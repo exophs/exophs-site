@@ -1,0 +1,311 @@
+/* Base styles for the body */
+:root {
+    --bg-dark: #121212; /* Dark background color */
+    --bg-light: #ffffff; /* Light background color */
+    --text-dark: #ffffff; /* Dark text color */
+    --text-light: #000000; /* Light text color */
+    --input-bg-dark: #1e1e1e; /* Dark background for input fields */
+    --input-bg-light: #f0f0f0; /* Light background for input fields */
+    --button-bg-dark: #333; /* Dark background for buttons */
+    --button-bg-light: #e0e0e0; /* Light background for buttons */
+    --hover-bg-dark: #555; /* Background color on button hover in dark mode */
+    --hover-bg-light: #cccccc; /* Background color on button hover in light mode */
+    --border-color: #444; /* Border color for various elements */
+    --border-light: #ccc; /* Lighter border color for light mode */
+    --back-button-bg-dark: #333; /* Dark background for back button */
+    --back-button-bg-light: #e0e0e0; /* Light background for back button */
+    --back-button-text-dark: #ffffff; /* Dark text color for back button */
+    --back-button-text-light: #000000; /* Light text color for back button */
+}
+
+body {
+    font-family: Arial, sans-serif; /* Font for the entire body */
+    margin: 20px; /* Margin around the body */
+    background-color: var(--bg-dark); /* Dark background color */
+    color: var(--text-dark); /* Dark text color */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for background and text color changes */
+}
+
+/* Center the header */
+header {
+    text-align: center; /* Center-align header text */
+    margin-bottom: 20px; /* Space below the header */
+}
+
+h1 {
+    font-size: 24px; /* Font size for the main heading */
+}
+
+/* Light mode styles */
+.light-mode {
+    background-color: var(--bg-light); /* Light background color */
+    color: var(--text-light); /* Light text color */
+}
+
+/* Toolbar styles */
+.toolbar {
+    display: flex; /* Use flexbox for horizontal alignment */
+    flex-wrap: wrap; /* Allow wrapping if the screen is narrow */
+    gap: 10px; /* Space between buttons */
+}
+
+/* Back button styles */
+.back-button {
+    position: absolute; /* Position the button absolutely */
+    top: 10px; /* Space from the top of the toolbar */
+    left: 5px; /* Space from the left side of the toolbar */
+    margin-bottom: 20px; /* Space below the Back button */
+    text-decoration: none; /* Remove underline from the link */
+    background-color: var(--back-button-bg-dark); /* Use dark background color */
+    color: var(--back-button-text-dark); /* Use dark text color */
+    padding: 5px 10px; /* Padding for better appearance */
+    border-radius: 4px; /* Rounded corners for the button */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+/* Light mode styles for back button */
+.light-mode .back-button {
+    background-color: var(--back-button-bg-light); /* Use light background color */
+    color: var(--back-button-text-light); /* Use light text color */
+}
+
+/* Styles for text input fields */
+input[type="text"] {
+    padding: 5px; /* Padding inside the input field */
+    margin-right: 5px; /* No margin on the right (corrected from px) */
+    border: 1px solid var(--border-color); /* Border style for the input field */
+    border-radius: 5px; /* Rounded corners for the input field */
+    background-color: var(--input-bg-dark); /* Dark background for the input field */
+    color: var(--text-dark); /* Dark text color inside the input */
+}
+
+/* Light mode styles for text inputs */
+.light-mode input[type="text"] {
+    background-color: var(--input-bg-light); /* Light background for input in light mode */
+    color: var(--text-light); /* Light text color inside the input */
+}
+
+/* Button styles */
+button, .toolbar-button {
+    margin-right: 10px; /* Space to the right of buttons */
+    padding: 5px 5px; /* Padding for better appearance */
+    font-size: 14px; /* Font size for buttons */
+    background-color: var(--button-bg-dark); /* Dark background for buttons */
+    color: var(--text-dark); /* Dark text color for buttons */
+    border: none; /* No border for buttons */
+    border-radius: 4px; /* Rounded corners for buttons */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s, transform 0.1s; /* Smooth transition for hover effects */
+}
+
+/* Styles for text formatting buttons (B, I, U) */
+.toolbar-button.formatting {
+    margin-right: 5px; /* Closer spacing for formatting buttons */
+}
+
+/* Hover styles for buttons */
+button:hover, .toolbar-button:hover {
+    background-color: var(--hover-bg-dark); /* Darker background on hover */
+}
+
+/* Light mode button styles */
+.light-mode button, .light-mode .toolbar-button {
+    background-color: var(--button-bg-light); /* Light background for buttons in light mode */
+    color: var(--text-light); /* Light text color for buttons */
+}
+
+/* Light mode hover styles for buttons */
+.light-mode button:hover, .light-mode .toolbar-button:hover {
+    background-color: var(--hover-bg-light); /* Lighter background on hover in light mode */
+}
+
+/* Editor styles */
+.editor {
+    border: 1px solid var(--border-color); /* Border style for the editor */
+    background-color: var(--input-bg-dark); /* Dark background for the editor */
+    color: var(--text-dark); /* Dark text color for the editor */
+    padding: 10px; /* Padding inside the editor */
+    min-height: 200px; /* Minimum height for the editor */
+    min-width: 300px; /* Minimum width for the editor */
+    resize: both; /* Allow resizing in both directions */
+    overflow: auto; /* Enable scrollbars when necessary */
+    outline: none; /* Remove default focus outline */
+    border-radius: 4px; /* Rounded corners for the editor */
+    font-size: 14px; /* Font size for the editor text */
+    line-height: 1.4; /* Line height for better readability */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Shadow effect for depth */
+}
+
+/* Light mode styles for the editor */
+.light-mode .editor {
+    background-color: var(--input-bg-light); /* Light background for editor in light mode */
+    color: var(--text-light); /* Light text color for editor */
+}
+
+/* Character and word count styles */
+#charCount, #wordCount {
+    color: var(--text-dark); /* Dark text color for count displays */
+}
+
+/* Light mode styles for counts */
+.light-mode #charCount, .light-mode #wordCount {
+    color: var(--text-light); /* Light text color for count displays in light mode */
+}
+
+/* Placeholder styles for inputs */
+.placeholder {
+    color: #888; /* Color for placeholder text */
+    pointer-events: none; /* Prevent interactions with placeholder text */
+}
+
+/* Styles for count container */
+.count-container {
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Center items vertically */
+    margin-top: 5px; /* Space above the count container */
+    padding: 10px; /* Padding inside the container */
+    background-color: var(--input-bg-dark); /* Dark background for count container */
+    border: 1px solid var(--border-color); /* Border style for the container */
+    border-radius: 4px; /* Rounded corners for the container */
+}
+
+/* Light mode styles for count container */
+.light-mode .count-container {
+    background-color: var(--input-bg-light); /* Light background for count container in light mode */
+    border: 1px solid var(--border-light); /* Light border for count container in light mode */
+}
+
+/* Count styles */
+.count {
+    color: var(--text-dark); /* Dark text color for count display */
+    font-weight: bold; /* Bold text for emphasis */
+    font-size: 16px; /* Font size for count display */
+    padding: 5px 10px; /* Padding for better appearance */
+    border-radius: 4px; /* Rounded corners for count display */
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent background for count display */
+    margin-right: 10px; /* Space to the right of the count display */
+}
+
+/* Light mode styles for counts */
+.light-mode .count {
+    color: var(--text-light); /* Light text color for count display in light mode */
+    background-color: rgba(0, 0, 0, 0.1); /* Semi-transparent background for count display in light mode */
+}
+
+/* Search and replace container styles */
+.search-replace-container {
+    margin-bottom: 15px; /* Space below the search and replace container */
+}
+
+/* Media query for responsive design */
+@media (max-width: 600px) {
+    .toolbar {
+        flex-direction: column; /* Stack toolbar elements vertically */
+    }
+
+    button, .toolbar-button {
+        margin-bottom: 10px; /* Space below buttons in small screens */
+    }
+
+    .editor {
+        min-width: 100%; /* Full width for the editor on small screens */
+    }
+}
+
+/* Styles for description container */
+.description-container {
+    margin-top: 15px; /* Space above the description container */
+    padding: 15px; /* Padding inside the container */
+    border: 1px solid var(--border-color); /* Border style for the container */
+    border-radius: 4px; /* Rounded corners for the container */
+    background-color: var(--input-bg-dark); /* Dark background for description container */
+    color: var(--text-dark); /* Dark text color for description */
+    max-height: 135px; /* Maximum height for the description container */
+    overflow-y: auto; /* Enable vertical scrollbar when content exceeds max height */
+}
+
+/* Light mode styles for description container */
+.light-mode .description-container {
+    background-color: var(--input-bg-light); /* Light background for description container in light mode */
+    border: 1px solid var(--border-light); /* Light border for description container in light mode */
+    color: var(--text-light); /* Light text color for description */
+}
+
+/* Focus styles for interactive elements */
+button:focus, .toolbar-button:focus, input[type="text"]:focus {
+    outline: 2px solid #ffffff; /* Highlight focused element with a white outline */
+}
+
+/* Custom scrollbar styles for the editor */
+.editor::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.editor::-webkit-scrollbar-thumb {
+    background-color: var(--border-color); /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Rounded corners for the scrollbar thumb */
+}
+
+.editor::-webkit-scrollbar-thumb:hover {
+    background-color: var(--hover-bg-dark); /* Darker thumb color on hover */
+}
+
+.editor::-webkit-scrollbar-track {
+    background-color: #1e1e1e; /* Background color of the scrollbar track */
+    border-radius: 4px; /* Rounded corners for the scrollbar track */
+}
+
+/* Custom scrollbar styles for the description container */
+.description-container::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.description-container::-webkit-scrollbar-thumb {
+    background-color: #444; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Rounded corners for the scrollbar thumb */
+}
+
+.description-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Darker thumb color on hover */
+}
+
+.description-container::-webkit-scrollbar-track {
+    background-color: #1e1e1e; /* Background color of the scrollbar track */
+    border-radius: 4px; /* Rounded corners for the scrollbar track */
+}
+
+/* Custom scrollbar styles for the entire page */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+    background-color: #444; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Rounded corners for the scrollbar thumb */
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Darker thumb color on hover */
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+    background-color: #121212; /* Background color of the scrollbar track */
+    border-radius: 4px; /* Rounded corners for the scrollbar track */
+}
+
+/* Error Message Styles */
+.error {
+    color: red; /* Red color for error messages */
+    margin-top: 5px; /* Space above error messages */
+}
+
+/* Improved Responsive Design for small screens */
+@media (max-width: 600px) {
+    .editor {
+        min-width: 100%; /* Full width for the editor on small screens */
+    }
+}

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Web Terminal</title>
+    <link rel="icon" href="https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/terminalV2.png?v=1742106355073" type="image/png">
+    <style>
+    body {
+        background-color: black;
+        color: white;
+        font-family: monospace;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+    }
+    #input-line {
+        display: flex;
+        align-items: center;
+        gap: 1px;
+        padding: 10px;
+        background-color: #000;
+        border-bottom: 2px;
+        box-shadow: 0 0 10px 2px rgb(0, 255, 0, 0.7);
+        user-select: none;
+    }
+    #input-line span {
+        color: green;
+    }
+    #cmd-input {
+        flex-grow: 1;
+        background: none;
+        border: none;
+        color: white;
+        font-family: inherit;
+        outline: none;
+        height: 1.5em;
+        line-height: 1.5em;
+    }
+    #terminal {
+        flex-grow: 1;
+        padding: 10px;
+        overflow-y: scroll;
+    }
+    #terminal::-webkit-scrollbar {
+        display: none;
+    }
+    .output {
+        margin-bottom: 10px;
+        white-space: pre-wrap;
+    }
+    /* Loading Screen Styles */
+    #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        backdrop-filter: blur(10px);
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    #loading-screen.hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+    #loading-text {
+        font-size: 2rem;
+        color: #fff;
+        font-weight: bold;
+    }
+    </style>
+</head>
+<body>
+    <div id="loading-screen">
+        <div id="loading-text">Loading...</div>
+    </div>
+
+    <div id="input-line">
+        <span id="user-prompt">user@web:~$</span>
+        <input id="cmd-input" type="text" autocomplete="off" autofocus>
+    </div>
+    <div id="terminal"></div>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        const cmdInput = document.getElementById('cmd-input');
+        const userPrompt = document.getElementById('user-prompt');
+        const usersKey = 'users';
+        let currentUser = localStorage.getItem('currentUser');
+
+        // File system structure
+        let fileSystem = {
+            name: 'root',
+            type: 'directory',
+            children: [
+                {
+                    name: 'home',
+                    type: 'directory',
+                    children: [
+                        {
+                            name: 'documents',
+                            type: 'directory',
+                            children: [
+                                { name: 'resume.txt', type: 'file', content: 'This is my resume.' },
+                                { name: 'notes.txt', type: 'file', content: 'These are my notes.' }
+                            ]
+                        },
+                        {
+                            name: 'downloads',
+                            type: 'directory',
+                            children: [
+                                { name: 'file1.zip', type: 'file' },
+                                { name: 'file2.tar.gz', type: 'file' }
+                            ]
+                        },
+                        { name: 'profile.txt', type: 'file', content: 'This is my profile.' }
+                    ]
+                },
+                {
+                    name: 'etc',
+                    type: 'directory',
+                    children: [
+                        { name: 'hosts.txt', type: 'file', content: '127.0.0.1 localhost' },
+                        { name: 'passwd.txt', type: 'file', content: 'root:x:0:0:root:/root:/bin/bash' },
+                        { name: 'config', type: 'directory', children: [] }
+                    ]
+                }
+            ]
+        };
+
+        let currentDir = fileSystem;
+
+        const updateUserPrompt = () => {
+            const path = getCurrentPath();
+            userPrompt.textContent = currentUser ? `${currentUser}@web:${path}$` : 'user@web:~$';
+        };
+
+        const getCurrentPath = () => {
+            let path = '';
+            let dir = currentDir;
+            while (dir && dir.name !== 'root') {
+                path = `/${dir.name}${path}`;
+                dir = dir.parent;
+            }
+            return path || '~';
+        };
+
+        const getUsers = () => JSON.parse(localStorage.getItem(usersKey)) || [];
+        const saveUsers = (users) => {
+            localStorage.setItem(usersKey, JSON.stringify(users));
+        };
+
+        const commands = {
+            neofetch: () => `
+███████████████████████████████
+Welcome to Web Terminal
+- Browser: ${navigator.userAgent}
+- Resolution: ${window.innerWidth}x${window.innerHeight}
+- Memory: ${Math.round(window.performance.memory?.usedJSHeapSize / 1024 / 1024) || "N/A"} MB
+███████████████████████████████
+            `,
+            echo: (args) => args.join(' '),
+            whoami: () => currentUser || "No user logged in",
+            date: () => new Date().toString(),
+            clear: () => { terminal.innerHTML = ""; return ""; },
+            help: () => `
+[User Management Commands]
+- makeuser [username] [password]: Create a new user.
+- login [username] [password]: Log in to an existing user.
+- logout: Log out the current user.
+- deleteuser [username] [password]: Delete a user.
+- users: List all signed-up users.
+- whoami: Display the currently logged-in username.
+
+[File System Commands]
+- cd [directory]: Change the current directory.
+- ls: List the contents of the current directory.
+- cat [file]: Display the contents of a file.
+
+[System Information Commands]
+- neofetch: Display system information (browser, resolution, memory usage, etc.).
+- date: Show the current date and time.
+
+[Utility Commands]
+- echo [text]: Print the provided text.
+- clear: Clear the terminal screen.
+- help: Display this help message.
+- back: Redirect to the homepage.
+`,
+            makeuser: (args) => {
+                const [username, password] = args;
+                if (!username || !password) {
+                    return 'Usage: makeuser [username] [password]';
+                }
+
+                const users = getUsers();
+                const userExists = users.some(user => user.username === username);
+                if (userExists) {
+                    return `User ${username} already exists.`;
+                }
+
+                users.push({ username, password });
+                saveUsers(users);
+                return `User ${username} created successfully.`;
+            },
+            login: (args) => {
+                const [username, password] = args;
+                if (!username || !password) {
+                    return 'Usage: login [username] [password]';
+                }
+
+                const users = getUsers();
+                const user = users.find(u => u.username === username && u.password === password);
+                if (!user) {
+                    return 'Invalid username or password.';
+                }
+
+                currentUser = username;
+                localStorage.setItem('currentUser', username);
+                updateUserPrompt();
+                return `Logged in as ${username}.`;
+            },
+            logout: () => {
+                if (!currentUser) {
+                    return 'No user is currently logged in.';
+                }
+
+                localStorage.removeItem('currentUser');
+                currentUser = null;
+                updateUserPrompt();
+                return 'Logged out successfully.';
+            },
+            users: () => {
+                const users = getUsers();
+                return users.map(u => u.username).join('\n') || 'No users found.';
+            },
+            deleteuser: (args) => {
+                const [username, password] = args;
+                if (!username || !password) {
+                    return 'Usage: deleteuser [username] [password]';
+                }
+
+                const users = getUsers();
+                const userIndex = users.findIndex(u => u.username === username && u.password === password);
+
+                if (userIndex === -1) {
+                    return 'Invalid username or password.';
+                }
+
+                if (username === currentUser) {
+                    currentUser = null;
+                    localStorage.removeItem('currentUser');
+                    updateUserPrompt();
+                }
+
+                users.splice(userIndex, 1);
+                saveUsers(users);
+                return `User ${username} deleted successfully.`;
+            },
+            changepassword: (args) => {
+                const [currentPassword, newPassword] = args;
+                if (!currentUser) {
+                    return 'No user is currently logged in.';
+                }
+
+                if (!currentPassword || !newPassword) {
+                    return 'Usage: changepassword [currentPassword] [newPassword]';
+                }
+
+                const users = getUsers();
+                const user = users.find(u => u.username === currentUser);
+
+                if (!user || user.password !== currentPassword) {
+                    return 'Current password is incorrect.';
+                }
+
+                user.password = newPassword;
+                saveUsers(users);
+                return 'Password changed successfully.';
+            },
+            cd: (args) => {
+                const [dir] = args;
+                if (!dir) {
+                    return 'Usage: cd [directory]'; // No default behavior, just show usage
+                }
+
+                if (dir === '..') {
+                    if (currentDir.parent) {
+                        currentDir = currentDir.parent;
+                        updateUserPrompt();
+                        return '';
+                    } else {
+                        return 'Already at root directory.';
+                    }
+                }
+
+                const newDir = currentDir.children.find(child => child.name === dir && child.type === 'directory');
+                if (newDir) {
+                    newDir.parent = currentDir;
+                    currentDir = newDir;
+                    updateUserPrompt();
+                    return '';
+                } else {
+                    return `Directory not found: ${dir}`;
+                }
+            },
+            ls: () => {
+                return currentDir.children.map(child => child.name).join('\n') || 'Directory is empty.';
+            },
+            cat: (args) => {
+                const [fileName] = args;
+                if (!fileName) {
+                    return 'Usage: cat [file]';
+                }
+
+                const file = currentDir.children.find(child => child.name === fileName && child.type === 'file');
+                if (!file) {
+                    return `File not found: ${fileName}`;
+                }
+
+                if (!file.content) {
+                    return `File is empty: ${fileName}`;
+                }
+
+                return file.content;
+            },
+            back: () => {
+                window.location.href = 'https://ionos.glitch.me';
+                return 'Redirecting to homepage...';
+            }
+        };
+
+        cmdInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const input = cmdInput.value.trim();
+                const [command, ...args] = input.split(' ');
+                const output = commands[command]
+                    ? commands[command](args)
+                    : `Command not found: ${command}`;
+
+                if (output !== undefined) {
+                    terminal.innerHTML += `<div class="output"><br>${output}</div>`;
+                    terminal.scrollTop = terminal.scrollHeight;
+                }
+                cmdInput.value = '';
+             }
+        });
+
+        document.addEventListener('click', () => {
+            cmdInput.focus();
+        });
+
+        updateUserPrompt();
+
+        window.addEventListener('load', () => {
+            const loadingScreen = document.getElementById('loading-screen');
+
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+            }, 2000); 
+
+            setTimeout(() => loadingScreen.remove(), 2500);
+        });
+    </script>
+</body>
+</html>

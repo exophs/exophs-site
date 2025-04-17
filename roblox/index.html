@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROBLOX - Imagination Platform (Dark Mode)</title>
+    <link rel="icon" href="https://images.rbxcdn.com/7bba321f4d8328683d6e59487ce514eb" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Gotham SSm", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+        
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            background-color: #222222;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            height: 34px;
+            margin-right: 24px;
+            cursor: pointer;
+        }
+        
+        nav {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-right: 24px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #e0e0e0;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 0;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: #00a2ff;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #333333;
+            border-radius: 8px;
+            padding: 8px 16px;
+            margin-right: 24px;
+            flex-grow: 1;
+            max-width: 400px;
+        }
+        
+        .search-icon {
+            color: #858585;
+            margin-right: 8px;
+        }
+        
+        .search-input {
+            border: none;
+            background-color: transparent;
+            flex-grow: 1;
+            font-size: 14px;
+            outline: none;
+            color: #e0e0e0;
+        }
+        
+        .search-input::placeholder {
+            color: #858585;
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            text-decoration: none;
+            margin-left: 12px;
+            cursor: pointer;
+        }
+        
+        .btn-outline {
+            border: 1px solid #00a2ff;
+            color: #00a2ff;
+            background-color: transparent;
+        }
+        
+        .btn-primary {
+            background-color: #00a2ff;
+            color: white;
+            border: none;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #003b80 0%, #0059b3 100%);
+            color: white;
+            padding: 64px 24px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+        
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+        
+        .hero-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 16px;
+            text-decoration: none;
+        }
+        
+        .hero-btn-white {
+            background-color: white;
+            color: #0059b3;
+        }
+        
+        .hero-btn-outline {
+            border: 2px solid white;
+            color: white;
+            background-color: transparent;
+        }
+        
+        /* Games Section */
+        .games-section {
+            padding: 48px 24px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #e0e0e0;
+        }
+        
+        .see-all {
+            color: #00a2ff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+        
+        .game-card {
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        
+        .game-thumbnail {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+            background-color: #444444;
+        }
+        
+        .game-info {
+            padding: 12px;
+        }
+        
+        .game-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #e0e0e0;
+        }
+        
+        .game-creator {
+            color: #a0a0a0;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .game-stats {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #a0a0a0;
+        }
+        
+        .game-stats div {
+            display: flex;
+            align-items: center;
+            margin-right: 12px;
+        }
+        
+        .stat-icon {
+            margin-right: 4px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #121212;
+            color: #e0e0e0;
+            padding: 48px 24px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            height: 48px;
+            margin-bottom: 16px;
+            filter: brightness(0.9);
+            cursor: pointer;
+        }
+        
+        .footer-links h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #e0e0e0;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+        
+        .footer-links a {
+            color: #a0a0a0;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: #00a2ff;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #333333;
+            padding-top: 24px;
+            margin-top: 24px;
+            text-align: center;
+            color: #a0a0a0;
+            font-size: 12px;
+        }
+
+        /* Dark mode toggle (just for visual - non-functional) */
+        .dark-mode-toggle {
+            display: flex;
+            align-items: center;
+            margin-left: 12px;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            margin-left: 8px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #0080dd;
+            border-radius: 20px;
+            transition: .3s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 21px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .3s;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            padding: 20px;
+            background-color: #333333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #a0a0a0;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .close-modal:hover {
+            color: #e0e0e0;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #e0e0e0;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #444444;
+            background-color: #333333;
+            color: #e0e0e0;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #00a2ff;
+        }
+        
+        .form-input.error {
+            border-color: #ff4444;
+        }
+        
+        .form-submit {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background-color: #00a2ff;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+        
+        .form-submit:hover {
+            background-color: #0088cc;
+        }
+        
+        .form-footer {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 14px;
+            color: #a0a0a0;
+        }
+        
+        .form-footer a {
+            color: #00a2ff;
+            text-decoration: none;
+        }
+        
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .form-switch {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: #333333;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .form-switch a {
+            color: #00a2ff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .form-switch a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #444444;
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 16px;
+            cursor: pointer;
+            color: #a0a0a0;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        
+        .tab.active {
+            color: #00a2ff;
+            border-bottom: 2px solid #00a2ff;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Error messages */
+        .error-message {
+            color: #ff4444;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+        
+        /* Success message */
+        .success-message {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 16px;
+            font-weight: 500;
+            display: none;
+        }
+        
+        /* Logged in state */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 16px;
+            display: none;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #00a2ff;
+            margin-right: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .username {
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+        
+        .logout-btn {
+            margin-left: 16px;
+            color: #a0a0a0;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .logout-btn:hover {
+            color: #e0e0e0;
+        }
+        
+        /* Page content container */
+        .page-container {
+            display: none;
+        }
+        
+        .page-container.active {
+            display: block;
+        }
+        
+        /* Marketplace Page */
+        .marketplace-section {
+            padding: 48px 24px;
+        }
+        
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .item-card {
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        
+        .item-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        
+        .item-thumbnail {
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%;
+            position: relative;
+            background-color: #444444;
+        }
+        
+        .item-info {
+            padding: 12px;
+        }
+        
+        .item-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #e0e0e0;
+        }
+        
+        .item-creator {
+            color: #a0a0a0;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .item-price {
+            color: #00a2ff;
+            font-weight: 600;
+        }
+        
+        /* Create Page */
+        .create-section {
+            padding: 48px 24px;
+            text-align: center;
+        }
+        
+        .create-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .create-option {
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            padding: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        
+        .create-option:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        
+        .create-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #00a2ff;
+        }
+        
+        .create-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .create-description {
+            color: #a0a0a0;
+            font-size: 14px;
+        }
+        
+        /* Robux Page */
+        .robux-section {
+            padding: 48px 24px;
+            text-align: center;
+        }
+        
+        .robux-packages {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .robux-card {
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            padding: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        
+        .robux-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        
+        .robux-amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00a2ff;
+            margin-bottom: 8px;
+        }
+        
+        .robux-price {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .robux-bonus {
+            color: #4CAF50;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        
+        /* Game Detail Page */
+        .game-detail {
+            padding: 48px 24px;
+        }
+        
+        .game-header {
+            display: flex;
+            margin-bottom: 32px;
+        }
+        
+        .game-poster {
+            width: 300px;
+            height: 200px;
+            border-radius: 12px;
+            background-color: #444444;
+            margin-right: 32px;
+        }
+        
+        .game-meta {
+            flex: 1;
+        }
+        
+        .game-title-large {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .game-creator-large {
+            font-size: 16px;
+            color: #a0a0a0;
+            margin-bottom: 16px;
+        }
+        
+        .game-stats-large {
+            display: flex;
+            margin-bottom: 16px;
+        }
+        
+        .game-stat {
+            margin-right: 24px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .game-stat-icon {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+        
+        .game-description {
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+        
+        .game-play-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            background-color: #00a2ff;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .game-screenshots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .screenshot {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            background-color: #444444;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        /* Loading spinner */
+        .loading-spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            margin: 40px auto;
+            border: 4px solid rgba(0, 162, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #00a2ff;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <img src="https://images.rbxcdn.com/d82801b936c26e174c4e782510a72d78-roblox_logo_dark_08292022.svg" alt="ROBLOX Logo" class="logo" id="home-logo">
+        
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link" data-page="home">Discover</a></li>
+                <li><a href="#" class="nav-link" data-page="marketplace">Marketplace</a></li>
+                <li><a href="#" class="nav-link" data-page="create">Create</a></li>
+                <li><a href="#" class="nav-link" data-page="robux">Robux</a></li>
+            </ul>
+        </nav>
+        
+        <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search experiences, items, creators..." class="search-input" id="search-input">
+        </div>
+        
+        <div class="user-actions">
+            <div class="dark-mode-toggle">
+                <span>Dark</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked id="dark-mode-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <a href="#" class="btn btn-outline" id="login-btn">Login</a>
+            <a href="#" class="btn btn-primary" id="signup-btn">Sign Up</a>
+            
+            <div class="user-profile" id="user-profile">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span class="username" id="username-display">User</span>
+                <span class="logout-btn" id="logout-btn">Logout</span>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loading-spinner"></div>
+    
+    <!-- Home Page -->
+    <div class="page-container active" id="home-page">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Powering Imagination</h1>
+            <p>ROBLOX is the ultimate virtual universe that lets you create, share experiences with friends, and be anything you can imagine.</p>
+            <div class="hero-btns">
+                <a href="#" class="hero-btn hero-btn-white" id="play-now-btn">Start Playing</a>
+                <a href="#" class="hero-btn hero-btn-outline" id="start-creating-btn">Start Creating</a>
+            </div>
+        </section>
+        
+        <!-- Popular Games Section -->
+        <section class="games-section">
+            <div class="section-header">
+                <h2 class="section-title">Popular Experiences</h2>
+                <a href="#" class="see-all">See All</a>
+            </div>
+            
+            <div class="games-grid" id="popular-games">
+                <!-- Game cards will be inserted here by JavaScript -->
+            </div>
+        </section>
+        
+        <!-- Recommended Games Section -->
+        <section class="games-section">
+            <div class="section-header">
+                <h2 class="section-title">Recommended For You</h2>
+                <a href="#" class="see-all">See All</a>
+            </div>
+            
+            <div class="games-grid" id="recommended-games">
+                <!-- Game cards will be inserted here by JavaScript -->
+            </div>
+        </section>
+    </div>
+    
+    <!-- Marketplace Page -->
+    <div class="page-container" id="marketplace-page">
+        <section class="marketplace-section">
+            <div class="section-header">
+                <h2 class="section-title">Marketplace</h2>
+                <div class="search-bar" style="max-width: 300px;">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="Search items..." class="search-input">
+                </div>
+            </div>
+            
+            <div class="item-grid" id="marketplace-items">
+                <!-- Items will be inserted here by JavaScript -->
+            </div>
+        </section>
+    </div>
+    
+    <!-- Create Page -->
+    <div class="page-container" id="create-page">
+        <section class="create-section">
+            <h1>Start Creating Today</h1>
+            <p>Bring your imagination to life with ROBLOX Studio</p>
+            
+            <div class="create-options">
+                <div class="create-option" id="create-game">
+                    <div class="create-icon">🎮</div>
+                    <h3 class="create-title">Create a Game</h3>
+                    <p class="create-description">Build immersive experiences with ROBLOX Studio</p>
+                </div>
+                
+                <div class="create-option" id="create-item">
+                    <div class="create-icon">👕</div>
+                    <h3 class="create-title">Design an Item</h3>
+                    <p class="create-description">Create clothing, accessories, and gear for your avatar</p>
+                </div>
+                
+                <div class="create-option" id="learn-create">
+                    <div class="create-icon">📚</div>
+                    <h3 class="create-title">Learn to Create</h3>
+                    <p class="create-description">Access tutorials and resources to get started</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Robux Page -->
+    <div class="page-container" id="robux-page">
+        <section class="robux-section">
+            <h1>Get Robux</h1>
+            <p>Purchase Robux to customize your avatar and get premium features</p>
+            
+            <div class="robux-packages">
+                <div class="robux-card">
+                    <div class="robux-amount">400 Robux</div>
+                    <div class="robux-price">$4.99</div>
+                    <div class="robux-bonus">No bonus</div>
+                    <button class="btn btn-primary">Buy Now</button>
+                </div>
+                
+                <div class="robux-card">
+                    <div class="robux-amount">800 Robux</div>
+                    <div class="robux-price">$9.99</div>
+                    <div class="robux-bonus">+80 bonus</div>
+                    <button class="btn btn-primary">Buy Now</button>
+                </div>
+                
+                <div class="robux-card">
+                    <div class="robux-amount">1,700 Robux</div>
+                    <div class="robux-price">$19.99</div>
+                    <div class="robux-bonus">+300 bonus</div>
+                    <button class="btn btn-primary">Buy Now</button>
+                </div>
+                
+                <div class="robux-card">
+                    <div class="robux-amount">4,500 Robux</div>
+                    <div class="robux-price">$49.99</div>
+                    <div class="robux-bonus">+1,000 bonus</div>
+                    <button class="btn btn-primary">Buy Now</button>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Game Detail Page -->
+    <div class="page-container" id="game-detail-page">
+        <section class="game-detail">
+            <div class="game-header">
+                <div class="game-poster" id="game-poster"></div>
+                <div class="game-meta">
+                    <h1 class="game-title-large" id="game-detail-title">Game Title</h1>
+                    <div class="game-creator-large" id="game-detail-creator">By Creator</div>
+                    
+                    <div class="game-stats-large">
+                        <div class="game-stat">
+                            <span class="game-stat-icon">👍</span>
+                            <span id="game-detail-likes">95%</span>
+                        </div>
+                        <div class="game-stat">
+                            <span class="game-stat-icon">👤</span>
+                            <span id="game-detail-players">125K</span>
+                        </div>
+                        <div class="game-stat">
+                            <span class="game-stat-icon">⭐</span>
+                            <span id="game-detail-visits">10M+</span>
+                        </div>
+                    </div>
+                    
+                    <p class="game-description" id="game-detail-description">
+                        This is a detailed description of the game. It explains what the game is about, 
+                        the gameplay mechanics, and any special features. Players can expect an immersive 
+                        experience with lots of interactive elements.
+                    </p>
+                    
+                    <a href="#" class="game-play-btn" id="play-game-btn">Play Now</a>
+                </div>
+            </div>
+            
+            <h2 class="section-title">Screenshots</h2>
+            <div class="game-screenshots">
+                <div class="screenshot"></div>
+                <div class="screenshot"></div>
+                <div class="screenshot"></div>
+            </div>
+            
+            <h2 class="section-title">Similar Games</h2>
+            <div class="games-grid" id="similar-games">
+                <!-- Similar games will be inserted here by JavaScript -->
+            </div>
+        </section>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <img src="https://images.rbxcdn.com/d82801b936c26e174c4e782510a72d78-roblox_logo_dark_08292022.svg" alt="ROBLOX Logo" class="footer-logo" id="footer-logo">
+                <p>©2025 Roblox Corporation. All rights reserved.</p>
+            </div>
+            
+            <div class="footer-links">
+                <h3>About</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Jobs</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Parents</a></li>
+                    <li><a href="#">Gift Cards</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Accessibility</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h3>Create</h3>
+                <ul>
+                    <li><a href="#">Create on Roblox</a></li>
+                    <li><a href="#">Developer Hub</a></li>
+                    <li><a href="#">Education</a></li>
+                    <li><a href="#">Group Building</a></li>
+                    <li><a href="#">Talent Hub</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>Roblox, "Powering Imagination" and the Roblox logo are among our registered and unregistered trademarks in the U.S. and other countries.</p>
+        </div>
+    </footer>
+    
+    <!-- Login/Signup Modal -->
+    <div class="modal" id="auth-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Welcome to ROBLOX</div>
+                <button class="close-modal">&times;</button>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="login">Login</div>
+                <div class="tab" data-tab="signup">Sign Up</div>
+            </div>
+            
+            <div class="tab-content active" id="login-tab">
+                <div class="modal-body">
+                    <div class="success-message" id="login-success">Login successful! Welcome back.</div>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-username" class="form-label">Username or Email</label>
+                            <input type="text" id="login-username" class="form-input" required>
+                            <div class="error-message" id="login-username-error">Please enter your username or email</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="login-password" class="form-label">Password</label>
+                            <input type="password" id="login-password" class="form-input" required>
+                            <div class="error-message" id="login-password-error">Please enter your password</div>
+                            <div class="error-message" id="login-invalid-error">Invalid username or password</div>
+                        </div>
+                        
+                        <button type="submit" class="form-submit">Login</button>
+                        
+                        <div class="form-footer">
+                            <a href="#" id="forgot-password">Forgot password?</a>
+                        </div>
+                    </form>
+                    
+                    <div class="form-switch">
+                        Don't have an account? <a href="#" class="switch-to-signup">Sign Up</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="signup-tab">
+                <div class="modal-body">
+                    <div class="success-message" id="signup-success">Account created successfully! Welcome to ROBLOX.</div>
+                    <form id="signup-form">
+                        <div class="form-group">
+                            <label for="signup-username" class="form-label">Username</label>
+                            <input type="text" id="signup-username" class="form-input" required>
+                            <div class="error-message" id="signup-username-error">Please enter a username (3-20 characters)</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signup-email" class="form-label">Email</label>
+                            <input type="email" id="signup-email" class="form-input" required>
+                            <div class="error-message" id="signup-email-error">Please enter a valid email address</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signup-password" class="form-label">Password</label>
+                            <input type="password" id="signup-password" class="form-input" required>
+                            <div class="error-message" id="signup-password-error">Password must be at least 8 characters</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signup-confirm" class="form-label">Confirm Password</label>
+                            <input type="password" id="signup-confirm" class="form-input" required>
+                            <div class="error-message" id="signup-confirm-error">Passwords don't match</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signup-birthdate" class="form-label">Birthdate</label>
+                            <input type="date" id="signup-birthdate" class="form-input" required>
+                            <div class="error-message" id="signup-birthdate-error">Please enter your birthdate</div>
+                        </div>
+                        
+                        <button type="submit" class="form-submit">Sign Up</button>
+                    </form>
+                    
+                    <div class="form-switch">
+                        Already have an account? <a href="#" class="switch-to-login">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Game data
+        const games = [
+            {
+                id: '1',
+                title: 'Adopt Me!',
+                creator: 'Uplift Games',
+                likes: '95%',
+                players: '125K',
+                description: 'Adopt and raise pets, decorate your home, and roleplay with friends in this family-friendly experience.',
+                visits: '25B+'
+            },
+            {
+                id: '2',
+                title: 'Brookhaven RP',
+                creator: 'Wolfpaq',
+                likes: '92%',
+                players: '98K',
+                description: 'Roleplay in a virtual town where you can own homes, drive cars, and live out your dreams.',
+                visits: '15B+'
+            },
+            {
+                id: '3',
+                title: 'Blox Fruits',
+                creator: 'Gamer Robot Inc',
+                likes: '94%',
+                players: '87K',
+                description: 'Become a powerful pirate or marine in this anime-inspired adventure game with devil fruits and swords.',
+                visits: '12B+'
+            },
+            {
+                id: '4',
+                title: 'Murder Mystery 2',
+                creator: 'Nikilis',
+                likes: '90%',
+                players: '45K',
+                description: 'A classic whodunit game where players must figure out who among them is the murderer.',
+                visits: '10B+'
+            },
+            {
+                id: '5',
+                title: 'Doors',
+                creator: 'LSPLASH',
+                likes: '97%',
+                players: '32K',
+                description: 'A horror experience where you must navigate through 100 doors, each with its own challenges.',
+                visits: '8B+'
+            },
+            {
+                id: '6',
+                title: 'Tower of Hell',
+                creator: 'YXCeptional Studios',
+                likes: '91%',
+                players: '28K',
+                description: 'A challenging obby (obstacle course) game with randomly generated towers to climb.',
+                visits: '7B+'
+            },
+            {
+                id: '7',
+                title: 'Pet Simulator X',
+                creator: 'BIG Games',
+                likes: '93%',
+                players: '75K',
+                description: 'Collect and hatch pets, explore worlds, and collect coins in this popular simulator game.',
+                visits: '9B+'
+            },
+            {
+                id: '8',
+                title: 'Arsenal',
+                creator: 'ROLVe Community',
+                likes: '89%',
+                players: '22K',
+                description: 'A fast-paced FPS game with various weapons and game modes to test your shooting skills.',
+                visits: '6B+'
+            },
+            {
+                id: '9',
+                title: 'Royale High',
+                creator: 'Callmehbob',
+                likes: '94%',
+                players: '38K',
+                description: 'A fantasy roleplay game where you can attend school, dress up, and explore magical realms.',
+                visits: '11B+'
+            },
+            {
+                id: '10',
+                title: 'Jailbreak',
+                creator: 'Badimo',
+                likes: '92%',
+                players: '25K',
+                description: 'Play as a criminal or police officer in this open-world game with vehicles and heists.',
+                visits: '8B+'
+            }
+        ];
+
+        // Marketplace items
+        const marketplaceItems = [
+            {
+                id: 'i1',
+                title: 'Dominus Empyreus',
+                creator: 'ROBLOX',
+                price: '50,000 Robux'
+            },
+            {
+                id: 'i2',
+                title: 'Valkyrie Helm',
+                creator: 'ROBLOX',
+                price: '1,000 Robux'
+            },
+            {
+                id: 'i3',
+                title: 'Korblox Deathspeaker',
+                creator: 'ROBLOX',
+                price: '2,500 Robux'
+            },
+            {
+                id: 'i4',
+                title: 'Neon Green Cyber Shades',
+                creator: 'User123',
+                price: '150 Robux'
+            },
+            {
+                id: 'i5',
+                title: 'Red Sparkle Time Fedora',
+                creator: 'User456',
+                price: '75 Robux'
+            },
+            {
+                id: 'i6',
+                title: 'Golden Crown',
+                creator: 'ROBLOX',
+                price: '1,500 Robux'
+            },
+            {
+                id: 'i7',
+                title: 'Black Iron Commando',
+                creator: 'ROBLOX',
+                price: '5,000 Robux'
+            },
+            {
+                id: 'i8',
+                title: 'Rainbow Shaggy',
+                creator: 'User789',
+                price: '200 Robux'
+            }
+        ];
+
+        // User data storage (simulating a database)
+        const users = JSON.parse(localStorage.getItem('roblox-users')) || [];
+        let currentUser = JSON.parse(localStorage.getItem('roblox-current-user')) || null;
+        
+        // Current page state
+        let currentPage = 'home';
+        let currentGame = null;
+        
+        // DOM elements
+        const modal = document.getElementById('auth-modal');
+        const loginBtn = document.getElementById('login-btn');
+        const signupBtn = document.getElementById('signup-btn');
+        const closeModal = document.querySelector('.close-modal');
+        const switchToSignup = document.querySelector('.switch-to-signup');
+        const switchToLogin = document.querySelector('.switch-to-login');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const userProfile = document.getElementById('user-profile');
+        const userAvatar = document.getElementById('user-avatar');
+        const usernameDisplay = document.getElementById('username-display');
+        const logoutBtn = document.getElementById('logout-btn');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        
+        // Page containers
+        const pageContainers = {
+            home: document.getElementById('home-page'),
+            marketplace: document.getElementById('marketplace-page'),
+            create: document.getElementById('create-page'),
+            robux: document.getElementById('robux-page'),
+            gameDetail: document.getElementById('game-detail-page')
+        };
+        
+        // Navigation elements
+        const navLinks = document.querySelectorAll('.nav-link');
+        const homeLogo = document.getElementById('home-logo');
+        const footerLogo = document.getElementById('footer-logo');
+        
+        // Form elements
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        
+        // Game elements
+        const popularGamesGrid = document.getElementById('popular-games');
+        const recommendedGamesGrid = document.getElementById('recommended-games');
+        const marketplaceItemsGrid = document.getElementById('marketplace-items');
+        const similarGamesGrid = document.getElementById('similar-games');
+        
+        // Game detail elements
+        const gamePoster = document.getElementById('game-poster');
+        const gameDetailTitle = document.getElementById('game-detail-title');
+        const gameDetailCreator = document.getElementById('game-detail-creator');
+        const gameDetailLikes = document.getElementById('game-detail-likes');
+        const gameDetailPlayers = document.getElementById('game-detail-players');
+        const gameDetailVisits = document.getElementById('game-detail-visits');
+        const gameDetailDescription = document.getElementById('game-detail-description');
+        const playGameBtn = document.getElementById('play-game-btn');
+        
+        // Initialize the page
+        function init() {
+            // Check if user is already logged in
+            if (currentUser) {
+                updateUserUI(currentUser);
+            }
+            
+            // Load initial content
+            loadHomePage();
+            
+            // Set up event listeners
+            setupEventListeners();
+        }
+        
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Auth buttons
+            loginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentUser) return;
+                modal.style.display = 'flex';
+                switchTab('login');
+            });
+            
+            signupBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentUser) return;
+                modal.style.display = 'flex';
+                switchTab('signup');
+            });
+            
+            // Close modal
+            closeModal.addEventListener('click', () => {
+                modal.style.display = 'none';
+                clearErrors();
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    clearErrors();
+                }
+            });
+            
+            // Tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    switchTab(tab.dataset.tab);
+                });
+            });
+            
+            // Switch between login/signup
+            switchToSignup.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTab('signup');
+            });
+            
+            switchToLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTab('login');
+            });
+            
+            // Form submissions
+            loginForm.addEventListener('submit', handleLogin);
+            signupForm.addEventListener('submit', handleSignup);
+            
+            // Logout
+            logoutBtn.addEventListener('click', handleLogout);
+            
+            // Forgot password
+            document.getElementById('forgot-password').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('Password reset functionality would be implemented here in a real application');
+            });
+            
+            // Navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    navigateTo(link.dataset.page);
+                });
+            });
+            
+            homeLogo.addEventListener('click', (e) => {
+                e.preventDefault();
+                navigateTo('home');
+            });
+            
+            footerLogo.addEventListener('click', (e) => {
+                e.preventDefault();
+                navigateTo('home');
+            });
+            
+            // Hero buttons
+            document.getElementById('play-now-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!currentUser) {
+                    modal.style.display = 'flex';
+                    switchTab('login');
+                } else {
+                    // In a real app, this would launch a game
+                    alert('Launching ROBLOX player...');
+                }
+            });
+            
+            document.getElementById('start-creating-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                navigateTo('create');
+            });
+            
+            // Create options
+            document.getElementById('create-game').addEventListener('click', () => {
+                if (!currentUser) {
+                    modal.style.display = 'flex';
+                    switchTab('login');
+                } else {
+                    // In a real app, this would download ROBLOX Studio
+                    alert('Downloading ROBLOX Studio...');
+                }
+            });
+            
+            document.getElementById('create-item').addEventListener('click', () => {
+                if (!currentUser) {
+                    modal.style.display = 'flex';
+                    switchTab('login');
+                } else {
+                    navigateTo('marketplace');
+                }
+            });
+            
+            document.getElementById('learn-create').addEventListener('click', () => {
+                window.open('https://developer.roblox.com/', '_blank');
+            });
+            
+            // Play game button
+            playGameBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!currentUser) {
+                    modal.style.display = 'flex';
+                    switchTab('login');
+                } else {
+                    alert(`Launching ${currentGame.title}...`);
+                }
+            });
+        }
+        
+        // Navigation function
+        function navigateTo(page) {
+            // Show loading spinner
+            loadingSpinner.style.display = 'block';
+            
+            // Hide all pages
+            Object.values(pageContainers).forEach(container => {
+                container.classList.remove('active');
+            });
+            
+            // Set current page
+            currentPage = page;
+            
+            // Load appropriate content
+            setTimeout(() => {
+                switch(page) {
+                    case 'home':
+                        loadHomePage();
+                        break;
+                    case 'marketplace':
+                        loadMarketplacePage();
+                        break;
+                    case 'create':
+                        loadCreatePage();
+                        break;
+                    case 'robux':
+                        loadRobuxPage();
+                        break;
+                    case 'gameDetail':
+                        loadGameDetailPage();
+                        break;
+                    default:
+                        loadHomePage();
+                }
+                
+                // Hide loading spinner
+                loadingSpinner.style.display = 'none';
+                
+                // Show the correct page
+                pageContainers[page].classList.add('active');
+            }, 500);
+        }
+        
+        // Load home page content
+        function loadHomePage() {
+            // Clear existing games
+            popularGamesGrid.innerHTML = '';
+            recommendedGamesGrid.innerHTML = '';
+            
+            // Add popular games (first 5)
+            games.slice(0, 5).forEach(game => {
+                popularGamesGrid.appendChild(createGameCard(game));
+            });
+            
+            // Add recommended games (next 5)
+            games.slice(5).forEach(game => {
+                recommendedGamesGrid.appendChild(createGameCard(game));
+            });
+        }
+        
+        // Load marketplace page
+        function loadMarketplacePage() {
+            marketplaceItemsGrid.innerHTML = '';
+            
+            marketplaceItems.forEach(item => {
+                marketplaceItemsGrid.appendChild(createMarketplaceItem(item));
+            });
+        }
+        
+        // Load create page
+        function loadCreatePage() {
+            // Content is static, nothing to load
+        }
+        
+        // Load robux page
+        function loadRobuxPage() {
+            // Content is static, nothing to load
+        }
+        
+        // Load game detail page
+        function loadGameDetailPage() {
+            if (!currentGame) return;
+            
+            // Update game details
+            gameDetailTitle.textContent = currentGame.title;
+            gameDetailCreator.textContent = `By ${currentGame.creator}`;
+            gameDetailLikes.textContent = currentGame.likes;
+            gameDetailPlayers.textContent = currentGame.players;
+            gameDetailVisits.textContent = currentGame.visits;
+            gameDetailDescription.textContent = currentGame.description;
+            
+            // Clear similar games
+            similarGamesGrid.innerHTML = '';
+            
+            // Add 5 random similar games (excluding current game)
+            const similarGames = games
+                .filter(game => game.id !== currentGame.id)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 5);
+            
+            similarGames.forEach(game => {
+                similarGamesGrid.appendChild(createGameCard(game));
+            });
+        }
+        
+        // Create a game card element
+        function createGameCard(game) {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.dataset.id = game.id;
+            
+            card.innerHTML = `
+                <div class="game-thumbnail"></div>
+                <div class="game-info">
+                    <h3 class="game-title">${game.title}</h3>
+                    <div class="game-creator">By ${game.creator}</div>
+                    <div class="game-stats">
+                        <div>
+                            <span class="stat-icon">👍</span>
+                            <span>${game.likes}</span>
+                        </div>
+                        <div>
+                            <span class="stat-icon">👤</span>
+                            <span>${game.players}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            card.addEventListener('click', () => {
+                currentGame = game;
+                navigateTo('gameDetail');
+            });
+            
+            return card;
+        }
+        
+        // Create a marketplace item element
+        function createMarketplaceItem(item) {
+            const card = document.createElement('div');
+            card.className = 'item-card';
+            card.dataset.id = item.id;
+            
+            card.innerHTML = `
+                <div class="item-thumbnail"></div>
+                <div class="item-info">
+                    <h3 class="item-title">${item.title}</h3>
+                    <div class="item-creator">By ${item.creator}</div>
+                    <div class="item-price">${item.price}</div>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Switch between login/signup tabs
+        function switchTab(tabName) {
+            tabs.forEach(tab => {
+                if (tab.dataset.tab === tabName) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            tabContents.forEach(content => {
+                if (content.id === `${tabName}-tab`) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+            
+            clearErrors();
+        }
+        
+        // Handle login form submission
+        function handleLogin(e) {
+            e.preventDefault();
+            clearErrors();
+            
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            // Validate inputs
+            let isValid = true;
+            
+            if (!username) {
+                showError('login-username-error');
+                document.getElementById('login-username').classList.add('error');
+                isValid = false;
+            }
+            
+            if (!password) {
+                showError('login-password-error');
+                document.getElementById('login-password').classList.add('error');
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Check credentials
+            const user = users.find(u => 
+                (u.username === username || u.email === username) && 
+                u.password === password
+            );
+            
+            if (user) {
+                // Successful login
+                currentUser = user;
+                localStorage.setItem('roblox-current-user', JSON.stringify(currentUser));
+                updateUserUI(currentUser);
+                
+                // Show success message
+                document.getElementById('login-success').style.display = 'block';
+                
+                // Close modal after delay
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    clearErrors();
+                    document.getElementById('login-success').style.display = 'none';
+                }, 1500);
+            } else {
+                // Invalid credentials
+                showError('login-invalid-error');
+                document.getElementById('login-username').classList.add('error');
+                document.getElementById('login-password').classList.add('error');
+            }
+        }
+        
+        // Handle signup form submission
+        function handleSignup(e) {
+            e.preventDefault();
+            clearErrors();
+            
+            const username = document.getElementById('signup-username').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm').value;
+            const birthdate = document.getElementById('signup-birthdate').value;
+            
+            // Validate inputs
+            let isValid = true;
+            
+            if (username.length < 3 || username.length > 20) {
+                showError('signup-username-error');
+                document.getElementById('signup-username').classList.add('error');
+                isValid = false;
+            }
+            
+            if (!email.includes('@') || !email.includes('.')) {
+                showError('signup-email-error');
+                document.getElementById('signup-email').classList.add('error');
+                isValid = false;
+            }
+            
+            if (password.length < 8) {
+                showError('signup-password-error');
+                document.getElementById('signup-password').classList.add('error');
+                isValid = false;
+            }
+            
+            if (password !== confirmPassword) {
+                showError('signup-confirm-error');
+                document.getElementById('signup-confirm').classList.add('error');
+                isValid = false;
+            }
+            
+            if (!birthdate) {
+                showError('signup-birthdate-error');
+                document.getElementById('signup-birthdate').classList.add('error');
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Check if username or email already exists
+            const usernameExists = users.some(u => u.username === username);
+            const emailExists = users.some(u => u.email === email);
+            
+            if (usernameExists) {
+                document.getElementById('signup-username-error').textContent = 'Username already taken';
+                showError('signup-username-error');
+                document.getElementById('signup-username').classList.add('error');
+                return;
+            }
+            
+            if (emailExists) {
+                document.getElementById('signup-email-error').textContent = 'Email already registered';
+                showError('signup-email-error');
+                document.getElementById('signup-email').classList.add('error');
+                return;
+            }
+            
+            // Create new user
+            const newUser = {
+                id: Date.now().toString(),
+                username,
+                email,
+                password,
+                birthdate,
+                joinDate: new Date().toISOString(),
+                avatarColor: getRandomColor()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('roblox-users', JSON.stringify(users));
+            
+            // Log in the new user
+            currentUser = newUser;
+            localStorage.setItem('roblox-current-user', JSON.stringify(currentUser));
+            updateUserUI(currentUser);
+            
+            // Show success message
+            document.getElementById('signup-success').style.display = 'block';
+            
+            // Clear form
+            signupForm.reset();
+            
+            // Close modal after delay
+            setTimeout(() => {
+                modal.style.display = 'none';
+                clearErrors();
+                document.getElementById('signup-success').style.display = 'none';
+            }, 1500);
+        }
+        
+        // Handle logout
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('roblox-current-user');
+            updateUserUI(null);
+        }
+        
+        // Update UI based on user state
+        function updateUserUI(user) {
+            if (user) {
+                // User is logged in
+                loginBtn.style.display = 'none';
+                signupBtn.style.display = 'none';
+                userProfile.style.display = 'flex';
+                usernameDisplay.textContent = user.username;
+                userAvatar.textContent = user.username.charAt(0).toUpperCase();
+                userAvatar.style.backgroundColor = user.avatarColor;
+            } else {
+                // User is logged out
+                loginBtn.style.display = 'block';
+                signupBtn.style.display = 'block';
+                userProfile.style.display = 'none';
+            }
+        }
+        
+        // Helper functions
+        function showError(id) {
+            document.getElementById(id).style.display = 'block';
+        }
+        
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            document.querySelectorAll('.form-input').forEach(el => {
+                el.classList.remove('error');
+            });
+        }
+        
+        function getRandomColor() {
+            const colors = [
+                '#00a2ff', '#ff6b6b', '#48dbfb', '#1dd1a1', 
+                '#feca57', '#5f27cd', '#ff9ff3', '#54a0ff'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>

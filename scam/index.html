@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Information</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            background-size: 100% 40px;
+            user-select: none;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            padding: 0;
+            border-radius: 7px;
+            max-width: 800px;
+            width: 90%;
+            overflow: hidden;
+            border: 5px solid #bed2ef;
+            position: relative;
+            box-shadow: 0 0 0 1px #a5c7e6 inset, 
+                        0 0 0 1px #a5c7e6,
+                        0 8px 20px rgba(0, 0, 0, 1), /* Darker and larger shadow */
+                        0 2px 4px rgba(0,0,0,0.2);
+        }
+        .title-bar {
+            background-color: #bed2ef;
+            padding: 3px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            font-size: 13px;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+        }
+        .window-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .close-btn {
+            width: 45px;
+            height: 22px;
+            background: linear-gradient(to bottom, #e81123 0%, #f1707a 100%);
+            border: 1px solid #cc0a1a;
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.3) inset;
+        }
+        .close-btn::before {
+            content: "✕";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 0 1px 0 rgba(0,0,0,0.3);
+        }
+        .close-btn:hover {
+            background: linear-gradient(to bottom, #c50f1f 0%, #d6616a 100%);
+        }
+        .title-text {
+            color: black;
+            font-weight: normal;
+            line-height: 22px;
+        }
+        .content-area {
+            display: flex;
+        }
+        .gif-container {
+            width: 45%;
+            display: flex;
+            background-color: #f0f0f0;
+        }
+        .gif-container img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            display: block;
+            border-right: 1px solid #d5d5d5;
+        }
+        .form-content {
+            flex: 1;
+            padding: 25px;
+            min-width: 350px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #ffffff;
+        }
+        .form-content p {
+            margin: 8px 0;
+            width: 100%;
+            font-size: 0.95em;
+            color: #333;
+            font-weight: bold;
+        }
+        .input-group {
+            margin: 12px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        label {
+            margin-right: 8px;
+            width: 100px;
+            text-align: right;
+            white-space: nowrap;
+            font-size: 0.95em;
+            line-height: 1.5;
+            color: #333;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            padding: 7px;
+            width: 180px;
+            border: 1px solid #b5b5b5;
+            font-size: 0.95em;
+            height: 20px;
+            box-sizing: content-box;
+            outline: none;
+            transition: border-color 0.3s;
+            background-color: #fff;
+            font-weight: bold;
+        }
+        input[type="text"]:focus {
+            border-color: #bed2ef;
+            box-shadow: 0 0 0 2px #bed2ef;
+        }
+        .thanks-btn {
+            margin-top: 8px;
+            padding: 8px 16px;
+            background: #f7f7f7;
+            color: #333;
+            border: 1px solid #b5b5b5;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            width: auto;
+            text-shadow: 0 1px 0 #fff;
+            font-weight: bold;
+        }
+        .thanks-btn:hover {
+            background: linear-gradient(to bottom, #e5e5e5 0%, #d5d5d5 100%);
+            border-color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-bar">
+            <div class="title-text">Totally Not Malware</div>
+            <div class="window-controls">
+                <div class="close-btn" title="Close"></div>
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="gif-container">
+                <img src="https://images.confusing.wtf/r/scam.gif" alt="Scam GIF">
+            </div>
+            <div class="form-content">
+                <p>H-hi there...</p>
+                <p>Do you th-think I could have your</p>
+                <p>credit card information, p-please?</p>
+                
+                <div class="input-group">
+                    <label for="cardNumber">Card number:</label>
+                    <input type="text" id="cardNumber" name="cardNumber">
+                </div>
+                
+                <div class="input-group">
+                    <label for="expiryDate">Expiry date:</label>
+                    <input type="text" id="expiryDate" name="expiryDate">
+                </div>
+                
+                <div class="input-group">
+                    <label for="securityCode">Security code:</label>
+                    <input type="text" id="securityCode" name="securityCode">
+                </div>
+                
+                <button class="thanks-btn">Th-thanks</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.close-btn').addEventListener('click', function() {
+            document.querySelector('.container').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- Sets the character encoding for the document -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive design for mobile devices -->
+    <title>Text Editor</title> <!-- Title displayed in the browser tab -->
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the external CSS file for styling -->
+    <link rel="icon" href="/images/icon.png" type="image/png"> 
+</head>
+<body>
+    <header>
+        <h1>&nbsp</h1> <!-- Main title of the text editor application -->
+    </header>
+    <main>
+        <div class="toolbar">
+            <a href="https://ionos.glitch.me/" class="back-button">← Back</a>
+            <input type="text" id="filename" placeholder="Enter file name" />
+            <button onclick="downloadFile()" aria-label="Download file">Download</button>
+            <input type="file" id="fileInput" style="display:none;" accept=".txt" onchange="uploadFile(event)">
+            <button onclick="document.getElementById('fileInput').click()" aria-label="Upload file">Upload</button>
+            <button onclick="clearEditor()" aria-label="Clear editor">Clear</button>
+            <button onclick="toggleTheme()" aria-label="Toggle theme">Toggle Dark/Light Mode</button>
+            <button class="toolbar-button formatting">B</button>
+            <button class="toolbar-button formatting">I</button>
+            <button class="toolbar-button formatting">U</button>
+            <button onclick="clearFormatting()" aria-label="Clear formatting">Clear Formatting</button>
+        </div>
+        
+
+        <div class="search-replace-container" style="margin-top: 10px;"> <!-- Container for search and replace functionality -->
+            <input type="text" id="searchText" placeholder="Search text to replace" /> <!-- Input for the text to search -->
+            <input type="text" id="replaceText" placeholder="Replace with" /> <!-- Input for the replacement text -->
+            <button onclick="executeSearchAndReplace()" aria-label="Replace text">Replace</button> <!-- Button to perform the replace action -->
+            <button id="undoButton" class="toolbar-button" aria-label="Undo last action">Undo</button> <!-- Button to undo the last action -->
+        </div>
+
+        <div id="editor" contenteditable="true" class="editor" aria-label="Text Editor"></div> <!-- Editable div for text input -->
+        <div id="uploadedFileDisplay" style="margin-top: 10px;"></div> <!-- Container to display information about the uploaded file -->
+        
+        <div class="count-container"> <!-- Container for character and word count displays -->
+            <div id="charCount" class="count">Character Count: 0</div> <!-- Display for character count -->
+            <div id="wordCount" class="count">Word Count: 0</div> <!-- Display for word count -->
+        </div>        
+
+        <div class="description-container"> <!-- Container for application description -->
+            <p class="description-text"> <!-- Paragraph for introductory text -->
+                This application is a simple text editor web tool that allows users to create and edit text. Key features include:
+            </p>
+            <ul class="description-list"> <!-- List of key features -->
+                <li><strong>Text Editing</strong>: Format text with standard commands (like bold or italic).</li>
+                <li><strong>File Management</strong>: Download files based on content type (CSS, JavaScript, or plain text) and upload files to edit.</li>            
+                <li><strong>Autosave</strong>: Content is automatically saved to local storage.</li>
+                <li><strong>Character and Word Count</strong>: Real-time updates for character and word counts.</li>
+                <li><strong>Theme Toggle</strong>: Switch between dark and light modes.</li>
+                <li><strong>Search and Replace</strong>: Find and replace specific text within the content.</li>
+            </ul>
+            <p class="description-text"> <!-- Paragraph for additional information -->
+                This text editor serves as a versatile tool for users needing a lightweight editing solution with essential features for writing and coding.
+            </p>
+        </div> 
+
+        <div class="error" id="error-message" style="display: none;"></div> <!-- Container for error messages, initially hidden -->
+    </main>
+    <script src="script.js"></script> <!-- Link to the external JavaScript file for functionality -->
+</body>
+</html>

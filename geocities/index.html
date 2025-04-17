@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://raw.githubusercontent.com/exophs/favicon/main/favicon_io/favicon.ico" />
+    <title>Welcome to My Wild GeoCities Page!</title>
+    <style>
+        body {
+            background-color: #00ffff;
+            color: #ff00ff;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            animation: colorChange 3s infinite;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        @keyframes colorChange {
+            0% { background-color: #ff00ff; color: #00ffff; }
+            25% { background-color: #00ff00; color: #ff0000; }
+            50% { background-color: #ff0000; color: #0000ff; }
+            75% { background-color: #0000ff; color: #ffff00; }
+            100% { background-color: #00ffff; color: #ff00ff; }
+        }
+
+        .zoom-wrapper {
+            transform: scale(0.8);
+            transform-origin: top left;
+            width: 125%;
+            height: 125%;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #ff0000;
+            text-shadow: 8px 8px #00ff00, -8px -8px #ff00ff;
+            animation: blink 0.5s infinite, pulse 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .content {
+            background-color: #ffffcc;
+            border: 5px dashed #ff00ff;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 15px 15px 40px #000000;
+        }
+
+        .marquee-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .marquee {
+            background-color: #ff0000;
+            color: #00ff00;
+            font-weight: bold;
+            padding: 10px;
+            border: 3px solid #000000;
+            font-size: 24px;
+            white-space: nowrap;
+            animation: textColorChange 2s infinite, bounce 2s infinite;
+        }
+
+        @keyframes textColorChange {
+            0% { color: #00ff00; background-color: #ff0000; }
+            50% { color: #ff00ff; background-color: #0000ff; }
+            100% { color: #00ff00; background-color: #ff0000; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-22px); }
+        }
+
+        .glitter {
+            color: #ffff00;
+            font-weight: bold;
+            animation: glitter 1s infinite;
+        }
+
+        @keyframes glitter {
+            0% { text-shadow: 0 0 5px #ffff00, 0 0 10px #ffff00, 0 0 15px #ffff00; }
+            50% { text-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00, 0 0 30px #ffff00; }
+            100% { text-shadow: 0 0 5px #ffff00, 0 0 10px #ffff00, 0 0 15px #ffff00; }
+        }
+
+        img {
+            border: 5px double #00ff00;
+            margin: 10px;
+            box-shadow: 10px 10px 20px #ff00ff;
+            animation: bounce 2s infinite, flash 1.5s infinite;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        a {
+            color: #00ff00;
+            font-weight: bold;
+            text-decoration: none;
+            animation: textGlow 1.5s infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 0 0 10px #00ff00; }
+            50% { text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00; }
+        }
+
+        .rainbow {
+            background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text;
+            color: transparent;
+            font-size: 36px;
+            animation: rainbow 2s infinite, shake 1s infinite;
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-10px); }
+        }
+
+        .ticker {
+            background-color: #ff0000;
+            color: #ffff00;
+            font-size: 18px;
+            padding: 5px;
+            border: 2px solid #0000ff;
+            margin-top: 20px;
+            width: 100%;
+            display: inline-block;
+            animation: tickerMove 10s linear infinite;
+        }
+
+        @keyframes tickerMove {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="zoom-wrapper">
+        <h1>!!! WELCOME TO THE ULTIMATE GEO-EXPERIENCE !!!</h1>
+
+        <div class="content">
+            <div class="marquee-container">
+                <div class="marquee">WELCOME TO MY AWESUM WEBSITE!!</div>
+            </div>
+
+            <p class="rainbow">This is the most RADICAL place on the web!</p>
+
+            <img src="https://img1.picmix.com/output/stamp/normal/2/9/8/3/1793892_62927.gif" alt="Dancing GIF" width="200">
+            <img src="https://www.geocities.ws/lucky121198/fireworks.gif" alt="Fireworks GIF" width="200">
+
+            <p>Check out my <a href="https://ionos.glitch.me/geocities/gallery/gallery.html">Totally Tubular GIF Gallery</a>!</p>
+            <p>Click here to go back to <a href="https://ionos.glitch.me/">Super Cool Links Page</a>!</p>
+
+            <div class="ticker">
+                🔥 Don't miss the latest updates! 🔥
+            </div>
+        </div>
+    </div>
+
+    <audio id="music" src="https://ray.confusing.wtf/u/go%20kitty%20go%20kitty%20go%20kitty%20ride.mp3" autoplay loop controls></audio>
+
+    <script>
+        const titleText = "Welcome to My Wild GeoCities Page!";
+        const titleSpeed = 150;
+        const deleteSpeed = 100;
+        const waitTime = 2000;
+
+        function typewriterTitle() {
+            let index = 0;
+            let isDeleting = false;
+
+            function type() {
+                let title = document.title;
+                if (index < titleText.length && !isDeleting) {
+                    document.title = titleText.substring(0, index + 1);
+                    index++;
+                    setTimeout(type, titleSpeed);
+                } else if (index === titleText.length && !isDeleting) {
+                    isDeleting = true;
+                    setTimeout(type, waitTime);
+                } else if (index > 0 && isDeleting) {
+                    document.title = titleText.substring(0, index - 1);
+                    index--;
+                    setTimeout(type, deleteSpeed);
+                } else if (index === 0 && isDeleting) {
+                    isDeleting = false;
+                    setTimeout(type, waitTime);
+                }
+            }
+
+            type();
+        }
+
+        typewriterTitle();
+    </script>
+    <script>
+        const audio = document.getElementById('music');
+        audio.volume = 0.1;
+    </script>
+    <script src="/js/geocities.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Cursor Trail Effect</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #111;
+            overflow: hidden;
+            height: 100vh;
+        }
+        .cursor {
+            position: relative;
+            pointer-events: none;
+        }
+        .cursor .box {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #00ff9a;
+            box-shadow: 0 0 15px #00ff9a, 0 0 50px #00ff9a;
+            transform-origin: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.7/gsap.min.js" integrity="sha512-f6bQMg6nkSRw/xfHw5BCbISe/dJjXrVGfz9BSDwhZtiErHwk7ifbmBEtF9vFW8UNIQPhV2uEFVyI/UHob9r7Cw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let cursor = document.querySelector('.cursor');
+            const numSquares = 72;
+            for (let i = 0; i < numSquares; i++) {
+                let span = document.createElement('span');
+                span.classList.add('box');
+                span.style.setProperty('--i', i + 1);
+                span.style.filter = `hue-rotate(${i * (360 / numSquares)}deg)`;
+                cursor.appendChild(span);
+            }
+        });
+
+        document.addEventListener("mousemove", e => {
+            const boxes = document.querySelectorAll('.box');
+            const radius = 100;
+            const angleIncrement = (2 * Math.PI) / boxes.length;
+
+            boxes.forEach((box, index) => {
+                const angle = index * angleIncrement - Math.PI / 2;
+                const x = e.clientX + Math.cos(angle) * radius;
+                const y = e.clientY + Math.sin(angle) * radius + radius;
+
+                gsap.to(box, {
+                    x: x,
+                    y: y,
+                    rotate: index * (360 / boxes.length),
+                    duration: 0.5,
+                    ease: "power2.out",
+                    delay: index * 0.02
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

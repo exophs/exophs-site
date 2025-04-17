@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Check</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .message {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .brave-message {
+            font-size: 24px;
+            color: #333;
+        }
+        .non-brave-message {
+            font-size: 48px;
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="content" class="message">
+        <!-- Content will be inserted here by JavaScript -->
+    </div>
+
+    <script>
+        // Function to detect Brave browser
+        function isBraveBrowser() {
+            // Check for Brave's specific properties
+            return (navigator.brave && typeof navigator.brave.isBrave === 'function') || 
+                   (window.chrome && navigator.brave);
+        }
+
+        // Display appropriate message based on browser
+        window.onload = function() {
+            const contentDiv = document.getElementById('content');
+            
+            if (isBraveBrowser()) {
+                contentDiv.innerHTML = '<div class="brave-message">I\'m sorry but the Brave browser has been blocked because I wanted it to be</div>';
+                document.body.style.backgroundColor = '#ffebee'; // Light red background
+            } else {
+                contentDiv.innerHTML = '<div class="non-brave-message">Yay! You\'re not on Brave!</div>';
+                document.body.style.backgroundColor = '#e8f5e9'; // Light green background
+            }
+        };
+    </script>
+</body>
+</html>
