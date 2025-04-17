@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://raw.githubusercontent.com/exophs/favicon/main/favicon_io/favicon.ico" />
+    <title>Totally Tubular GIF Gallery</title>
+    <style>
+        body {
+            background-color: #00ffff;
+            color: #ff00ff;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            animation: colorChange 3s infinite;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        @keyframes colorChange {
+            0% { background-color: #ff00ff; color: #00ffff; }
+            25% { background-color: #00ff00; color: #ff0000; }
+            50% { background-color: #ff0000; color: #0000ff; }
+            75% { background-color: #0000ff; color: #ffff00; }
+            100% { background-color: #00ffff; color: #ff00ff; }
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #ff0000;
+            text-shadow: 8px 8px #00ff00, -8px -8px #ff00ff;
+            animation: blink 0.5s infinite, pulse 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            background-color: #ffffcc;
+            border: 5px dashed #ff00ff;
+            box-shadow: 15px 15px 40px #000000;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .gallery-item {
+            display: inline-block;
+            border: 5px solid #00ff00;
+            box-shadow: 0 0 20px #ff0000;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .gallery-item img {
+            width: 300px;
+            height: 200px;
+            object-fit: fill;
+            cursor: pointer;
+            border: 0;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px #ff0000;
+        }
+
+        .marquee {
+            background-color: #ff0000;
+            color: #00ff00;
+            font-weight: bold;
+            padding: 10px;
+            margin: 10px 0;
+            border: 3px solid #000000;
+            font-size: 24px;
+            animation: marqueeMove 10s linear infinite;
+        }
+
+        @keyframes marqueeMove {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .footer {
+            margin: 20px;
+            font-size: 18px;
+            color: #ff00ff;
+        }
+
+        .footer a {
+            color: #00ff00;
+            font-weight: bold;
+            text-decoration: none;
+            animation: textGlow 1.5s infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 0 0 10px #00ff00; }
+            50% { text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00; }
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 80%;
+            border: 5px solid #00ff00;
+        }
+
+        .lightbox .close, .lightbox .prev, .lightbox .next {
+            position: absolute;
+            top: 50%;
+            background-color: #000;
+            color: #ff00ff;
+            font-size: 36px;
+            text-decoration: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .lightbox .close {
+            right: 10px;
+            top: 10px;
+        }
+
+        .lightbox .prev {
+            left: 10px;
+            transform: translateY(-50%);
+        }
+
+        .lightbox .next {
+            right: 10px;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Totally Tubular GIF Gallery</h1>
+
+    <div class="marquee">🚀 Check out these radical GIFs! 🚀</div>
+
+    <div class="gallery">
+        <div class="gallery-item">
+            <img src="https://media.tenor.com/BXQgJskV7LgAAAAj/9999.gif" alt="GIF 1">
+        </div>
+        <div class="gallery-item">
+            <img src="https://images.squarespace-cdn.com/content/v1/56ed89411bbee05366ba8c47/1460077446813-N83OCUGPJWH5PQLDGYGF/image-asset.gif" alt="Photo 2">
+        </div>
+        <div class="gallery-item">
+            <img src="https://media.tenor.com/xzjlrhYq_lQAAAAj/cat-nyan-cat.gif" alt="GIF 3">
+        </div>
+        <div class="gallery-item">
+            <img src="https://img1.picmix.com/output/pic/normal/0/5/0/8/11328050_7683c.gif" alt="GIF 4">
+        </div>
+    </div>
+
+    <div id="lightbox" class="lightbox">
+        <a href="#" class="close">&times;</a>
+        <a href="#" class="prev">&lt;</a>
+        <img id="lightbox-img" alt="Lightbox Image">
+        <a href="#" class="next">&gt;</a>
+    </div>
+
+    <footer class="footer">
+        <p>Want to see more? <a href="https://ionos.glitch.me\geocities\">Back to Home</a></p>
+    </footer>
+    <audio id="music" src="https://images.confusing.wtf/u/go%20kitty%20go%20kitty%20go%20kitty%20ride.mp3" autoplay loop controls></audio>
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const images = document.querySelectorAll('.gallery-item img');
+        let currentIndex = 0;
+
+        images.forEach((image, index) => {
+            image.addEventListener('click', () => {
+                openLightbox(index);
+            });
+        });
+
+        function openLightbox(index) {
+            lightbox.style.display = 'flex';
+            lightboxImg.src = images[index].src;
+            currentIndex = index;
+        }
+
+        function closeLightbox() {
+            lightbox.style.display = 'none';
+        }
+
+        function changeImage(direction) {
+            currentIndex = (currentIndex + direction + images.length) % images.length;
+            lightboxImg.src = images[currentIndex].src;
+        }
+
+        document.querySelector('.lightbox .close').addEventListener('click', closeLightbox);
+        document.querySelector('.lightbox .prev').addEventListener('click', () => changeImage(-1));
+        document.querySelector('.lightbox .next').addEventListener('click', () => changeImage(1));
+
+        document.addEventListener('keydown', (event) => {
+            if (lightbox.style.display === 'flex') {
+                if (event.key === 'Escape') {
+                    closeLightbox();
+                } else if (event.key === 'ArrowLeft') {
+                    changeImage(-1);
+                } else if (event.key === 'ArrowRight') {
+                    changeImage(1);
+                }
+            }
+        });
+
+        lightbox.addEventListener('click', (event) => {
+            if (event.target === lightbox) {
+                closeLightbox();
+            }
+        });
+    </script>
+    <script src="/js/geocities.js"></script>
+</body>
+</html>

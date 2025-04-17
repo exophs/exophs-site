@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Fake Hyprland</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: url("https://hyprland.org/imgs/blog/contestWinners/Kath.png")
+          no-repeat center center fixed;
+        background-color: black;
+        background-size: cover;
+        font-family: monospace;
+        overflow: hidden;
+      }
+
+      .waybar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 30px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 15px;
+        z-index: 9999;
+        font-size: 14px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .waybar > div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+        text-align: center;
+      }
+
+      .waybar > div:first-child {
+        text-align: left;
+      }
+
+      .waybar > div:last-child {
+        text-align: right;
+      }
+
+      .desktop {
+        position: absolute;
+        top: 50px; /* Space between desktop and waybar */
+        left: 20px; /* Added some space from the left */
+        right: 20px; /* Added some space from the right */
+        bottom: 20px; /* Added some space from the bottom */
+        overflow: hidden;
+      }
+
+      .window {
+        position: absolute;
+        background: rgba(30, 30, 30, 0.6);
+        color: white;
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        resize: both;
+        overflow: auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+        /* Removed cursor: move; from here to use default cursor */
+        user-select: none;
+        transition: border 0.3s ease;
+        border-radius: 15px; /* Curved corners */
+      }
+
+      /* Add a class for when the window is being dragged */
+      .window.dragging {
+        cursor: move;
+      }
+
+      .window.left-side {
+        left: 20px;
+        width: calc(50% - 30px); /* Space between the windows */
+      }
+
+      .window.right-side {
+        right: 20px;
+        width: calc(50% - 30px); /* Space between the windows */
+      }
+
+      .window.focused {
+        border: 2px solid #00aaff;
+      }
+
+      .controls {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        z-index: 10000;
+      }
+
+      .controls button {
+        background: black;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        margin-right: 5px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      .titlebar {
+        font-weight: bold;
+        /* Keep the move cursor only on the titlebar when needed */
+        cursor: default;
+        user-select: none;
+      }
+
+      .titlebar.draggable {
+        cursor: move;
+      }
+
+      .calendar {
+        position: fixed;
+        top: 35px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(30, 30, 30, 0.9);
+        color: white;
+        padding: 15px;
+        width: 220px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+        z-index: 10000;
+        display: none;
+      }
+
+      .calendar-header {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .calendar-days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+        text-align: center;
+      }
+
+      .calendar-days div {
+        padding: 5px;
+        cursor: pointer;
+      }
+
+      .calendar-days div:hover {
+        background-color: #444;
+      }
+
+      .calendar-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+
+      .calendar-nav button {
+        background: #333;
+        color: white;
+        border: none;
+        padding: 5px;
+        cursor: pointer;
+      }
+
+      .calendar-nav button:hover {
+        background: #444;
+      }
+
+      .battery-icon {
+        display: inline-block;
+        width: 18px;
+        height: 10px;
+        margin-right: 5px;
+        vertical-align: middle;
+      }
+
+      .monitor-icon {
+        display: inline-block;
+        width: 16px;
+        height: 12px;
+        margin-right: 5px;
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="waybar">
+      <div>
+        <svg
+          class="monitor-icon"
+          viewBox="0 0 24 18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <!-- Monitor screen -->
+          <rect
+            x="2"
+            y="2"
+            width="20"
+            height="12"
+            rx="1"
+            ry="1"
+            fill="none"
+            stroke="white"
+            stroke-width="1"
+          />
+          <!-- Monitor stand -->
+          <rect x="9" y="14" width="6" height="2" fill="white" />
+          <!-- Monitor base -->
+          <rect x="7" y="16" width="10" height="1" fill="white" />
+        </svg>
+        Workspaces: [1] 2 3
+      </div>
+      <div id="clock"></div>
+      <div>
+        <svg
+          class="battery-icon"
+          viewBox="0 0 24 12"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <!-- Battery outline -->
+          <rect
+            x="1"
+            y="1"
+            width="20"
+            height="10"
+            rx="1"
+            ry="1"
+            fill="none"
+            stroke="white"
+            stroke-width="1"
+          />
+          <!-- Battery tip -->
+          <rect
+            x="21"
+            y="3"
+            width="2"
+            height="6"
+            rx="0.5"
+            ry="0.5"
+            fill="white"
+          />
+          <!-- Battery level (100%) -->
+          <rect
+            x="2"
+            y="2"
+            width="18"
+            height="8"
+            rx="0.5"
+            ry="0.5"
+            fill="white"
+          />
+        </svg>
+        100%
+      </div>
+    </div>
+
+    <div class="desktop" id="desktop"></div>
+
+    <div class="calendar" id="calendar">
+      <div class="calendar-header" id="calendar-header">April 2025</div>
+      <div class="calendar-days" id="calendar-days"></div>
+      <div class="calendar-nav">
+        <button id="prev-month">❮</button>
+        <button id="next-month">❯</button>
+      </div>
+    </div>
+
+    <script>
+      let z = 1;
+      let layout = "tiling";
+      let focusedWindow = null;
+      let currentDate = new Date();
+      let ctrlKeyPressed = false;
+
+      // Track Ctrl key state
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Control') {
+          ctrlKeyPressed = true;
+          
+          // Make titlebar draggable when Ctrl is pressed
+          if (focusedWindow) {
+            const titlebar = focusedWindow.querySelector('.titlebar');
+            if (titlebar) {
+              titlebar.classList.add('draggable');
+            }
+          }
+        }
+      });
+
+      document.addEventListener('keyup', (e) => {
+        if (e.key === 'Control') {
+          ctrlKeyPressed = false;
+          
+          // Remove draggable status from all titlebars
+          document.querySelectorAll('.titlebar').forEach(t => {
+            t.classList.remove('draggable');
+          });
+          
+          // Also remove dragging class from any windows
+          document.querySelectorAll('.window').forEach(w => {
+            w.classList.remove('dragging');
+          });
+        }
+      });
+
+      function spawnWindow() {
+        const win = document.createElement("div");
+        win.classList.add("window");
+        win.style.left = Math.random() * 500 + "px";
+        win.style.top = Math.random() * 300 + "px";
+        win.style.width = "300px";
+        win.style.height = "200px";
+        win.style.zIndex = z++;
+
+        const titlebar = document.createElement("div");
+        titlebar.classList.add("titlebar");
+        titlebar.innerHTML = "🗔 Window";
+        win.appendChild(titlebar);
+
+        const content = document.createElement("div");
+        content.innerHTML = "<p>This is a fake Hyprland window!</p>";
+        win.appendChild(content);
+
+        document.getElementById("desktop").appendChild(win);
+
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        win.addEventListener("mousedown", (e) => {
+          // Only allow dragging with Ctrl + left mouse button
+          if (e.button !== 0 || !ctrlKeyPressed) {
+            return;
+          }
+
+          if (focusedWindow) {
+            focusedWindow.classList.remove("focused");
+          }
+          win.classList.add("focused");
+          focusedWindow = win;
+
+          isDragging = true;
+          win.classList.add("dragging"); // Add dragging class to show move cursor
+          
+          const rect = win.getBoundingClientRect();
+          offsetX = e.clientX - rect.left;
+          offsetY = e.clientY - rect.top;
+          win.style.zIndex = z++;
+          e.stopPropagation();
+        });
+
+        window.addEventListener("mousemove", (e) => {
+          if (isDragging && ctrlKeyPressed) {
+            win.style.left = e.clientX - offsetX + "px";
+            win.style.top = e.clientY - offsetY + "px";
+            focusedWindow = win;
+          } else if (isDragging && !ctrlKeyPressed) {
+            // If Ctrl key is released while dragging, stop dragging
+            isDragging = false;
+            win.classList.remove("dragging"); // Remove the dragging class
+          }
+        });
+
+        window.addEventListener("mouseup", () => {
+          if (isDragging) {
+            isDragging = false;
+            // Remove the dragging class when mouse is released
+            document.querySelectorAll('.window').forEach(w => {
+              w.classList.remove('dragging');
+            });
+          }
+        });
+      }
+
+      function updateClock() {
+        const now = new Date();
+        const time = now.toLocaleTimeString();
+        const date = now.toLocaleDateString();
+        document.getElementById("clock").textContent = `${time} | ${date}`;
+      }
+
+      function generateCalendar() {
+        const month = currentDate.getMonth();
+        const year = currentDate.getFullYear();
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const lastDate = new Date(year, month + 1, 0).getDate();
+
+        let calendarDays = "";
+        for (let i = 0; i < firstDay; i++) {
+          calendarDays += "<div></div>";
+        }
+        for (let day = 1; day <= lastDate; day++) {
+          calendarDays += `<div>${day}</div>`;
+        }
+
+        document.getElementById("calendar-days").innerHTML = calendarDays;
+        document.getElementById(
+          "calendar-header"
+        ).textContent = `${currentDate.toLocaleString("default", {
+          month: "long",
+        })} ${year}`;
+      }
+
+      function changeMonth(increment) {
+        currentDate.setMonth(currentDate.getMonth() + increment);
+        generateCalendar();
+      }
+
+      function clearFocus() {
+        if (focusedWindow) {
+          focusedWindow.classList.remove("focused");
+          focusedWindow = null;
+        }
+      }
+
+      setInterval(updateClock, 1000);
+      updateClock();
+
+      document.getElementById("clock").addEventListener("click", (e) => {
+        const calendar = document.getElementById("calendar");
+        const isVisible = calendar.style.display === "block";
+        calendar.style.display = isVisible ? "none" : "block";
+        if (!isVisible) {
+          generateCalendar();
+        }
+        e.stopPropagation();
+      });
+
+      document.getElementById("prev-month").addEventListener("click", () => {
+        changeMonth(-1);
+      });
+
+      document.getElementById("next-month").addEventListener("click", () => {
+        changeMonth(1);
+      });
+
+      document.addEventListener("click", (e) => {
+        const calendar = document.getElementById("calendar");
+        const clock = document.getElementById("clock");
+        if (
+          calendar.style.display === "block" &&
+          !calendar.contains(e.target) &&
+          !clock.contains(e.target)
+        ) {
+          calendar.style.display = "none";
+        }
+        
+        // Clear focus when clicking on desktop or waybar
+        if (e.target === document.getElementById("desktop") || 
+            e.target.classList.contains("waybar")) {
+          clearFocus();
+        }
+      });
+
+      // Add click handler for waybar
+      document.querySelector(".waybar").addEventListener("click", (e) => {
+        clearFocus();
+      });
+
+      // Add click handler for desktop
+      document.getElementById("desktop").addEventListener("click", (e) => {
+        if (e.target === document.getElementById("desktop")) {
+          clearFocus();
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.key === "x" && focusedWindow) {
+          focusedWindow.remove();
+          focusedWindow = null;
+          return;
+        }
+
+        const superHeld =
+          e.ctrlKey &&
+          (e.key === "ArrowLeft" ||
+            e.key === "ArrowRight" ||
+            e.key === "ArrowUp" ||
+            e.key === "ArrowDown");
+
+        if (superHeld && focusedWindow) {
+          const desk = document.getElementById("desktop");
+          const width = desk.clientWidth;
+          const height = desk.clientHeight;
+
+          if (e.key === "ArrowLeft") {
+            focusedWindow.style.left = "0px";
+            focusedWindow.style.top = "0px";
+            focusedWindow.style.width = width / 2 + "px";
+            focusedWindow.style.height = height + "px";
+          } else if (e.key === "ArrowRight") {
+            focusedWindow.style.left = width / 2 + "px";
+            focusedWindow.style.top = "0px";
+            focusedWindow.style.width = width / 2 + "px";
+            focusedWindow.style.height = height + "px";
+          } else if (e.key === "ArrowUp") {
+            focusedWindow.style.left = "0px";
+            focusedWindow.style.top = "0px";
+            focusedWindow.style.width = width + "px";
+            focusedWindow.style.height = height / 2 + "px";
+          } else if (e.key === "ArrowDown") {
+            focusedWindow.style.left = "0px";
+            focusedWindow.style.top = height / 2 + "px";
+            focusedWindow.style.width = width + "px";
+            focusedWindow.style.height = height / 2 + "px";
+          }
+        }
+
+        if (superHeld && ["1", "2", "3"].includes(e.key)) {
+          switchWorkspace(parseInt(e.key));
+        }
+
+        if (e.key === "t" || e.key === "T") {
+          layout = layout === "tiling" ? "floating" : "tiling";
+          arrangeTiling();
+        }
+
+        if (e.altKey && e.key === "t") {
+          spawnWindow();
+        }
+      });
+
+      function switchWorkspace(workspaceNumber) {
+        console.log("Switching to workspace " + workspaceNumber);
+      }
+
+      function arrangeTiling() {
+        console.log("Arranging windows in " + layout + " layout.");
+      }
+    </script>
+  </body>
+</html>

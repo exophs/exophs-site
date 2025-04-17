@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✦ escapism ✧</title>
+    <link rel="icon" href="https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/2e8bb6ce-7a5b-4788-b786-c7c6ad3105f4.image.png?v=1743751527735" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            background-color: #000;
+            user-select: none;
+        }
+        
+        #video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        #fullpage-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            -webkit-media-controls {
+                display: none !important;
+            }
+            filter: blur(10px) brightness(0.7);
+            transform: scale(1.05);
+        }
+        
+        video::-webkit-media-controls-overlay-play-button,
+        video::-webkit-media-controls-cast-button,
+        video::-internal-media-controls-download-button {
+            display: none !important;
+        }
+        
+        #play-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            background-color: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(2px);
+        }
+        
+        #play-button {
+            padding: 18px 36px;
+            font-size: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50px;
+            cursor: pointer;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 300;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #play-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.8);
+            color: white;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        #play-button::before {
+            content: '▶';
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        #play-button:hover::before {
+            transform: scale(1.2);
+        }
+        
+        .title {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            letter-spacing: 3px;
+            z-index: 101;
+            text-align: center;
+            width: 100%;
+            pointer-events: none;
+        }
+        
+        .video-playing #play-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        
+        .video-playing #fullpage-video {
+            filter: none;
+        }
+
+        #skip-prompt {
+            position: fixed;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            letter-spacing: 1px;
+            z-index: 102;
+            text-align: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .video-playing #skip-prompt {
+            opacity: 1;
+        }
+
+        #escapism-info {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 1s ease;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #escapism-info h1 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            text-transform: lowercase;
+            letter-spacing: 15px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        #escapism-info h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        #escapism-info .content {
+            max-width: 600px;
+            text-align: center;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        #escapism-info p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        #escapism-info a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        #escapism-info a:hover {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        #return-button {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 15px 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            position: relative;
+            overflow: hidden;
+            font-weight: 300;
+            backdrop-filter: blur(5px);
+        }
+
+        #return-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: all 0.6s ease;
+        }
+
+        #return-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.8);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        #return-button:hover::before {
+            left: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(10px, 10px); }
+            50% { transform: translate(5px, -5px); }
+            75% { transform: translate(-5px, 5px); }
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <video 
+            id="fullpage-video" 
+            loop
+            controlsList="nodownload nofullscreen noremoteplayback"
+            preload="auto"
+        >
+            <source src="https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/escapism-edited.mp4?v=1743748140285" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+    </div>
+    
+    <div id="play-overlay">
+        <button id="play-button">Begin Escape</button>
+    </div>
+    
+    <div class="title">✦ escapism ✧</div>
+    <div id="skip-prompt">Press SPACE to skip</div>
+
+    <script>
+        const video = document.getElementById('fullpage-video');
+        const playButton = document.getElementById('play-button');
+        const playOverlay = document.getElementById('play-overlay');
+        const body = document.body;
+        const skipPrompt = document.getElementById('skip-prompt');
+        
+        video.pause();
+        
+        video.loop = false;
+        
+        video.addEventListener('ended', () => {
+            showEscapismInfo();
+        });
+        
+        playButton.addEventListener('click', () => {
+            video.muted = false;
+            video.play().then(() => {
+                body.classList.add('video-playing');
+            }).catch(error => {
+                video.muted = true;
+                video.play().then(() => {
+                    body.classList.add('video-playing');
+                });
+            });
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && body.classList.contains('video-playing')) {
+                e.preventDefault();
+                showEscapismInfo();
+            }
+        });
+        
+        function createParticles() {
+            const particleCount = 30;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 3 + 1;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const duration = Math.random() * 10 + 5;
+                const delay = Math.random() * 5;
+                const opacity = Math.random() * 0.5 + 0.1;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.opacity = opacity;
+                particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+                
+                document.getElementById('escapism-info').appendChild(particle);
+            }
+        }
+        
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes float {
+                0%, 100% { transform: translate(0, 0); }
+                25% { transform: translate(10px, 10px); }
+                50% { transform: translate(5px, -5px); }
+                75% { transform: translate(-5px, 5px); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        function showEscapismInfo() {
+            video.pause();
+            const infoPage = document.createElement('div');
+            infoPage.id = 'escapism-info';
+            
+            infoPage.innerHTML = `
+                <h1>✦ escapism ✧</h1>
+                <div class="content">
+                    <p>
+                        Escapism is the mental diversion from unpleasant or boring aspects of daily life, 
+                        typically through activities involving imagination or entertainment.
+                    </p>
+                    <p>
+                        It can manifest through literature, music, video games, daydreaming, 
+                        or any activity that allows the mind to wander beyond immediate circumstances.
+                    </p>
+                    <p>
+                        While often criticized as avoidance, escapism can also be a healthy 
+                        coping mechanism and source of creative inspiration.
+                    </p>
+                    <p>
+                        video by <a href="https://www.instagram.com/furyxzia/" target="_blank" rel="noopener noreferrer">@furyxzia</a>
+                    </p>
+                </div>
+                <button id="return-button">return to experience</button>
+            `;
+            
+            document.body.appendChild(infoPage);
+            
+            createParticles();
+            
+            setTimeout(() => {
+                infoPage.style.opacity = '1';
+            }, 50);
+            
+            infoPage.querySelector('#return-button').addEventListener('click', () => {
+                infoPage.style.opacity = '0';
+                setTimeout(() => {
+                    infoPage.remove();
+                    video.currentTime = 0;
+                    video.play();
+                }, 1000);
+            });
+        }
+        
+        window.addEventListener('resize', function() {
+            video.style.width = window.innerWidth + 'px';
+            video.style.height = window.innerHeight + 'px';
+        });
+    </script>
+</body>
+</html>

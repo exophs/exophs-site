@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Draw ･ﾟ✧</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: white;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      #color-picker {
+        position: fixed;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 10;
+      }
+
+      .color-option {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid black;
+      }
+
+      #color-picker-button {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 2px solid black;
+        background: conic-gradient(
+          red,
+          yellow,
+          green,
+          cyan,
+          blue,
+          magenta,
+          red
+        );
+        cursor: pointer;
+      }
+
+      #clear-btn-container,
+      #save-btn-container,
+      #brush-size-container,
+      #eraser-btn-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #clear-btn,
+      #save-btn,
+      #brush-size-slider,
+      #eraser-btn {
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+      }
+
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+      }
+
+      /* Warning dialog styles */
+      #warning-dialog {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        display: none;
+        z-index: 1000;
+        text-align: center;
+        width: 300px;
+      }
+
+      #warning-dialog button {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 14px;
+        cursor: pointer;
+        background-color: #ff6666;
+        border: none;
+        color: white;
+        border-radius: 5px;
+      }
+
+      #warning-dialog button.cancel {
+        background-color: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="color-picker">
+      <!-- RGB color picker button -->
+      <div id="color-picker-button" onclick="openColorPicker()"></div>
+      <!-- Hidden color input for picking colors -->
+      <input
+        type="color"
+        id="color-input"
+        style="display: none"
+        onchange="setColor(this.value)"
+      />
+
+      <!-- Individual color options -->
+      <div
+        class="color-option"
+        style="background-color: #000000"
+        onclick="setColor('#000000')"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #ffffff"
+        onclick="setColor('#FFFFFF')"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #ed1c24"
+        onclick="setColor('#ED1C24')"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #ff7f27"
+        onclick="setColor('#FF7F27')"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #fff200"
+        onclick="setColor('#FFF200')"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #22b14c"
+        onclick="setColor('#22B14C')"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #00a2e8"
+        onclick="setColor('#00A2E8')"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #3f48cc"
+        onclick="setColor('#3F48CC')"
+      ></div>
+      <div
+        class="color-option"
+        style="background-color: #a349a4"
+        onclick="setColor('#A349A4')"
+      ></div>
+
+      <!-- Brush Size Slider -->
+      <div id="brush-size-container">
+        <input
+          type="range"
+          id="brush-size-slider"
+          min="5"
+          max="50"
+          value="30"
+          onchange="setBrushSize(this.value)"
+        />
+      </div>
+
+      <!-- Eraser Button -->
+      <div id="eraser-btn-container">
+        <img
+          id="eraser-btn"
+          src="https://static-00.iconduck.com/assets.00/eraser-icon-256x256-e0q4ms0d.png"
+          alt="Eraser"
+          onclick="toggleEraser()"
+          style="
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+          "
+        />
+      </div>
+
+      <div id="clear-btn-container">
+        <!-- Trash bin SVG for Clear button -->
+        <svg
+          id="clear-btn"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          onclick="showWarning()"
+        >
+          <path
+            d="M3 6h18v2H3zm3 2h12v14H6zm5 1v9h2v-9h-2zm1 0h-2v9h2zM6 7h12v1H6z"
+          />
+        </svg>
+      </div>
+
+      <div id="save-btn-container">
+        <!-- Save as Image button with custom PNG image -->
+        <img
+          id="save-btn"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0xMup0mjburc4x_QCAdtDhvXgkREZMjgNFw&s"
+          alt="Save Image"
+          onclick="saveAsImage()"
+          style="
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+          "
+        />
+      </div>
+    </div>
+
+    <canvas id="background"></canvas>
+
+    <!-- Warning dialog -->
+    <div id="warning-dialog">
+      <p>Are you sure you want to clear the canvas?</p>
+      <button onclick="clearCanvas()">Yes</button>
+      <button class="cancel" onclick="cancelClear()">Cancel</button>
+    </div>
+
+    <script>
+      var canvas = document.getElementById("background");
+      var context = canvas.getContext("2d");
+      var isDrawing = false;
+      var isEraser = false;
+      var color = "#000000";
+      var brushSize = 30;
+      var canvasHistory = []; // Stack for undo/redo
+      var historyIndex = -1;
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      // Check if there's any saved drawing in localStorage
+      if (localStorage.getItem("drawing")) {
+        var savedImage = new Image();
+        savedImage.src = localStorage.getItem("drawing");
+        savedImage.onload = function () {
+          context.drawImage(savedImage, 0, 0);
+        };
+      }
+
+      function setColor(newColor) {
+        color = newColor;
+        document.getElementById("color-picker-button").style.backgroundColor =
+          newColor;
+        isEraser = false; // Disable eraser if new color is selected
+      }
+
+      function setBrushSize(size) {
+        brushSize = size;
+      }
+
+      function toggleEraser() {
+        isEraser = !isEraser;
+        color = isEraser ? "white" : color; // Set to white when eraser is on
+        document.getElementById("eraser-btn").style.backgroundColor = isEraser
+          ? "#ffcc00"
+          : "#ccc";
+      }
+
+      // Handle mouse events
+      canvas.addEventListener("mousedown", function (event) {
+        if (event.target.classList.contains("color-option")) return;
+        isDrawing = true;
+        saveState(); // Save state when drawing starts
+      });
+
+      canvas.addEventListener("mouseup", function () {
+        isDrawing = false;
+        context.beginPath();
+        saveState(); // Save state after drawing
+      });
+
+      canvas.addEventListener("mousemove", function (event) {
+        if (!isDrawing || event.target.classList.contains("color-option"))
+          return;
+
+        var clientX = event.clientX;
+        var clientY = event.clientY;
+
+        draw(clientX, clientY);
+      });
+
+      // Handle touch events
+      canvas.addEventListener("touchstart", function (event) {
+        event.preventDefault(); // Prevent scrolling
+        if (event.target.classList.contains("color-option")) return;
+        isDrawing = true;
+        saveState(); // Save state when drawing starts
+      });
+
+      canvas.addEventListener("touchend", function () {
+        isDrawing = false;
+        context.beginPath();
+        saveState(); // Save state after drawing
+      });
+
+      canvas.addEventListener("touchmove", function (event) {
+        event.preventDefault(); // Prevent scrolling
+
+        if (!isDrawing || event.target.classList.contains("color-option"))
+          return;
+
+        var touch = event.touches[0]; // Get the first touch point
+        var clientX = touch.clientX;
+        var clientY = touch.clientY;
+
+        draw(clientX, clientY);
+      });
+
+      function draw(clientX, clientY) {
+        context.lineWidth = brushSize;
+        context.lineCap = "round";
+        context.strokeStyle = color;
+
+        context.lineTo(clientX, clientY);
+        context.stroke();
+        context.beginPath();
+        context.moveTo(clientX, clientY);
+      }
+
+      // Save the current state of the canvas
+      function saveState() {
+        if (historyIndex < canvasHistory.length - 1) {
+          canvasHistory = canvasHistory.slice(0, historyIndex + 1); // Remove redo steps if new action is made
+        }
+        canvasHistory.push(canvas.toDataURL());
+        historyIndex++;
+
+        // Save canvas state to localStorage
+        localStorage.setItem("drawing", canvas.toDataURL());
+      }
+
+      // Undo the last drawing action
+      function undo() {
+        if (historyIndex > 0) {
+          historyIndex--;
+          var imgData = new Image();
+          imgData.src = canvasHistory[historyIndex];
+          imgData.onload = function () {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(imgData, 0, 0);
+          };
+        }
+      }
+
+      // Redo the last undone action
+      function redo() {
+        if (historyIndex < canvasHistory.length - 1) {
+          historyIndex++;
+          var imgData = new Image();
+          imgData.src = canvasHistory[historyIndex];
+          imgData.onload = function () {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(imgData, 0, 0);
+          };
+        }
+      }
+
+      window.addEventListener("resize", function () {
+        var tempCanvas = document.createElement("canvas");
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+        tempCanvas.getContext("2d").drawImage(canvas, 0, 0);
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        context.drawImage(tempCanvas, 0, 0);
+      });
+
+      window.addEventListener("DOMContentLoaded", function () {
+        setColor("#000000");
+      });
+
+      // Show the warning dialog
+      function showWarning() {
+        document.getElementById("warning-dialog").style.display = "block";
+      }
+
+      // Clear the canvas
+      function clearCanvas() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        saveState(); // Save the cleared state
+        document.getElementById("warning-dialog").style.display = "none"; // Hide the warning dialog
+        localStorage.removeItem("drawing"); // Remove the saved drawing from localStorage
+      }
+
+      // Cancel clearing the canvas
+      function cancelClear() {
+        document.getElementById("warning-dialog").style.display = "none"; // Hide the warning dialog
+      }
+
+      // Save the canvas as an image
+      function saveAsImage() {
+        var imageUrl = canvas.toDataURL("image/png");
+        var link = document.createElement("a");
+        link.href = imageUrl;
+        link.download = "drawing.png";
+        link.click();
+      }
+
+      // Open the hidden color input when clicking the RGB button
+      function openColorPicker() {
+        document.getElementById("color-input").click();
+      }
+
+      // Keyboard shortcuts for undo and redo
+      window.addEventListener("keydown", function (event) {
+        if (event.ctrlKey && event.key === "z") {
+          undo();
+        } else if (event.ctrlKey && event.key === "y") {
+          redo();
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: black;
+    color: white;
+    font-family: monospace;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+}
+
+canvas, pre {
+    width: 400px;
+    height: auto;
+    font-size: 8px;
+}
+
+pre {
+    white-space: pre;
+    font-size: 8px;
+    line-height: 1.1;
+    margin: 0;
+    text-align: left;
+}
