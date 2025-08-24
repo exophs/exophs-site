@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExophsBot Commands Documentation</title>
+    <style>
+        html {
+            scroll-behavior: smooth; /* Smooth scrolling for nav links */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        html::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, and Opera */
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #2b2b2b;
+            color: #e0e0e0;
+            height: 100%;
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
+            overflow-y: auto; /* Allow vertical scrolling */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+        body::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, and Opera */
+        }
+        header {
+            background-color: #4b0082;
+            color: #e0e0e0;
+            padding: 20px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            background-color: #3c3c3c;
+            color: #e0e0e0;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #d8bfd8;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        nav a:hover {
+            color: #ffffff;
+        }
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #333333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        h2 {
+            border-bottom: 2px solid #6a0dad;
+            padding-bottom: 10px;
+            color: #d8bfd8;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #555555;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #6a0dad;
+            color: #e0e0e0;
+        }
+        tr:nth-child(even) {
+            background-color: #3c3c3c;
+        }
+        code {
+            background-color: #4b4b4b;
+            padding: 2px 4px;
+            border-radius: 4px;
+            color: #d8bfd8;
+        }
+        footer {
+            background-color: #3c3c3c;
+            color: #e0e0e0;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ExophsBot Commands Documentation</h1>
+        <p>Version 1.0.1 | For the 5B5T Minecraft Server</p>
+    </header>
+    <nav>
+        <a href="#introduction">Introduction</a>
+        <a href="#commands">Commands List</a>
+    </nav>
+    <main>
+        <section id="introduction">
+            <h2>Introduction</h2>
+            <p>Welcome to the official documentation for ExophsBot, a Minecraft bot designed for the 5B5T server. This bot provides various utility, fun, and movement commands to enhance your gameplay experience. All commands are prefixed with <code>!</code> and can be used in the in-game chat.</p>
+            <p>Note: This documentation excludes admin-only commands. For any issues or suggestions, join our Discord server using the <code>!discord</code> command in-game.</p>
+        </section>
+        <section id="commands">
+            <h2>Commands List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Usage</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>!help</code></td>
+                        <td><code>!help</code></td>
+                        <td>Displays a list of all available commands with brief descriptions.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!ping</code></td>
+                        <td><code>!ping [username]</code></td>
+                        <td>Gets the ping (latency) of the specified user or yourself if no username is provided. Returns "unknown" if not available.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!lastmsg</code></td>
+                        <td><code>!lastmsg &lt;username&gt;</code></td>
+                        <td>Retrieves the last message sent by the specified user.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!firstmsg</code></td>
+                        <td><code>!firstmsg &lt;username&gt;</code></td>
+                        <td>Retrieves the first message sent by the specified user.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!randommsg</code></td>
+                        <td><code>!randommsg &lt;username&gt;</code></td>
+                        <td>Retrieves a random message from the specified user's message history.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!info</code></td>
+                        <td><code>!info</code></td>
+                        <td>Displays system information including Node.js version, operating system, and CPU model.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!randomn</code></td>
+                        <td><code>!randomn &lt;decimals&gt; &lt;min&gt; &lt;max&gt;</code></td>
+                        <td>Generates a random number between min and max with the specified number of decimal places (0-99).</td>
+                    </tr>
+                    <tr>
+                        <td><code>!prefix</code></td>
+                        <td><code>!prefix</code></td>
+                        <td>Displays the current command prefix ("!").</td>
+                    </tr>
+                    <tr>
+                        <td><code>!uptime</code></td>
+                        <td><code>!uptime</code></td>
+                        <td>Shows the bot's uptime in minutes.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!online</code></td>
+                        <td><code>!online</code></td>
+                        <td>Displays the number of players currently online.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!discord</code></td>
+                        <td><code>!discord</code></td>
+                        <td>Provides the link to join the Discord server: https://discord.gg/dN8jCQymN7</td>
+                    </tr>
+                    <tr>
+                        <td><code>!gay</code></td>
+                        <td><code>!gay [target]</code></td>
+                        <td>Generates a humorous random percentage of how "gay" the target (or yourself) is.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!coords</code></td>
+                        <td><code>!coords</code></td>
+                        <td>Generates and displays fake random coordinates in the Overworld.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!pitch</code></td>
+                        <td><code>!pitch</code></td>
+                        <td>Displays the bot's current camera pitch.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!yaw</code></td>
+                        <td><code>!yaw</code></td>
+                        <td>Displays the bot's current camera yaw.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!doxx</code></td>
+                        <td><code>!doxx [target]</code></td>
+                        <td>Generates and displays a fake IP address for the target (or yourself) as a joke.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!health</code></td>
+                        <td><code>!health</code></td>
+                        <td>Displays the bot's current health and hunger levels.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!hunger</code></td>
+                        <td><code>!hunger</code></td>
+                        <td>Displays the bot's current hunger and health levels.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!y/n</code></td>
+                        <td><code>!y/n</code></td>
+                        <td>Randomly responds with "YES" or "NO".</td>
+                    </tr>
+                    <tr>
+                        <td><code>!roast</code></td>
+                        <td><code>!roast</code></td>
+                        <td>Delivers a random humorous roast message to the user.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!kit</code></td>
+                        <td><code>!kit &lt;name&gt;</code></td>
+                        <td>Simulates receiving a kit with the specified name.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!rules</code></td>
+                        <td><code>!rules</code></td>
+                        <td>Displays the server rules and how to report offenders.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!report</code></td>
+                        <td><code>!report &lt;player&gt; [reason]</code></td>
+                        <td>Reports the specified player, optionally with a reason.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!8ball</code></td>
+                        <td><code>!8ball &lt;question&gt;</code></td>
+                        <td>Provides a random Magic 8-Ball response to your question.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!move</code></td>
+                        <td><code>!move &lt;forward/back/left/right/jump/stop/look&gt; [time in seconds or look params]</code></td>
+                        <td>Controls the bot's movement in the specified direction for an optional duration, or adjusts look direction (e.g., yaw/pitch or directions like forward/up).</td>
+                    </tr>
+                    <tr>
+                        <td><code>!goto</code></td>
+                        <td><code>!goto &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></td>
+                        <td>Moves the bot to the specified coordinates using pathfinding.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!come</code></td>
+                        <td><code>!come</code></td>
+                        <td>Makes the bot move towards the player who issued the command.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!follow</code></td>
+                        <td><code>!follow &lt;player&gt;</code></td>
+                        <td>Makes the bot follow the specified player.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!attack</code></td>
+                        <td><code>!attack &lt;animal/playername/stop&gt;</code></td>
+                        <td>Makes the bot attack the specified target (animal or player) with critical hits, or stop attacking if "stop" is used. Limited to certain animals.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 ExophsBot | Made for Ray by Quicoys | Last Updated: August 24, 2025</p>
+    </footer>
+</body>
+</html>
