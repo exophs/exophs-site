@@ -331,79 +331,79 @@
       }
 
       setInterval(updateCountdown, 1000);
-      ghostCursor();
+      // ghostCursor();
     });
 
-    function ghostCursor() {
-      let width = window.innerWidth;
-      let height = window.innerHeight;
-      let cursor = { x: width / 2, y: height / 2 };
-      let particles = [];
-      let canvas, context;
+    // function ghostCursor() {
+    //   let width = window.innerWidth;
+    //   let height = window.innerHeight;
+    //   let cursor = { x: width / 2, y: height / 2 };
+    //   let particles = [];
+    //   let canvas, context;
 
-      let baseImage = new Image();
-      baseImage.src = "https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/cursor.png?v=1729381820267";
+    //   let baseImage = new Image();
+    //   baseImage.src = "https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/cursor.png?v=1729381820267";
 
-      function init() {
-        canvas = document.createElement("canvas");
-        context = canvas.getContext("2d");
-        canvas.style.top = "0px";
-        canvas.style.left = "0px";
-        canvas.style.pointerEvents = "none";
-        canvas.style.position = "fixed";
-        canvas.style.zIndex = "9999";
-        document.body.appendChild(canvas);
-        canvas.width = width;
-        canvas.height = height;
-        bindEvents();
-        loop();
-      }
+    //   function init() {
+    //     canvas = document.createElement("canvas");
+    //     context = canvas.getContext("2d");
+    //     canvas.style.top = "0px";
+    //     canvas.style.left = "0px";
+    //     canvas.style.pointerEvents = "none";
+    //     canvas.style.position = "fixed";
+    //     canvas.style.zIndex = "9999";
+    //     document.body.appendChild(canvas);
+    //     canvas.width = width;
+    //     canvas.height = height;
+    //     bindEvents();
+    //     loop();
+    //   }
 
-      function bindEvents() {
-        document.body.addEventListener("mousemove", onMouseMove);
-        window.addEventListener("resize", onWindowResize);
-      }
+    //   function bindEvents() {
+    //     document.body.addEventListener("mousemove", onMouseMove);
+    //     window.addEventListener("resize", onWindowResize);
+    //   }
 
-      function onWindowResize() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-      }
+    //   function onWindowResize() {
+    //     width = window.innerWidth;
+    //     height = window.innerHeight;
+    //     canvas.width = width;
+    //     canvas.height = height;
+    //   }
 
-      function onMouseMove(e) {
-        cursor.x = e.clientX;
-        cursor.y = e.clientY;
-        addParticle(cursor.x, cursor.y, baseImage);
-      }
+    //   function onMouseMove(e) {
+    //     cursor.x = e.clientX;
+    //     cursor.y = e.clientY;
+    //     addParticle(cursor.x, cursor.y, baseImage);
+    //   }
 
-      function addParticle(x, y, image) {
-        particles.push(new Particle(x, y, image));
-      }
+    //   function addParticle(x, y, image) {
+    //     particles.push(new Particle(x, y, image));
+    //   }
 
-      function updateParticles() {
-        context.clearRect(0, 0, width, height);
-        particles.forEach(p => p.update(context));
-        particles = particles.filter(p => p.lifeSpan >= 0);
-      }
+    //   function updateParticles() {
+    //     context.clearRect(0, 0, width, height);
+    //     particles.forEach(p => p.update(context));
+    //     particles = particles.filter(p => p.lifeSpan >= 0);
+    //   }
 
-      function loop() {
-        updateParticles();
-        requestAnimationFrame(loop);
-      }
+    //   function loop() {
+    //     updateParticles();
+    //     requestAnimationFrame(loop);
+    //   }
 
-      function Particle(x, y, image) {
-        this.lifeSpan = 40;
-        this.position = { x: x, y: y };
-        this.image = image;
+    //   function Particle(x, y, image) {
+    //     this.lifeSpan = 40;
+    //     this.position = { x: x, y: y };
+    //     this.image = image;
 
-        this.update = function(context) {
-          this.lifeSpan--;
-          const opacity = Math.max(this.lifeSpan / 40, 0);
-          context.globalAlpha = opacity;
-          context.drawImage(this.image, this.position.x, this.position.y);
-        };
-      }
+    //     this.update = function(context) {
+    //       this.lifeSpan--;
+    //       const opacity = Math.max(this.lifeSpan / 40, 0);
+    //       context.globalAlpha = opacity;
+    //       context.drawImage(this.image, this.position.x, this.position.y);
+    //     };
+    //   }
 
       init();
     }
