@@ -1,437 +1,416 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Welcome to Ray's site! Explore my projects, enjoy the countdown to my birthday, and find hidden secrets!">
-    <meta name="keywords" content="Ray, projects, countdown, secrets, personal website">
-    <link rel="icon" href="https://raw.githubusercontent.com/exophs/favicon/main/favicon_io/favicon.ico">
-    <title>ray's site</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
-    <meta property="og:title" content="Hey Chat">
-    <meta property="og:description" content="My website">
-    <meta property="og:image" content="https://ray.confusing.wtf/u/48xEZ1.jpg">
-    <meta property="og:url" content="http://exophs.space">
-    <meta property="og:type" content="website">
-    <link rel="canonical" href="http://exophs.space">
-    <style>
-        @font-face {
-            font-family: 'MinecraftRegular';
-            src: url('https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/MinecraftRegular-Bmg3.otf?v=1727558152366') format('opentype');
-            font-weight: normal;
-            font-style: normal;
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Welcome to Ray's site! Explore my projects, enjoy the countdown to my birthday, and find hidden secrets!">
+  <meta name="keywords" content="Ray, projects, countdown, secrets, personal website">
+  <link rel="icon" href="https://raw.githubusercontent.com/exophs/favicon/main/favicon_io/favicon.ico">
+  <title>ray's site</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <meta property="og:title" content="Hey Chat">
+  <meta property="og:description" content="My website">
+  <meta property="og:image" content="https://ray.confusing.wtf/u/48xEZ1.jpg">
+  <meta property="og:url" content="http://exophs.space">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://exophs.space">
+  <style>
+    @font-face {
+      font-family: 'MinecraftRegular';
+      src: url('https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/MinecraftRegular-Bmg3.otf?v=1727558152366') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
 
-        @font-face {
-            font-family: 'MinecraftBold';
-            src: url('https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/MinecraftBold-nMK1.otf?v=1727558147987') format('opentype');
-            font-weight: bold;
-            font-style: normal;
-        }
+    @font-face {
+      font-family: 'MinecraftBold';
+      src: url('https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/MinecraftBold-nMK1.otf?v=1727558147987') format('opentype');
+      font-weight: bold;
+      font-style: normal;
+    }
 
-        body {
-            font-family: 'MinecraftRegular', sans-serif, Arial;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
+    body {
+      font-family: 'MinecraftRegular', sans-serif, Arial;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
 
-        .title {
-            font-family: 'MinecraftRegular', sans-serif;
-        }
+    .title {
+      font-family: 'MinecraftRegular', sans-serif;
+    }
 
-        .instructions h2,
-        .instructions h3,
-        h1, h2, h3, p {
-            font-family: 'MinecraftBold', sans-serif;
-        }
+    .instructions h2,
+    .instructions h3,
+    h1,
+    h2,
+    h3,
+    p {
+      font-family: 'MinecraftBold', sans-serif;
+    }
 
-        button {
-            font-family: 'MinecraftRegular', sans-serif;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+    button {
+      font-family: 'MinecraftRegular', sans-serif;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
 
-        .no-underline {
-            text-decoration: none;
-            color: inherit;
-            outline: none;
-        }
+    .no-underline {
+      text-decoration: none;
+      color: inherit;
+      outline: none;
+    }
 
-        .no-underline:hover {
-            text-decoration: none;
-        }
+    .no-underline:hover {
+      text-decoration: none;
+    }
 
-        .no-underline:focus {
-            outline: none;
-        }
-      
-        nav {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          padding: 20px 0;
-          z-index: 1000; /* Lower than menu's z-index */
-          display: flex;
-          justify-content: center;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-          overflow: hidden; /* Ensure the pseudo-element doesn't overflow */
-          transition: opacity 0.3s ease;
-          opacity: 1;
-        }
+    .no-underline:focus {
+      outline: none;
+    }
 
-        nav::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(26, 26, 26, 0.8); /* Semi-transparent background */
-          backdrop-filter: blur(10px); /* Blur effect */
-          -webkit-backdrop-filter: blur(10px); /* Safari support */
-          z-index: -1; /* Place it behind the content */
-        }
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      transition: opacity 0.3s ease;
+      opacity: 1;
+    }
 
-        /* Hide the nav when it has the 'hidden' class */
-        nav.hidden {
-            display: none;
-            opacity: 0;
-        }
+    nav::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(26, 26, 26, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: -1;
+    }
 
-        /* Ensure the menu has a higher z-index than the nav */
-        .menu {
-            z-index: 1001; /* Higher than nav's z-index */
-        }
+    nav.hidden {
+      display: none;
+      opacity: 0;
+    }
 
-        /* Adjust the wrapper to account for the fixed nav */
-        .wrapper {
-            padding-top: 80px; /* Adjust this value based on the height of your nav */
-        }
-    </style>
+    .menu {
+      z-index: 1001;
+    }
+
+    .wrapper {
+      padding-top: 80px;
+    }
+  </style>
 </head>
 <body>
-<nav>
-    <div style="color: white; font-size: 16px; font-family: 'MinecraftRegular', sans-serif; line-height: 0; margin: 0; padding: 0; width: 100%; text-align: left; padding-left: 20px;">Welcome to my site!!!!</div>
-</nav>
+  <nav>
+    <div style="color: white; font-size: 16px; font-family: 'MinecraftRegular', sans-serif; line-height: 0; margin: 0; padding: 0; width: 100%; text-align: left; padding-left: 20px;">
+      Welcome to my site!!!!
+    </div>
+  </nav>
 
-    <!-- Particles.js Background -->
-    <div id="particles-js"></div>
+  <div id="particles-js"></div>
 
-    <!-- Main Content -->
-    <div class="wrapper">
-        <div role="main">
-            <a class="links_underline" href="https://exophs.is-a.dev/" aria-label="Visit Exophs GitHub Page">
-                <h1 class="title" id="main-title">Hey chat</h1>
-            </a>
-            <p style="font-size: 18px; margin-top: 10px; color: #ffffff; font-family: 'MinecraftRegular', sans-serif;">
-                Welcome to my website! Explore more by clicking the three lines at the top.
-            </p>
-            <div class="instructions">
-                <h2><span id="typewriter">&nbsp;</span></h2>
-                <div class="countdown-container">
-                    <h3 id="countdown"></h3>
-                </div>
-            </div>
-            <div id="secret-message" style="display: none;">
-                <a href="https://exophs.space/this/is/not/a/secret/" style="color: yellow; text-decoration: none;">Click here to reveal the secret page!</a>
-            </div>
+  <div class="wrapper">
+    <div role="main">
+      <a class="links_underline" href="https://exophs.is-a.dev/" aria-label="Visit Exophs GitHub Page">
+        <h1 class="title" id="main-title">Hey chat</h1>
+      </a>
+      <p style="font-size: 18px; margin-top: 10px; color: #ffffff; font-family: 'MinecraftRegular', sans-serif;">
+        Welcome to my website! Explore more by clicking the three lines at the top.
+      </p>
+      <div class="instructions">
+        <h2><span id="typewriter">&nbsp;</span></h2>
+        <div class="countdown-container">
+          <h3 id="countdown"></h3>
         </div>
-    </div>
-
-    <!-- Hint Message -->
-    <div class="hint" id="hintMessage">
-        <p>Can you find the hidden secret? Hint: title!</p>
-    </div>
-
-    <!-- Three Lines Menu Button -->
-    <div class="three-lines" id="menuButton">
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-
-    <!-- Menu -->
-    <div class="menu" id="menu">
-        <div class="button-container">
-            <a href="https://exophs.space/about/" aria-label="About Me">
-                <button style="background: linear-gradient(45deg, #6a1b9a, #4a148c);">About Me</button>
-            </a>
-            <a href="https://exophs.space/geocities/" aria-label="Silly Geocities Thing">
-                <button class="rainbow-button" style="font-family: 'Comic Sans MS', cursive;">silly geocities thing i made</button>
-                <div class="tooltip">⚠️ Epilepsy Warning: Flashing lights may trigger seizures ⚠️</div>
-            </a>
-            <a href="https://exophs.space/text-editor/" aria-label="Text Editor">
-                <button style="background: linear-gradient(45deg, #1976d2, #0d47a1);">Text Editor</button>
-            </a>
-            <a href="https://exophs.space/terminal/" aria-label="Terminal">
-                <button style="background: linear-gradient(45deg, #1976d2, #0d47a1);">Terminal</button>
-            </a>
-            <a href="https://exophs.space/terminal/terminalV2/" aria-label="TerminalV2">
-                <button style="background: linear-gradient(45deg, #1976d2, #0d47a1);">TerminalV2</button>
-            </a>
       </div>
+      <div id="secret-message" style="display: none;">
+        <a href="https://exophs.space/this/is/not/a/secret/" style="color: yellow; text-decoration: none;">Click here to reveal the secret page!</a>
+      </div>
+    </div>
   </div>
 
-    <!-- Scripts -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof particlesJS === 'undefined') {
-                console.error('particlesJS is not loaded');
-                return;
-            }
+  <div class="hint" id="hintMessage">
+    <p>Can you find the hidden secret? Hint: title!</p>
+  </div>
 
-            // Initialize particlesJS
-            particlesJS('particles-js', {
-                particles: {
-                    number: { value: 80 },  // Reduced from 150 to 80
-                    color: { value: "#ffffff" },
-                    shape: { type: "circle" },
-                    opacity: { value: 0.5 },
-                    size: { value: 3 },
-                    line_linked: {
-                        enable: true,
-                        distance: 200,  // Increased from 150
-                        color: "#ffffff",
-                        opacity: 0.3,  // Reduced from 0.4
-                        width: 1
-                    },
-                    move: { 
-                        enable: true, 
-                        speed: 0.5,  // Reduced from 2 to 0.5 (much slower)
-                        direction: "none",
-                        random: true,
-                        straight: false,
-                        out_mode: "out",
-                        bounce: false
-                    }
-                },
-                interactivity: {
-                    detect_on: "canvas",
-                    events: {
-                        onhover: { 
-                            enable: true, 
-                            mode: "grab",
-                            repulse: {
-                                distance: 100,
-                                duration: 0.4
-                            }
-                        },
-                        onclick: { 
-                            enable: true, 
-                            mode: "push",
-                            push: {
-                                particles_nb: 4  // Fewer particles affected on click
-                            }
-                        },
-                        resize: true
-                    }
-                }
-            });
+  <div class="three-lines" id="menuButton">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
 
-            const mainTitle = document.getElementById('main-title');
-            const secretMessage = document.getElementById('secret-message');
+  <div class="menu" id="menu">
+    <div class="button-container">
+      <a href="https://exophs.space/about/" aria-label="About Me">
+        <button style="background: linear-gradient(45deg, #6a1b9a, #4a148c);">About Me</button>
+      </a>
+      <a href="https://exophs.space/geocities/" aria-label="Silly Geocities Thing">
+        <button class="rainbow-button" style="font-family: 'Comic Sans MS', cursive;">silly geocities thing i made</button>
+        <div class="tooltip">⚠️ Epilepsy Warning: Flashing lights may trigger seizures ⚠️</div>
+      </a>
+      <a href="https://exophs.space/text-editor/" aria-label="Text Editor">
+        <button style="background: linear-gradient(45deg, #1976d2, #0d47a1);">Text Editor</button>
+      </a>
+      <a href="https://exophs.space/terminal/" aria-label="Terminal">
+        <button style="background: linear-gradient(45deg, #1976d2, #0d47a1);">Terminal</button>
+      </a>
+      <a href="https://exophs.space/terminal/terminalV2/" aria-label="TerminalV2">
+        <button style="background: linear-gradient(45deg, #1976d2, #0d47a1);">TerminalV2</button>
+      </a>
+    </div>
+  </div>
 
-            mainTitle.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                secretMessage.style.display = 'block';
-            });
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof particlesJS === 'undefined') {
+        console.error('particlesJS is not loaded');
+        return;
+      }
 
-// Menu sounds functionality
-const menuButton = document.getElementById('menuButton');
-const menu = document.getElementById('menu');
-const nav = document.querySelector('nav');
+      particlesJS('particles-js', {
+        particles: {
+          number: { value: 80 },
+          color: { value: "#ffffff" },
+          shape: { type: "circle" },
+          opacity: { value: 0.5 },
+          size: { value: 3 },
+          line_linked: {
+            enable: true,
+            distance: 200,
+            color: "#ffffff",
+            opacity: 0.3,
+            width: 1
+          },
+          move: {
+            enable: true,
+            speed: 0.5,
+            direction: "none",
+            random: true,
+            straight: false,
+            out_mode: "out",
+            bounce: false
+          }
+        },
+        interactivity: {
+          detect_on: "canvas",
+          events: {
+            onhover: {
+              enable: true,
+              mode: "grab",
+              repulse: {
+                distance: 100,
+                duration: 0.4
+              }
+            },
+            onclick: {
+              enable: true,
+              mode: "push",
+              push: {
+                particles_nb: 4
+              }
+            },
+            resize: true
+          }
+        }
+      });
 
-// Menu toggle functionality
-menuButton.addEventListener('click', () => {
-    const isOpening = !menu.classList.contains('visible');
-    
-    menu.classList.toggle('visible');
-    menuButton.classList.toggle('open');
-    
-    if (isOpening) {
-        // If opening menu, fade out nav smoothly before hiding it
-        nav.style.opacity = '0';
-        menuOpenSound.currentTime = 0;
-        menuOpenSound.play().catch(e => console.log("Open sound play failed:", e));
-        
-        // Wait for fade-out to complete before hiding
-        setTimeout(() => {
+      const mainTitle = document.getElementById('main-title');
+      const secretMessage = document.getElementById('secret-message');
+
+      mainTitle.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        secretMessage.style.display = 'block';
+      });
+
+      const menuButton = document.getElementById('menuButton');
+      const menu = document.getElementById('menu');
+      const nav = document.querySelector('nav');
+
+      menuButton.addEventListener('click', () => {
+        const isOpening = !menu.classList.contains('visible');
+
+        menu.classList.toggle('visible');
+        menuButton.classList.toggle('open');
+
+        if (isOpening) {
+          nav.style.opacity = '0';
+          menuOpenSound.currentTime = 0;
+          menuOpenSound.play().catch(e => console.log("Open sound play failed:", e));
+          setTimeout(() => {
             nav.classList.add('hidden');
-        }, 300);
-    } else {
-        
-        // Wait for the menu closing animation to complete (400ms delay)
-        setTimeout(() => {
-            // Add fade-in animation for the nav
+          }, 300);
+        } else {
+          setTimeout(() => {
             nav.style.opacity = '0';
             nav.classList.remove('hidden');
-            // Force a reflow to ensure the opacity transition works
             void nav.offsetWidth;
             nav.style.opacity = '1';
-        }, 400);
-    }
-});
-
-            // Typewriter and countdown functions
-            const texts = [
-                "Add me on Discord: .exophs",
-                "Visit my GitHub for more projects",
-                "Check out the latest updates on my website, https://exophs.space",
-                "i love my friends",
-            ];
-
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-            }
-
-            shuffleArray(texts);
-            let textIndex = 0;
-            let charIndex = 0;
-            let isDeleting = false;
-
-            function type() {
-                const element = document.getElementById("typewriter");
-                const currentText = texts[textIndex];
-                const speed = isDeleting ? 50 : 150;
-
-                if (charIndex < currentText.length && !isDeleting) {
-                    element.innerHTML = "&nbsp;" + currentText.slice(0, charIndex + 1);
-                    charIndex++;
-                    setTimeout(type, speed);
-                } else if (isDeleting && charIndex > 0) {
-                    element.innerHTML = "&nbsp;" + currentText.slice(0, charIndex - 1);
-                    charIndex--;
-                    setTimeout(type, speed);
-                } else if (!isDeleting && charIndex === currentText.length) {
-                    isDeleting = true;
-                    setTimeout(type, 1000);
-                } else if (isDeleting && charIndex === 0) {
-                    isDeleting = false;
-                    textIndex = (textIndex + 1) % texts.length;
-
-                    if (textIndex === 0) {
-                        shuffleArray(texts);
-                    }
-
-                    setTimeout(type, 500);
-                }
-            }
-
-            setTimeout(type, 1000);
-
-            function updateCountdown() {
-                const targetDate = new Date('2025-10-16T00:00:00Z');  // Updated target date
-                const now = new Date();
-                const timeDifference = targetDate - now;
-
-                if (timeDifference <= 0) {
-                    document.getElementById('countdown').innerHTML = "It's my birthday!! I'm now 18!";  // Updated message for 18th birthday
-                    return;
-                }
-
-                const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-                document.getElementById('countdown').innerHTML =
-                    `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
-            }
-
-            setInterval(updateCountdown, 1000);
-            ghostCursor();
-        });
-
-        // The ghostCursor function
-        function ghostCursor() {
-            let width = window.innerWidth;
-            let height = window.innerHeight;
-            let cursor = { x: width / 2, y: height / 2 };
-            let particles = [];
-            let canvas, context;
-
-            let baseImage = new Image();
-            baseImage.src = "https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/cursor.png?v=1729381820267";
-
-            function init() {
-                canvas = document.createElement("canvas");
-                context = canvas.getContext("2d");
-                canvas.style.top = "0px";
-                canvas.style.left = "0px";
-                canvas.style.pointerEvents = "none";
-                canvas.style.position = "fixed"; // Ensures it stays in place
-                canvas.style.zIndex = "9999"; // Set a high z-index to appear above other elements
-
-                document.body.appendChild(canvas);
-                canvas.width = width;
-                canvas.height = height;
-
-                bindEvents();
-                loop();
-            }
-
-            function bindEvents() {
-                document.body.addEventListener("mousemove", onMouseMove);
-                window.addEventListener("resize", onWindowResize);
-            }
-
-            function onWindowResize() {
-                width = window.innerWidth;
-                height = window.innerHeight;
-                canvas.width = width;
-                canvas.height = height;
-            }
-
-            function onMouseMove(e) {
-                cursor.x = e.clientX;
-                cursor.y = e.clientY;
-                addParticle(cursor.x, cursor.y, baseImage);
-            }
-
-            function addParticle(x, y, image) {
-                particles.push(new Particle(x, y, image));
-            }
-
-            function updateParticles() {
-                context.clearRect(0, 0, width, height);
-                particles.forEach(p => p.update(context));
-                particles = particles.filter(p => p.lifeSpan >= 0);
-            }
-
-            function loop() {
-                updateParticles();
-                requestAnimationFrame(loop);
-            }
-
-            function Particle(x, y, image) {
-                this.lifeSpan = 40;
-                this.position = { x: x, y: y };
-                this.image = image;
-
-                this.update = function(context) {
-                    this.lifeSpan--;
-                    const opacity = Math.max(this.lifeSpan / 40, 0);
-                    context.globalAlpha = opacity;
-                    context.drawImage(this.image, this.position.x, this.position.y);
-                };
-            }
-
-            init();
+          }, 400);
         }
-    </script>
+      });
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2025 <a href="https://exophs.is-a.dev" class="no-underline">exophs</a>. All rights reserved.</p>
-    </footer>
+      const texts = [
+        "Add me on Discord: .exophs",
+        "Visit my GitHub for more projects",
+        "Check out the latest updates on my website, https://exophs.space",
+        "i love my friends"
+      ];
+
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+      }
+
+      shuffleArray(texts);
+      let textIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+
+      function type() {
+        const element = document.getElementById("typewriter");
+        const currentText = texts[textIndex];
+        const speed = isDeleting ? 50 : 150;
+
+        if (charIndex < currentText.length && !isDeleting) {
+          element.innerHTML = "&nbsp;" + currentText.slice(0, charIndex + 1);
+          charIndex++;
+          setTimeout(type, speed);
+        } else if (isDeleting && charIndex > 0) {
+          element.innerHTML = "&nbsp;" + currentText.slice(0, charIndex - 1);
+          charIndex--;
+          setTimeout(type, speed);
+        } else if (!isDeleting && charIndex === currentText.length) {
+          isDeleting = true;
+          setTimeout(type, 1000);
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false;
+          textIndex = (textIndex + 1) % texts.length;
+          if (textIndex === 0) {
+            shuffleArray(texts);
+          }
+          setTimeout(type, 500);
+        }
+      }
+
+      setTimeout(type, 1000);
+
+      function updateCountdown() {
+        const targetDate = new Date(2025, 9, 16, 0, 0, 0);
+        const now = new Date();
+        const timeDifference = targetDate - now;
+
+        if (timeDifference <= 0) {
+          document.getElementById('countdown').innerHTML = "It's my birthday!! I'm now 18!";
+          return;
+        }
+
+        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+        document.getElementById('countdown').innerHTML =
+          `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
+      }
+
+      setInterval(updateCountdown, 1000);
+      ghostCursor();
+    });
+
+    function ghostCursor() {
+      let width = window.innerWidth;
+      let height = window.innerHeight;
+      let cursor = { x: width / 2, y: height / 2 };
+      let particles = [];
+      let canvas, context;
+
+      let baseImage = new Image();
+      baseImage.src = "https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/cursor.png?v=1729381820267";
+
+      function init() {
+        canvas = document.createElement("canvas");
+        context = canvas.getContext("2d");
+        canvas.style.top = "0px";
+        canvas.style.left = "0px";
+        canvas.style.pointerEvents = "none";
+        canvas.style.position = "fixed";
+        canvas.style.zIndex = "9999";
+        document.body.appendChild(canvas);
+        canvas.width = width;
+        canvas.height = height;
+        bindEvents();
+        loop();
+      }
+
+      function bindEvents() {
+        document.body.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("resize", onWindowResize);
+      }
+
+      function onWindowResize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+      }
+
+      function onMouseMove(e) {
+        cursor.x = e.clientX;
+        cursor.y = e.clientY;
+        addParticle(cursor.x, cursor.y, baseImage);
+      }
+
+      function addParticle(x, y, image) {
+        particles.push(new Particle(x, y, image));
+      }
+
+      function updateParticles() {
+        context.clearRect(0, 0, width, height);
+        particles.forEach(p => p.update(context));
+        particles = particles.filter(p => p.lifeSpan >= 0);
+      }
+
+      function loop() {
+        updateParticles();
+        requestAnimationFrame(loop);
+      }
+
+      function Particle(x, y, image) {
+        this.lifeSpan = 40;
+        this.position = { x: x, y: y };
+        this.image = image;
+
+        this.update = function(context) {
+          this.lifeSpan--;
+          const opacity = Math.max(this.lifeSpan / 40, 0);
+          context.globalAlpha = opacity;
+          context.drawImage(this.image, this.position.x, this.position.y);
+        };
+      }
+
+      init();
+    }
+  </script>
+
+  <footer>
+    <p>© 2025 <a href="https://exophs.is-a.dev" class="no-underline">exophs</a>. All rights reserved.</p>
+  </footer>
 </body>
 </html>
