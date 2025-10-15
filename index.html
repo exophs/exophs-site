@@ -313,13 +313,11 @@
       setTimeout(type, 1000);
 
       function updateCountdown() {
-        // Target date: October 16, 2025, 00:00:00 EST
-        const targetDate = new Date('2025-10-16T00:00:00-05:00'); // EST is UTC-5
+        const targetDate = new Date('2025-10-16T00:00:00-05:00');
         const now = new Date();
         
-        // Convert current time to EST by adjusting for the local timezone offset
-        const estOffset = -5 * 60; // EST offset in minutes (UTC-5)
-        const localOffset = now.getTimezoneOffset(); // Local offset in minutes
+        const estOffset = -5 * 60;
+        const localOffset = now.getTimezoneOffset();
         const estTime = new Date(now.getTime() + (estOffset - localOffset) * 60 * 1000);
         
         const timeDifference = targetDate - estTime;
@@ -338,7 +336,6 @@
             `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
       }
 
-      // Update immediately and then every second
       updateCountdown();
       setInterval(updateCountdown, 1000);
     });
