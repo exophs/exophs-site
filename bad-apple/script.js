@@ -2,7 +2,7 @@ const video = document.createElement('video');
 video.src = 'https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/bad-apple.mp4?v=1729383680202';
 video.crossOrigin = 'anonymous';
 video.loop = true;
-video.muted = true;
+video.muted = false;
 
 const canvas = document.getElementById('videoCanvas');
 const ctx = canvas.getContext('2d');
