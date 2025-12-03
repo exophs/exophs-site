@@ -104,6 +104,18 @@ body {
   animation: fadeIn 2s ease-in forwards 1s;
 }
 
+/* Let the wrapper and main content pass pointer events to particles.js */
+.wrapper,
+.wrapper [role="main"] {
+  pointer-events: none;
+}
+
+/* Re-enable pointer events for all actual interactive elements */
+.wrapper * {
+  pointer-events: auto;
+}
+
+
 .content {
   display: flex;
   flex-direction: column;
