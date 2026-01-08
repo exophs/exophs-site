@@ -1,424 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="https://raw.githubusercontent.com/exophs/favicon/main/favicon_io/favicon.ico" />
-    <title>About Me</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap">
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Roboto', sans-serif;
-            line-height: 1.4;
-            background: linear-gradient(to right, #3a0a6f, #0e0037);
-            background-size: 200% 200%;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            text-align: center;
-            min-height: 100vh;
-            transition: background-position 0.1s ease-out;
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            box-sizing: border-box;
-        }
-        h1, h3 {
-            color: #fff;
-            margin: 10px 0;
-            font-family: 'Montserrat', sans-serif;
-            transition: transform 0.3s ease, text-shadow 0.3s ease;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-        h1:hover, h3:hover {
-            transform: scale(1.05);
-            text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 0.8);
-        }
-        p {
-            color: #fff;
-            font-size: 1em;
-            font-weight: normal;
-            font-family: 'Montserrat', sans-serif;
-            margin: 5px 0;
-            transition: transform 0.3s ease;
-        }
-        p:hover {
-            transform: translateY(-3px);
-        }
-        .profile-pic {
-            border-radius: 10%;
-            width: 120px;
-            height: 120px;
-            margin: 10px 0;
-            user-drag: none;
-            -webkit-user-drag: none;
-            transition: transform 0.3s ease;
-        }
-        .profile-pic:hover {
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-        .interests {
-            margin: 10px 0;
-        }
-        .contact-info {
-            margin: 10px 0;
-        }
-        .contact-info a {
-            color: #80b3ff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        .contact-info a:hover {
-            color: #b3d9ff;
-        }
-        .animated-text {
-            animation: fadeIn 2s ease-in-out;
-            max-width: 1000px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            margin: 0 auto;
-            padding: 0 10px;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .social-icons img, .tech-icons img {
-            vertical-align: middle;
-            transition: filter 0.3s ease;
-            user-drag: none;
-            -webkit-user-drag: none;
-        }
-        .social-icons, .tech-icons {
-            text-align: center;
-            margin-top: 10px;
-        }
-        .tech-icons {
-            margin-bottom: 30px;
-        }
-        .tech-icons a {
-            margin: 0 5px;
-            display: inline-block;
-            text-align: center;
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-        .tech-icons a:hover {
-            transform: scale(1.1);
-        }
-        .tech-icons a::before {
-            content: attr(data-name);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            margin-bottom: 5px;
-            background-color: #333;
-            color: #fff;
-            padding: 3px 6px;
-            border-radius: 5px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease;
-            font-size: 12px;
-        }
-        .tech-icons a:hover::before {
-            opacity: 1;
-            visibility: visible;
-        }
-        .tech-icons img {
-            width: 30px;
-            height: 30px;
-        }
-        .preview-tooltip {
-            position: relative;
-            display: inline-block;
-        }
-        .preview-tooltip .preview {
-            visibility: hidden;
-            width: 300px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 5px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -150px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-        }
-        .preview-tooltip:hover .preview {
-            visibility: visible;
-            opacity: 1;
-        }
-        .preview img {
-            max-width: 100%;
-            border-radius: 5px;
-            user-drag: none;
-            -webkit-user-drag: none;
-        }
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(52, 52, 60, 0)); /* Fading effect */
-            color: white;
-            text-align: center;
-            padding: 10px;
-            box-sizing: border-box;
-            z-index: 1000;
-            font-size: 14px;
-        }
-        @keyframes backgroundAnimation {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
-        }
-        .background:hover {
-            transform: scale(1.1);
-        }
-        .back-button, .contacts-button {
-            position: absolute;
-            top: 10px;
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 2.5px 5px;
-            border-radius: 7px;
-            text-decoration: none;
-            color: #fff;
-            font-weight: bold;
-            font-family: 'Montserrat', sans-serif;
-            transition: background-color 0.3s ease;
-        }
-        .back-button:hover, .contacts-button:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-        .back-button {
-            left: 10px;
-        }
-        .contacts-button {
-            right: 10px;
-        }
-        .collage {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        .collage img {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .collage img:hover {
-            transform: scale(1.05);
-        }
-        .lightbox {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .lightbox img {
-            max-width: 90%;
-            max-height: 80%;
-            border-radius: 10px;
-        }
-        .lightbox .close, .lightbox .prev, .lightbox .next {
-            position: fixed;
-            top: 10px;
-            background: rgba(0, 0, 0);
-            color: #fff;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 10px;
-            border-radius: 50%;
-            z-index: 1001;
-        }
-        .lightbox .close {
-            right: 10px;
-        }
-        .lightbox .prev {
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .lightbox .next {
-            right: 60px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .container {
-            transform: scale(0.9);
-            transform-origin: center;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="https://raw.githubusercontent.com/exophs/favicon/main/favicon_io/favicon.ico" />
+<title>About Me - Ray</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap">
+<style>
+    /* ---------------- Body & Colors ---------------- */
+    :root {
+        --mocha-base: #1e1e2e;
+        --mocha-mantle: #181825;
+        --mocha-crust: #11111b;
+        --mocha-text: #cdd6f4;
+        --mocha-subtext: #bac2de;
+        --mocha-blue: #89b4fa;
+        --mocha-peach: #fab387;
+        --mocha-green: #a6e3a1;
+        --mocha-lavender: #b4befe;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        color: var(--mocha-text);
+        background-color: var(--mocha-base);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px 20px;
+    }
+
+    a {
+        color: var(--mocha-blue);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    a:hover {
+        color: var(--mocha-peach);
+    }
+
+    /* ---------------- Container ---------------- */
+    .container {
+        max-width: 900px;
+        width: 100%;
+        background-color: var(--mocha-mantle);
+        border-radius: 15px;
+        padding: 30px 40px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    /* ---------------- Header ---------------- */
+    h1 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.5em;
+        margin-bottom: 5px;
+        color: var(--mocha-lavender);
+    }
+
+    h3 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 400;
+        color: var(--mocha-peach);
+        margin-bottom: 20px;
+    }
+
+    /* ---------------- Profile ---------------- */
+    .profile-pic {
+        width: 150px;
+        height: 150px;
+        border-radius: 15px;
+        margin: 0 auto 20px;
+        display: block;
+        object-fit: cover;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-pic:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px var(--mocha-lavender);
+    }
+
+    /* ---------------- Text ---------------- */
+    p {
+        font-family: 'Roboto', sans-serif;
+        font-size: 1em;
+        margin-bottom: 15px;
+        line-height: 1.6;
+        color: var(--mocha-subtext);
+    }
+
+    /* ---------------- Buttons ---------------- */
+    .back-button, .contacts-button {
+        display: inline-block;
+        margin: 0 5px;
+        padding: 6px 12px;
+        background-color: var(--mocha-crust);
+        border-radius: 8px;
+        font-weight: bold;
+        color: var(--mocha-blue);
+        transition: all 0.2s ease;
+    }
+
+    .back-button:hover, .contacts-button:hover {
+        background-color: var(--mocha-base);
+        color: var(--mocha-peach);
+    }
+
+    /* ---------------- Tech Icons ---------------- */
+    .tech-icons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        margin: 25px 0;
+    }
+
+    .tech-icons img {
+        width: 40px;
+        height: 40px;
+        transition: transform 0.2s ease;
+    }
+
+    .tech-icons img:hover {
+        transform: scale(1.2);
+    }
+
+    /* ---------------- Collage ---------------- */
+    .collage {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        margin: 25px 0;
+    }
+
+    .collage img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .collage img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px var(--mocha-green);
+    }
+
+    /* ---------------- Lightbox ---------------- */
+    .lightbox {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0,0,0,0.85);
+        z-index: 1000;
+    }
+
+    .lightbox img {
+        max-width: 80%;
+        max-height: 80%;
+        border-radius: 10px;
+    }
+
+    .lightbox .close, .lightbox .prev, .lightbox .next {
+        position: fixed;
+        top: 20px;
+        background-color: var(--mocha-crust);
+        color: var(--mocha-text);
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 50%;
+        font-size: 18px;
+    }
+
+    .lightbox .prev { left: 20px; top: 50%; transform: translateY(-50%); }
+    .lightbox .next { right: 20px; top: 50%; transform: translateY(-50%); }
+    .lightbox .close { right: 20px; }
+
+    /* ---------------- Footer ---------------- */
+    footer {
+        text-align: center;
+        padding: 15px;
+        font-size: 14px;
+        color: var(--mocha-subtext);
+    }
+
+    /* ---------------- Tooltip ---------------- */
+    .preview-tooltip {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .preview-tooltip .preview {
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        background-color: var(--mocha-crust);
+        padding: 8px;
+        border-radius: 8px;
+        transition: opacity 0.3s ease;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .preview-tooltip:hover .preview {
+        visibility: visible;
+        opacity: 1;
+    }
+
+</style>
 </head>
 <body>
-    <a href="https://exophs.space" class="back-button">Back</a>
-    <a href="https://exophs.space/about/contacts/" class="contacts-button">Contacts</a>
-    <div class="background"></div>
-    <div class="container">
-        <h1>Hi, I'm Ray</h1>
-        <h3>A Small Dev</h3>
-        <img src="https://avatars.githubusercontent.com/u/91388963?v=4" alt="Profile Picture" class="profile-pic" />
-        <p class="animated-text">
-            Hi, my name is Ray. I'm 18 years old and I live in Pennsylvania, USA.
-            I'm a small web developer with a passion for making websites. I enjoy
-            experimenting with different designs and learning new web technologies.
-        </p>
-        <p>
-            I'm currently working on 
-            <span class="preview-tooltip">
-                <a href="https://github.com/exophs/exophs.github.io" target="_blank" style="color: #80b3ff;">exophs.github.io</a>
-                <span class="preview">
-                    <img src="https://ray.confusing.wtf/u/xoSHbY.png" alt="Preview of exophs.github.io" />
-                </span>
+<div class="container">
+    <div style="text-align:center; margin-bottom:20px;">
+        <a href="https://exophs.space" class="back-button">Back</a>
+        <a href="https://exophs.space/about/contacts/" class="contacts-button">Contacts</a>
+    </div>
+
+    <h1>Hi, I'm Ray</h1>
+    <h3>Small Web Developer</h3>
+    <img src="https://avatars.githubusercontent.com/u/91388963?v=4" alt="Profile Picture" class="profile-pic">
+
+    <p>
+        I'm 18 years old, living in Pennsylvania, USA. I enjoy creating websites and learning new web technologies.
+    </p>
+
+    <p>
+        Currently working on 
+        <span class="preview-tooltip">
+            <a href="https://github.com/exophs/exophs.github.io" target="_blank">exophs.github.io</a>
+            <span class="preview">
+                <img src="https://ray.confusing.wtf/u/xoSHbY.png" alt="Preview of exophs.github.io">
             </span>
-          and this website that you're on right now
-        </p>
-        <p>
-            I'm currently learning <strong>HTML</strong>
-        </p>
-        <div class="interests">
-            <p>I also enjoy playing video games like Minecraft, Grand Theft Auto 5, and Roblox (but my main account is now terminated sadly).</p>
-        </div>
-        <div class="tech-icons">
-            <p>
-                <a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer" data-name="CSS">
-                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="CSS3" />
-                </a>
-                <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer" data-name="HTML5">
-                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="HTML5" />
-                </a>
-                <a href="https://www.java.com" target="_blank" rel="noreferrer" data-name="Java">
-                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="Java" />
-                </a>
-                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer" data-name="JavaScript">
-                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript" />
-                </a>
-                <a href="https://www.linux.org/" target="_blank" rel="noreferrer" data-name="Linux">
-                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="Linux" />
-                </a>
-                <a href="https://www.python.org" target="_blank" rel="noreferrer" data-name="Python">
-                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python" />
-                </a>
-            </p>
-        </div>
-        <h3>This is my cat Pixie</h3>
-        <div class="collage">
-          <img src="https://images.confusing.wtf/r/42Wo9O.jpeg?compress=false" alt="Collage Image 1" width="150" height="150" loading="lazy" />
-          <img src="https://images.confusing.wtf/r/8jcAUh.jpeg?compress=false" alt="Collage Image 2" width="150" height="150" loading="lazy" />
-          <img src="https://images.confusing.wtf/r/UfeHQT.jpeg?compress=false" alt="Collage Image 3" width="150" height="150" loading="lazy" />
-          <img src="https://images.confusing.wtf/r/adKDTm.jpeg?compress=false" alt="Collage Image 4" width="150" height="150" loading="lazy" />
-      </div>
+        </span> 
+        and this website.
+    </p>
+
+    <div class="tech-icons">
+        <a href="https://www.w3schools.com/css/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="CSS3"></a>
+        <a href="https://www.w3.org/html/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="HTML5"></a>
+        <a href="https://www.java.com" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="Java"></a>
+        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript"></a>
+        <a href="https://www.linux.org/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="Linux"></a>
+        <a href="https://www.python.org" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python"></a>
     </div>
-    <div id="lightbox" class="lightbox">
-        <button class="close">&times;</button>
-        <button class="prev">&#10094;</button>
-        <button class="next">&#10095;</button>
-        <img id="lightbox-img" alt="Lightbox Image" />
+
+    <h3>This is my cat Pixie</h3>
+    <div class="collage">
+        <img src="https://images.confusing.wtf/r/42Wo9O.jpeg?compress=false" alt="Collage Image 1">
+        <img src="https://images.confusing.wtf/r/8jcAUh.jpeg?compress=false" alt="Collage Image 2">
+        <img src="https://images.confusing.wtf/r/UfeHQT.jpeg?compress=false" alt="Collage Image 3">
+        <img src="https://images.confusing.wtf/r/adKDTm.jpeg?compress=false" alt="Collage Image 4">
     </div>
-    <footer>
-        <p>© 2024 <a href="https://exophs.is-a.dev" class="no-underline">exophs</a>. All rights reserved.</p>
-    </footer>
-    <style>
-      .no-underline {
-          text-decoration: none;
-          color: inherit;
-          outline: none;
-      }
-      .no-underline:hover {
-          text-decoration: none;
-      }
-      .no-underline:focus {
-          outline: none;
-      }
-    </style>
-    <script>
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-        const images = document.querySelectorAll('.collage img');
-        let currentIndex = 0;
+</div>
 
-        images.forEach((image, index) => {
-            image.addEventListener('click', () => {
-                openLightbox(index);
-            });
-        });
+<div id="lightbox" class="lightbox">
+    <button class="close">&times;</button>
+    <button class="prev">&#10094;</button>
+    <button class="next">&#10095;</button>
+    <img id="lightbox-img" alt="Lightbox Image">
+</div>
 
-        function openLightbox(index) {
-            lightbox.style.display = 'flex';
-            lightboxImg.src = images[index].src;
-            currentIndex = index;
-        }
+<footer>
+    <p>© 2024 <a href="https://exophs.is-a.dev">exophs</a>. All rights reserved.</p>
+</footer>
 
-        function closeLightbox() {
-            lightbox.style.display = 'none';
-        }
+<script>
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const images = document.querySelectorAll('.collage img');
+let currentIndex = 0;
 
-        function changeImage(direction) {
-            currentIndex = (currentIndex + direction + images.length) % images.length;
-            lightboxImg.src = images[currentIndex].src;
-        }
+images.forEach((img, i) => img.addEventListener('click', () => openLightbox(i)));
 
-        document.querySelector('.lightbox .close').addEventListener('click', closeLightbox);
-        document.querySelector('.lightbox .prev').addEventListener('click', () => changeImage(-1));
-        document.querySelector('.lightbox .next').addEventListener('click', () => changeImage(1));
+function openLightbox(i) {
+    currentIndex = i;
+    lightbox.style.display = 'flex';
+    lightboxImg.src = images[i].src;
+}
 
-        document.addEventListener('keydown', (event) => {
-            if (lightbox.style.display === 'flex') {
-                if (event.key === 'Escape') {
-                    closeLightbox();
-                } else if (event.key === 'ArrowLeft') {
-                    changeImage(-1);
-                } else if (event.key === 'ArrowRight') {
-                    changeImage(1);
-                }
-            }
-        });
+function closeLightbox() { lightbox.style.display = 'none'; }
 
-        lightbox.addEventListener('click', (event) => {
-            if (event.target === lightbox) {
-                closeLightbox();
-            }
-        });
-    </script>
-    <script src="/js/sparkle.js"></script>
+function changeImage(dir) {
+    currentIndex = (currentIndex + dir + images.length) % images.length;
+    lightboxImg.src = images[currentIndex].src;
+}
+
+document.querySelector('.lightbox .close').addEventListener('click', closeLightbox);
+document.querySelector('.lightbox .prev').addEventListener('click', () => changeImage(-1));
+document.querySelector('.lightbox .next').addEventListener('click', () => changeImage(1));
+
+document.addEventListener('keydown', e => {
+    if(lightbox.style.display === 'flex'){
+        if(e.key === 'Escape') closeLightbox();
+        else if(e.key === 'ArrowLeft') changeImage(-1);
+        else if(e.key === 'ArrowRight') changeImage(1);
+    }
+});
+
+lightbox.addEventListener('click', e => { if(e.target === lightbox) closeLightbox(); });
+</script>
 </body>
 </html>
