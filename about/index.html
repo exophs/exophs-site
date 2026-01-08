@@ -30,29 +30,21 @@ body {
     font-family: 'Roboto', sans-serif;
     color: var(--mocha-text);
     background-color: var(--mocha-base);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 40px 20px;
+    height: 100vh;
+    overflow: hidden; /* hide native scrollbar */
+}
+
+/* ---------------- Scrollable Container ---------------- */
+.scroll-container {
+    height: 100%;
+    width: 100%;
     overflow-y: scroll; /* scrolling enabled */
     scrollbar-width: none; /* Firefox */
 }
 
-body::-webkit-scrollbar {
-    width: 0px; /* hide scrollbar in Chrome/Safari */
+.scroll-container::-webkit-scrollbar {
+    width: 0px; /* Chrome, Edge, Safari */
     background: transparent;
-}
-
-a {
-    color: var(--mocha-blue);
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-a:hover {
-    color: var(--mocha-peach);
 }
 
 /* ---------------- Container ---------------- */
@@ -62,6 +54,7 @@ a:hover {
     background-color: var(--mocha-mantle);
     border-radius: 15px;
     padding: 30px 40px;
+    margin: 40px auto;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
@@ -203,7 +196,6 @@ p {
 
 /* ---------------- Footer ---------------- */
 footer {
-    margin-top: auto; /* sticky to bottom if content is short */
     text-align: center;
     padding: 15px 0;
     font-size: 14px;
@@ -212,6 +204,7 @@ footer {
     background-color: var(--mocha-mantle);
     border-top: 1px solid #2a2a3a;
     box-sizing: border-box;
+    margin-top: 40px;
 }
 
 /* ---------------- Tooltip ---------------- */
@@ -243,46 +236,48 @@ footer {
 </head>
 <body>
 
-<div class="container">
-    <div style="text-align:center; margin-bottom:20px;">
-        <a href="https://exophs.space" class="back-button">Back</a>
-        <a href="https://exophs.space/about/contacts/" class="contacts-button">Contacts</a>
-    </div>
+<div class="scroll-container">
+    <div class="container">
+        <div style="text-align:center; margin-bottom:20px;">
+            <a href="https://exophs.space" class="back-button">Back</a>
+            <a href="https://exophs.space/about/contacts/" class="contacts-button">Contacts</a>
+        </div>
 
-    <h1>Hi, I'm Ray</h1>
-    <h3>Small Web Developer</h3>
-    <img src="https://avatars.githubusercontent.com/u/91388963?v=4" alt="Profile Picture" class="profile-pic">
+        <h1>Hi, I'm Ray</h1>
+        <h3>Small Web Developer</h3>
+        <img src="https://avatars.githubusercontent.com/u/91388963?v=4" alt="Profile Picture" class="profile-pic">
 
-    <p>
-        I'm 18 years old, living in Pennsylvania, USA. I enjoy creating websites and learning new web technologies.
-    </p>
+        <p>
+            I'm 18 years old, living in Pennsylvania, USA. I enjoy creating websites and learning new web technologies.
+        </p>
 
-    <p>
-        Currently working on 
-        <span class="preview-tooltip">
-            <a href="https://github.com/exophs/exophs.github.io" target="_blank">exophs.github.io</a>
-            <span class="preview">
-                <img src="https://ray.confusing.wtf/u/xoSHbY.png" alt="Preview of exophs.github.io">
-            </span>
-        </span> 
-        and this website.
-    </p>
+        <p>
+            Currently working on 
+            <span class="preview-tooltip">
+                <a href="https://github.com/exophs/exophs.github.io" target="_blank">exophs.github.io</a>
+                <span class="preview">
+                    <img src="https://ray.confusing.wtf/u/xoSHbY.png" alt="Preview of exophs.github.io">
+                </span>
+            </span> 
+            and this website.
+        </p>
 
-    <div class="tech-icons">
-        <a href="https://www.w3schools.com/css/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="CSS3"></a>
-        <a href="https://www.w3.org/html/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="HTML5"></a>
-        <a href="https://www.java.com" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="Java"></a>
-        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript"></a>
-        <a href="https://www.linux.org/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="Linux"></a>
-        <a href="https://www.python.org" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python"></a>
-    </div>
+        <div class="tech-icons">
+            <a href="https://www.w3schools.com/css/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="CSS3"></a>
+            <a href="https://www.w3.org/html/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="HTML5"></a>
+            <a href="https://www.java.com" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="Java"></a>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript"></a>
+            <a href="https://www.linux.org/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="Linux"></a>
+            <a href="https://www.python.org" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python"></a>
+        </div>
 
-    <h3>This is my cat Pixie</h3>
-    <div class="collage">
-        <img src="https://images.confusing.wtf/r/42Wo9O.jpeg?compress=false" alt="Collage Image 1">
-        <img src="https://images.confusing.wtf/r/8jcAUh.jpeg?compress=false" alt="Collage Image 2">
-        <img src="https://images.confusing.wtf/r/UfeHQT.jpeg?compress=false" alt="Collage Image 3">
-        <img src="https://images.confusing.wtf/r/adKDTm.jpeg?compress=false" alt="Collage Image 4">
+        <h3>This is my cat Pixie</h3>
+        <div class="collage">
+            <img src="https://images.confusing.wtf/r/42Wo9O.jpeg?compress=false" alt="Collage Image 1">
+            <img src="https://images.confusing.wtf/r/8jcAUh.jpeg?compress=false" alt="Collage Image 2">
+            <img src="https://images.confusing.wtf/r/UfeHQT.jpeg?compress=false" alt="Collage Image 3">
+            <img src="https://images.confusing.wtf/r/adKDTm.jpeg?compress=false" alt="Collage Image 4">
+        </div>
     </div>
 </div>
 
