@@ -7,287 +7,198 @@
     <title>About Me</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap">
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Roboto', sans-serif;
-            line-height: 1.4;
-            background: linear-gradient(to right, #3a0a6f, #0e0037);
-            background-size: 200% 200%;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            text-align: center;
-            min-height: 100vh;
-            transition: background-position 0.1s ease-out;
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            box-sizing: border-box;
-        }
-        h1, h3 {
-            color: #fff;
-            margin: 10px 0;
-            font-family: 'Montserrat', sans-serif;
-            transition: transform 0.3s ease, text-shadow 0.3s ease;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-        h1:hover, h3:hover {
-            transform: scale(1.05);
-            text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 0.8);
-        }
-        p {
-            color: #fff;
-            font-size: 1em;
-            font-weight: normal;
-            font-family: 'Montserrat', sans-serif;
-            margin: 5px 0;
-            transition: transform 0.3s ease;
-        }
-        p:hover {
-            transform: translateY(-3px);
-        }
-        .profile-pic {
-            border-radius: 10%;
-            width: 120px;
-            height: 120px;
-            margin: 10px 0;
-            user-drag: none;
-            -webkit-user-drag: none;
-            transition: transform 0.3s ease;
-        }
-        .profile-pic:hover {
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-        .interests {
-            margin: 10px 0;
-        }
-        .contact-info {
-            margin: 10px 0;
-        }
-        .contact-info a {
-            color: #80b3ff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        .contact-info a:hover {
-            color: #b3d9ff;
-        }
-        .animated-text {
-            animation: fadeIn 2s ease-in-out;
-            max-width: 1000px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            margin: 0 auto;
-            padding: 0 10px;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .social-icons img, .tech-icons img {
-            vertical-align: middle;
-            transition: filter 0.3s ease;
-            user-drag: none;
-            -webkit-user-drag: none;
-        }
-        .social-icons, .tech-icons {
-            text-align: center;
-            margin-top: 10px;
-        }
-        .tech-icons {
-            margin-bottom: 30px;
-        }
-        .tech-icons a {
-            margin: 0 5px;
-            display: inline-block;
-            text-align: center;
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-        .tech-icons a:hover {
-            transform: scale(1.1);
-        }
-        .tech-icons a::before {
-            content: attr(data-name);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            margin-bottom: 5px;
-            background-color: #333;
-            color: #fff;
-            padding: 3px 6px;
-            border-radius: 5px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease;
-            font-size: 12px;
-        }
-        .tech-icons a:hover::before {
-            opacity: 1;
-            visibility: visible;
-        }
-        .tech-icons img {
-            width: 30px;
-            height: 30px;
-        }
-        .preview-tooltip {
-            position: relative;
-            display: inline-block;
-        }
-        .preview-tooltip .preview {
-            visibility: hidden;
-            width: 300px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 5px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -150px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-        }
-        .preview-tooltip:hover .preview {
-            visibility: visible;
-            opacity: 1;
-        }
-        .preview img {
-            max-width: 100%;
-            border-radius: 5px;
-            user-drag: none;
-            -webkit-user-drag: none;
-        }
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(52, 52, 60, 0)); /* Fading effect */
-            color: white;
-            text-align: center;
-            padding: 10px;
-            box-sizing: border-box;
-            z-index: 1000;
-            font-size: 14px;
-        }
-        @keyframes backgroundAnimation {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
-        }
-        .background:hover {
-            transform: scale(1.1);
-        }
-        .back-button, .contacts-button {
-            position: absolute;
-            top: 10px;
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 2.5px 5px;
-            border-radius: 7px;
-            text-decoration: none;
-            color: #fff;
-            font-weight: bold;
-            font-family: 'Montserrat', sans-serif;
-            transition: background-color 0.3s ease;
-        }
-        .back-button:hover, .contacts-button:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-        .back-button {
-            left: 10px;
-        }
-        .contacts-button {
-            right: 10px;
-        }
-        .collage {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        .collage img {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .collage img:hover {
-            transform: scale(1.05);
-        }
-        .lightbox {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .lightbox img {
-            max-width: 90%;
-            max-height: 80%;
-            border-radius: 10px;
-        }
-        .lightbox .close, .lightbox .prev, .lightbox .next {
-            position: fixed;
-            top: 10px;
-            background: rgba(0, 0, 0);
-            color: #fff;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 10px;
-            border-radius: 50%;
-            z-index: 1001;
-        }
-        .lightbox .close {
-            right: 10px;
-        }
-        .lightbox .prev {
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .lightbox .next {
-            right: 60px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .container {
-            transform: scale(0.9);
-            transform-origin: center;
-        }
-    </style>
+    :root {
+        --mocha-bg: #1e1e2e;
+        --mocha-bg-gradient-start: #1e1e2e;
+        --mocha-bg-gradient-end: #302d41;
+        --mocha-text: #cdd6f4;
+        --mocha-accent: #f5c2e7;
+        --mocha-accent-hover: #f8c7ef;
+        --mocha-link: #89b4fa;
+        --mocha-link-hover: #b4c7ff;
+        --mocha-shadow: rgba(255, 255, 255, 0.2);
+        --mocha-tooltip-bg: #45475a;
+        --mocha-footer-bg: rgba(30, 30, 46, 0.8);
+    }
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        line-height: 1.4;
+        background: linear-gradient(to right, var(--mocha-bg-gradient-start), var(--mocha-bg-gradient-end));
+        background-size: 200% 200%;
+        color: var(--mocha-text);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        text-align: center;
+        min-height: 100vh;
+        transition: background-position 0.1s ease-out;
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        box-sizing: border-box;
+    }
+
+    h1, h3 {
+        color: var(--mocha-text);
+        margin: 10px 0;
+        font-family: 'Montserrat', sans-serif;
+        transition: transform 0.3s ease, text-shadow 0.3s ease;
+        text-shadow: 0 0 5px var(--mocha-shadow), 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    h1:hover, h3:hover {
+        transform: scale(1.05);
+        text-shadow: 0 0 10px var(--mocha-accent), 0 0 20px rgba(245, 194, 231, 0.7);
+    }
+
+    p {
+        color: var(--mocha-text);
+        font-size: 1em;
+        font-weight: normal;
+        font-family: 'Montserrat', sans-serif;
+        margin: 5px 0;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    p:hover {
+        transform: translateY(-3px);
+    }
+
+    .profile-pic {
+        border-radius: 10%;
+        width: 120px;
+        height: 120px;
+        margin: 10px 0;
+        user-drag: none;
+        -webkit-user-drag: none;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .profile-pic:hover {
+        animation: pulse 1.5s infinite;
+        box-shadow: 0 0 20px var(--mocha-accent);
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    .contact-info a {
+        color: var(--mocha-link);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .contact-info a:hover {
+        color: var(--mocha-link-hover);
+    }
+
+    .animated-text {
+        animation: fadeIn 2s ease-in-out;
+        max-width: 1000px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        margin: 0 auto;
+        padding: 0 10px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .tech-icons a::before {
+        background-color: var(--mocha-tooltip-bg);
+        color: var(--mocha-text);
+    }
+
+    .tech-icons img {
+        width: 30px;
+        height: 30px;
+        filter: brightness(0.9);
+        transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .tech-icons a:hover img {
+        transform: scale(1.1);
+        filter: brightness(1.2);
+    }
+
+    .preview-tooltip .preview {
+        background-color: var(--mocha-tooltip-bg);
+        color: var(--mocha-text);
+        box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
+    }
+
+    footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: var(--mocha-footer-bg);
+        color: var(--mocha-text);
+        text-align: center;
+        padding: 10px;
+        box-sizing: border-box;
+        z-index: 1000;
+        font-size: 14px;
+    }
+
+    .back-button, .contacts-button {
+        background-color: rgba(68, 63, 82, 0.6);
+        color: var(--mocha-text);
+        padding: 2.5px 5px;
+        border-radius: 7px;
+        font-weight: bold;
+        text-decoration: none;
+        font-family: 'Montserrat', sans-serif;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .back-button:hover, .contacts-button:hover {
+        background-color: rgba(68, 63, 82, 0.8);
+        color: var(--mocha-accent);
+    }
+
+    .collage img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .collage img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px var(--mocha-accent);
+    }
+
+    .lightbox {
+        background: rgba(30, 30, 46, 0.95);
+    }
+
+    .lightbox .close, .lightbox .prev, .lightbox .next {
+        background: rgba(52, 52, 60, 0.8);
+        color: var(--mocha-text);
+    }
+
+    .lightbox .close:hover, .lightbox .prev:hover, .lightbox .next:hover {
+        background: var(--mocha-accent);
+        color: #1e1e2e;
+    }
+</style>
 </head>
 <body>
     <a href="https://exophs.space" class="back-button">Back</a>
