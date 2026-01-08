@@ -7,7 +7,7 @@
 <title>About Me - Ray</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap">
 <style>
-    /* ---------------- Body & Colors ---------------- */
+    /* ---------------- Catppuccin Mocha Colors ---------------- */
     :root {
         --mocha-base: #1e1e2e;
         --mocha-mantle: #181825;
@@ -26,15 +26,27 @@
         padding: 0;
     }
 
+    /* ---------------- Body & Scrollbar ---------------- */
     body {
         font-family: 'Roboto', sans-serif;
         color: var(--mocha-text);
         background-color: var(--mocha-base);
         min-height: 100vh;
         display: flex;
-        justify-content: center;
-        align-items: flex-start;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
         padding: 40px 20px;
+        overflow-y: scroll;
+    }
+
+    /* Hide scrollbar but keep scroll */
+    body::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+    }
+    body {
+        scrollbar-width: none;
     }
 
     a {
@@ -63,6 +75,7 @@
         font-size: 2.5em;
         margin-bottom: 5px;
         color: var(--mocha-lavender);
+        text-align: center;
     }
 
     h3 {
@@ -70,6 +83,7 @@
         font-weight: 400;
         color: var(--mocha-peach);
         margin-bottom: 20px;
+        text-align: center;
     }
 
     /* ---------------- Profile ---------------- */
@@ -95,6 +109,7 @@
         margin-bottom: 15px;
         line-height: 1.6;
         color: var(--mocha-subtext);
+        text-align: center;
     }
 
     /* ---------------- Buttons ---------------- */
@@ -192,10 +207,15 @@
 
     /* ---------------- Footer ---------------- */
     footer {
+        margin-top: auto; /* sticky to bottom if content is short */
         text-align: center;
-        padding: 15px;
+        padding: 15px 0;
         font-size: 14px;
         color: var(--mocha-subtext);
+        width: 100%;
+        background-color: var(--mocha-mantle);
+        border-top: 1px solid #2a2a3a;
+        box-sizing: border-box;
     }
 
     /* ---------------- Tooltip ---------------- */
