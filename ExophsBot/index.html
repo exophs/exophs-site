@@ -10,12 +10,10 @@
             margin: 0;
             padding: 0;
         }
-
         html {
             scroll-behavior: smooth;
             font-size: 100%;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
@@ -23,31 +21,26 @@
             color: #e0e0e0;
             min-height: 100vh;
         }
-
         header {
             background: linear-gradient(135deg, #4b0082, #6a0dad);
             color: white;
             padding: 1.5rem 1rem;
             text-align: center;
         }
-
         header h1 {
             font-size: clamp(1.6rem, 6vw, 2.2rem);
             margin-bottom: 0.5rem;
         }
-
         header p {
             opacity: 0.9;
             font-size: 0.95rem;
         }
-
         nav {
             background-color: #2a2a2a;
             padding: 0.9rem;
             text-align: center;
             border-bottom: 1px solid #444;
         }
-
         nav a {
             color: #d0b0ff;
             text-decoration: none;
@@ -56,17 +49,14 @@
             font-size: 0.95rem;
             transition: color 0.2s;
         }
-
         nav a:hover {
             color: white;
         }
-
         main {
             max-width: 1100px;
             margin: 1.5rem auto;
             padding: 1rem;
         }
-
         h2 {
             color: #d8bfd8;
             border-bottom: 3px solid #6a0dad;
@@ -74,13 +64,10 @@
             margin: 2rem 0 1rem;
             font-size: 1.6rem;
         }
-
-        /* Search */
         .search-container {
             margin: 1.5rem 0 2rem;
             max-width: 100%;
         }
-
         #commandSearch {
             width: 100%;
             padding: 0.9rem 1rem;
@@ -92,12 +79,10 @@
             outline: none;
             transition: all 0.2s;
         }
-
         #commandSearch:focus {
             border-color: #9d4fff;
             box-shadow: 0 0 0 3px rgba(157, 79, 255, 0.25);
         }
-
         #noResults {
             display: none;
             color: #ff9999;
@@ -105,8 +90,6 @@
             margin-top: 1rem;
             text-align: center;
         }
-
-        /* Table */
         .table-wrapper {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -114,19 +97,16 @@
             border-radius: 8px;
             border: 1px solid #444;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.95rem;
         }
-
         th, td {
             padding: 0.9rem 1rem;
             text-align: left;
             border-bottom: 1px solid #444;
         }
-
         th {
             background: #6a0dad;
             color: white;
@@ -136,24 +116,20 @@
             z-index: 10;
             white-space: nowrap;
         }
-
         td code {
             background: #2b2b2b;
             padding: 0.2em 0.5em;
             border-radius: 4px;
             font-family: 'Consolas', 'Courier New', monospace;
         }
-
         tr:nth-child(even) {
             background-color: #252525;
         }
-
         .highlight {
             background-color: rgba(157, 79, 255, 0.35);
             padding: 0.15rem 0.3rem;
             border-radius: 3px;
         }
-
         footer {
             background-color: #1a1a1a;
             color: #aaa;
@@ -163,99 +139,48 @@
             font-size: 0.9rem;
             border-top: 1px solid #333;
         }
-
-        /* Mobile adjustments */
         @media (max-width: 768px) {
-            main {
-                padding: 0.8rem;
-                margin: 1rem;
-            }
-
-            nav a {
-                margin: 0 0.8rem;
-                font-size: 0.9rem;
-            }
-
-            th, td {
-                padding: 0.75rem 0.9rem;
-                font-size: 0.92rem;
-            }
-
-            table {
-                font-size: 0.9rem;
-            }
-
-            /* Make command column narrower on small screens */
-            th:first-child, td:first-child {
-                min-width: 110px;
-            }
-
-            /* Make description take more space */
-            td:nth-child(3) {
-                min-width: 180px;
-            }
+            main { padding: 0.8rem; margin: 1rem; }
+            nav a { margin: 0 0.8rem; font-size: 0.9rem; }
+            th, td { padding: 0.75rem 0.9rem; font-size: 0.92rem; }
+            table { font-size: 0.9rem; }
+            th:first-child, td:first-child { min-width: 110px; }
+            td:nth-child(3) { min-width: 180px; }
         }
-
         @media (max-width: 480px) {
-            header {
-                padding: 1.2rem 0.8rem;
-            }
-
-            h2 {
-                font-size: 1.4rem;
-            }
-
-            nav {
-                padding: 0.7rem;
-            }
-
-            nav a {
-                margin: 0 0.6rem;
-                display: inline-block;
-                margin-bottom: 0.3rem;
-            }
-
-            .search-container {
-                margin: 1.2rem 0;
-            }
-
-            #commandSearch {
-                font-size: 0.95rem;
-                padding: 0.8rem;
-            }
+            header { padding: 1.2rem 0.8rem; }
+            h2 { font-size: 1.4rem; }
+            nav { padding: 0.7rem; }
+            nav a { margin: 0 0.6rem; display: inline-block; margin-bottom: 0.3rem; }
+            .search-container { margin: 1.2rem 0; }
+            #commandSearch { font-size: 0.95rem; padding: 0.8rem; }
         }
     </style>
 </head>
 <body>
-
     <header>
         <h1>ExophsBot Commands Documentation</h1>
         <p>Version 1.0.1 | For the 5B5T Minecraft Server</p>
     </header>
-
     <nav>
         <a href="#introduction">Introduction</a>
         <a href="#commands">Commands List</a>
     </nav>
-
     <main>
         <section id="introduction">
             <h2>Introduction</h2>
             <p>Welcome to the official documentation for <strong>ExophsBot</strong>, a Minecraft bot designed for the 5B5T server.</p>
-            <p>This bot provides various utility, fun, movement, and communication commands to enhance your gameplay experience.</p>
-            <p>All public commands are prefixed with <code>!</code> and can be used in in-game chat.</p>
+            <p>This bot provides utility, fun, movement, and communication commands to enhance your gameplay experience.</p>
+            <p>All public commands are prefixed with <code>!</code> and can be used in in-game chat or via DiscordSRV bridge.</p>
             <p><strong>Note:</strong> This page lists <strong>public commands only</strong>. Admin commands (starting with <code>:</code>) are not shown here.</p>
             <p>For questions or suggestions, join our Discord using <code>!discord</code>.</p>
         </section>
-
         <section id="commands">
             <h2>Commands List</h2>
-
             <div class="search-container">
-                <input type="text" id="commandSearch" placeholder="Search commands... (e.g. offline, move, roast)">
+                <input type="text" id="commandSearch" placeholder="Search commands... (e.g. offline, roast, move)">
                 <p id="noResults">No matching commands found.</p>
             </div>
-
             <div class="table-wrapper">
                 <table id="commandsTable">
                     <thead>
@@ -269,42 +194,42 @@
                         <tr>
                             <td><code>!help</code></td>
                             <td><code>!help</code></td>
-                            <td>Displays a link to this documentation page.</td>
+                            <td>Shows a link to this documentation page.</td>
                         </tr>
                         <tr>
                             <td><code>!ping</code></td>
                             <td><code>!ping [username]</code></td>
-                            <td>Shows your ping or the ping of another player. Returns "unknown" if not available.</td>
+                            <td>Shows your ping or another player's ping (returns "unknown" if not available).</td>
                         </tr>
                         <tr>
                             <td><code>!lastmsg</code></td>
-                            <td><code>!lastmsg &lt;username&gt;</code></td>
+                            <td><code>!lastmsg <username></code></td>
                             <td>Shows the most recent message sent by the specified player.</td>
                         </tr>
                         <tr>
                             <td><code>!firstmsg</code></td>
-                            <td><code>!firstmsg &lt;username&gt;</code></td>
+                            <td><code>!firstmsg <username></code></td>
                             <td>Shows the first recorded message sent by the specified player.</td>
                         </tr>
                         <tr>
                             <td><code>!randommsg</code></td>
-                            <td><code>!randommsg &lt;username&gt;</code></td>
-                            <td>Picks and shows a random message from the specified player's message history.</td>
+                            <td><code>!randommsg <username></code></td>
+                            <td>Picks and displays a random message from the player's history.</td>
                         </tr>
                         <tr>
                             <td><code>!info</code></td>
                             <td><code>!info</code></td>
-                            <td>Displays information about the bot's runtime environment (Node.js version, OS, CPU).</td>
+                            <td>Shows bot runtime info (Node.js version, OS, CPU model).</td>
                         </tr>
                         <tr>
                             <td><code>!randomn</code></td>
-                            <td><code>!randomn &lt;decimals&gt; &lt;min&gt; &lt;max&gt;</code></td>
-                            <td>Generates a random decimal number between min and max with the specified precision (0–99 decimals).</td>
+                            <td><code>!randomn <decimals> <min> <max></code></td>
+                            <td>Generates a random number between min and max with specified decimal places (0–99).</td>
                         </tr>
                         <tr>
                             <td><code>!prefix</code></td>
                             <td><code>!prefix</code></td>
-                            <td>Shows the current command prefix (currently "!").</td>
+                            <td>Displays the current command prefix (currently "!").</td>
                         </tr>
                         <tr>
                             <td><code>!uptime</code></td>
@@ -319,17 +244,17 @@
                         <tr>
                             <td><code>!discord</code></td>
                             <td><code>!discord</code></td>
-                            <td>Displays the invite link to the official Discord server.</td>
+                            <td>Shows the invite link to the official Discord server.</td>
                         </tr>
                         <tr>
                             <td><code>!gay</code></td>
                             <td><code>!gay [target]</code></td>
-                            <td>Shows a random funny percentage of how "gay" you or another player are (joke command).</td>
+                            <td>Shows a random funny percentage of how "gay" you or another player are (joke).</td>
                         </tr>
                         <tr>
                             <td><code>!coords</code></td>
                             <td><code>!coords</code></td>
-                            <td>Shows completely fake random coordinates (for memes/trolling).</td>
+                            <td>Shows completely fake random coordinates (meme/troll command).</td>
                         </tr>
                         <tr>
                             <td><code>!pitch</code></td>
@@ -359,17 +284,17 @@
                         <tr>
                             <td><code>!y/n</code></td>
                             <td><code>!y/n</code></td>
-                            <td>Answers your question with a random YES or NO.</td>
+                            <td>Answers any question with a random YES or NO.</td>
                         </tr>
                         <tr>
                             <td><code>!roast</code></td>
-                            <td><code>!roast &lt;username&gt;</code></td>
+                            <td><code>!roast <username></code></td>
                             <td>Sends a random savage/funny roast directed at the specified player.</td>
                         </tr>
                         <tr>
                             <td><code>!kit</code></td>
-                            <td><code>!kit &lt;name&gt;</code></td>
-                            <td>Fake kit claim message (currently just cosmetic).</td>
+                            <td><code>!kit <name></code></td>
+                            <td>Fake kit claim message (currently cosmetic only).</td>
                         </tr>
                         <tr>
                             <td><code>!rules</code></td>
@@ -378,37 +303,72 @@
                         </tr>
                         <tr>
                             <td><code>!report</code></td>
-                            <td><code>!report &lt;player&gt; [reason]</code></td>
+                            <td><code>!report <player> [reason]</code></td>
                             <td>Creates a fake/public report message for the specified player.</td>
                         </tr>
                         <tr>
                             <td><code>!8ball</code></td>
-                            <td><code>!8ball &lt;question&gt;</code></td>
+                            <td><code>!8ball <question></code></td>
                             <td>Ask the Magic 8-Ball a question and get a random classic response.</td>
                         </tr>
                         <tr>
                             <td><code>!offlinemsg</code></td>
-                            <td><code>!offlinemsg &lt;player&gt; &lt;message&gt;</code></td>
-                            <td>Sends an offline message to the specified player. They will see it when they join (or sometimes when they chat).</td>
+                            <td><code>!offlinemsg <player> <message></code></td>
+                            <td>Sends an offline message to another player — they will see it when they join (or sometimes when they chat).</td>
                         </tr>
                         <tr>
                             <td><code>!ignore</code></td>
-                            <td><code>!ignore &lt;player&gt;</code></td>
+                            <td><code>!ignore <player></code></td>
                             <td>Blocks a player from sending you offline messages via !offlinemsg.</td>
                         </tr>
                         <tr>
                             <td><code>!unignore</code></td>
-                            <td><code>!unignore &lt;player&gt;</code></td>
-                            <td>Removes a player from your ignore list so they can send you offline messages again.</td>
+                            <td><code>!unignore <player></code></td>
+                            <td>Removes a player from your ignore list so they can send offline messages again.</td>
+                        </tr>
+                        <tr>
+                            <td><code>!iq</code></td>
+                            <td><code>!iq [target]</code></td>
+                            <td>Shows a random IQ score for you or another player (joke — 40–160 range).</td>
+                        </tr>
+                        <tr>
+                            <td><code>!pp</code> / <code>!dick</code> / <code>!cock</code></td>
+                            <td><code>!pp [target]</code></td>
+                            <td>Shows a random "pp size" in cm for you or another player (joke — 6–24 cm).</td>
+                        </tr>
+                        <tr>
+                            <td><code>!autistic</code></td>
+                            <td><code>!autistic [target]</code></td>
+                            <td>Shows a random funny percentage of how "autistic" you or another player are.</td>
+                        </tr>
+                        <tr>
+                            <td><code>!retard</code> / <code>!retardness</code></td>
+                            <td><code>!retard [target]</code></td>
+                            <td>Shows a random funny percentage of "retardness" (joke command).</td>
+                        </tr>
+                        <tr>
+                            <td><code>!fat</code></td>
+                            <td><code>!fat [target]</code></td>
+                            <td>Shows a random funny percentage of how "fat" you or another player are.</td>
+                        </tr>
+                        <tr>
+                            <td><code>!silly</code></td>
+                            <td><code>!silly [target]</code></td>
+                            <td>Shows a random funny percentage of how "silly" you or another player are.</td>
+                        </tr>
+                        <tr>
+                            <td><code>!say</code></td>
+                            <td><code>!say <message></code></td>
+                            <td>Makes the bot say your message in chat. Cannot start with / (server commands blocked).</td>
                         </tr>
                         <tr>
                             <td><code>!move</code></td>
-                            <td><code>!move &lt;forward/back/left/right/jump/stop/look&gt; [time or look params]</code></td>
-                            <td>Makes the bot walk, jump, stop, or look in a direction. Supports timed movement and look yaw/pitch.</td>
+                            <td><code>!move <forward/back/left/right/jump/stop/look> [time or look params]</code></td>
+                            <td>Makes the bot walk, jump, stop, or look in a direction (supports timed movement and yaw/pitch look).</td>
                         </tr>
                         <tr>
                             <td><code>!goto</code></td>
-                            <td><code>!goto &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></td>
+                            <td><code>!goto <x> <y> <z></code></td>
                             <td>Makes the bot pathfind to the specified coordinates.</td>
                         </tr>
                         <tr>
@@ -418,12 +378,12 @@
                         </tr>
                         <tr>
                             <td><code>!follow</code></td>
-                            <td><code>!follow &lt;player&gt;</code></td>
+                            <td><code>!follow <player></code></td>
                             <td>Makes the bot continuously follow the specified player.</td>
                         </tr>
                         <tr>
                             <td><code>!attack</code></td>
-                            <td><code>!attack &lt;player/animal/stop&gt;</code></td>
+                            <td><code>!attack <player/animal/stop></code></td>
                             <td>Makes the bot attack a player or certain animals with crits. Use "stop" to cancel.</td>
                         </tr>
                     </tbody>
@@ -431,11 +391,9 @@
             </div>
         </section>
     </main>
-
     <footer>
         <p>© 2025–2026 ExophsBot | Made for Ray by Quicoys | Last Updated: February 2026</p>
     </footer>
-
     <script>
         const searchInput = document.getElementById('commandSearch');
         const table = document.getElementById('commandsTable');
@@ -451,25 +409,16 @@
         function filterTable() {
             const filter = searchInput.value.toLowerCase().trim();
             let visible = 0;
-
             for (let i = 1; i < rows.length; i++) {
                 const cells = rows[i].getElementsByTagName('td');
                 if (cells.length < 3) continue;
-
                 const command = cells[0].textContent.toLowerCase();
-                const usage   = cells[1].textContent.toLowerCase();
-                const desc    = cells[2].textContent.toLowerCase();
-
-                const matches = 
-                    command.includes(filter) ||
-                    usage.includes(filter)   ||
-                    desc.includes(filter);
-
+                const usage = cells[1].textContent.toLowerCase();
+                const desc = cells[2].textContent.toLowerCase();
+                const matches = command.includes(filter) || usage.includes(filter) || desc.includes(filter);
                 if (matches) {
                     rows[i].style.display = '';
                     visible++;
-
-                    // Reset and re-apply highlights
                     cells[0].innerHTML = highlightText(cells[0].textContent, filter);
                     cells[1].innerHTML = highlightText(cells[1].textContent, filter);
                     cells[2].innerHTML = highlightText(cells[2].textContent, filter);
@@ -477,12 +426,11 @@
                     rows[i].style.display = 'none';
                 }
             }
-
             noResults.style.display = (visible === 0 && filter !== '') ? 'block' : 'none';
         }
 
         searchInput.addEventListener('input', filterTable);
-        // Optional: focus search on mobile
+
         if (window.innerWidth <= 768) {
             setTimeout(() => searchInput.focus(), 300);
         }
