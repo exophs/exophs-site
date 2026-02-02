@@ -6,12 +6,12 @@
     <title>ExophsBot Commands Documentation</title>
     <style>
         html {
-            scroll-behavior: smooth; /* Smooth scrolling for nav links */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE and Edge */
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
         html::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, and Opera */
+            display: none;
         }
         body {
             font-family: Arial, sans-serif;
@@ -21,13 +21,12 @@
             background-color: #2b2b2b;
             color: #e0e0e0;
             height: 100%;
-            overflow-x: hidden; /* Prevent horizontal scrollbar */
-            overflow-y: auto; /* Allow vertical scrolling */
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE and Edge */
+            overflow-x: hidden;
+            overflow-y: auto;
+            scrollbar-width: none;
         }
         body::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, and Opera */
+            display: none;
         }
         header {
             background-color: #4b0082;
@@ -112,8 +111,8 @@
     <main>
         <section id="introduction">
             <h2>Introduction</h2>
-            <p>Welcome to the official documentation for ExophsBot, a Minecraft bot designed for the 5B5T server. This bot provides various utility, fun, and movement commands to enhance your gameplay experience. All commands are prefixed with <code>!</code> and can be used in the in-game chat.</p>
-            <p>Note: This documentation excludes admin-only commands. For any issues or suggestions, join our Discord server using the <code>!discord</code> command in-game.</p>
+            <p>Welcome to the official documentation for ExophsBot, a Minecraft bot designed for the 5B5T server. This bot provides various utility, fun, movement, and communication commands to enhance your gameplay experience. All commands are prefixed with <code>!</code> and can be used in the in-game chat.</p>
+            <p><strong>Note:</strong> This documentation lists public commands only. Admin-only commands (starting with <code>:</code>) are not included here. For any issues, questions or suggestions, join our Discord server using the <code>!discord</code> command in-game.</p>
         </section>
         <section id="commands">
             <h2>Commands List</h2>
@@ -129,154 +128,173 @@
                     <tr>
                         <td><code>!help</code></td>
                         <td><code>!help</code></td>
-                        <td>Displays a list of all available commands with brief descriptions.</td>
+                        <td>Displays a link to this documentation page.</td>
                     </tr>
                     <tr>
                         <td><code>!ping</code></td>
                         <td><code>!ping [username]</code></td>
-                        <td>Gets the ping (latency) of the specified user or yourself if no username is provided. Returns "unknown" if not available.</td>
+                        <td>Shows your ping or the ping of another player. Returns "unknown" if not available.</td>
                     </tr>
                     <tr>
                         <td><code>!lastmsg</code></td>
                         <td><code>!lastmsg &lt;username&gt;</code></td>
-                        <td>Retrieves the last message sent by the specified user.</td>
+                        <td>Shows the most recent message sent by the specified player.</td>
                     </tr>
                     <tr>
                         <td><code>!firstmsg</code></td>
                         <td><code>!firstmsg &lt;username&gt;</code></td>
-                        <td>Retrieves the first message sent by the specified user.</td>
+                        <td>Shows the first recorded message sent by the specified player.</td>
                     </tr>
                     <tr>
                         <td><code>!randommsg</code></td>
                         <td><code>!randommsg &lt;username&gt;</code></td>
-                        <td>Retrieves a random message from the specified user's message history.</td>
+                        <td>Picks and shows a random message from the specified player's message history.</td>
                     </tr>
                     <tr>
                         <td><code>!info</code></td>
                         <td><code>!info</code></td>
-                        <td>Displays system information including Node.js version, operating system, and CPU model.</td>
+                        <td>Displays information about the bot's runtime environment (Node.js version, OS, CPU).</td>
                     </tr>
                     <tr>
                         <td><code>!randomn</code></td>
                         <td><code>!randomn &lt;decimals&gt; &lt;min&gt; &lt;max&gt;</code></td>
-                        <td>Generates a random number between min and max with the specified number of decimal places (0-99).</td>
+                        <td>Generates a random decimal number between min and max with the specified precision (0–99 decimals).</td>
                     </tr>
                     <tr>
                         <td><code>!prefix</code></td>
                         <td><code>!prefix</code></td>
-                        <td>Displays the current command prefix ("!").</td>
+                        <td>Shows the current command prefix (currently "!").</td>
                     </tr>
                     <tr>
                         <td><code>!uptime</code></td>
                         <td><code>!uptime</code></td>
-                        <td>Shows the bot's uptime in minutes.</td>
+                        <td>Shows how long the bot has been running (in minutes).</td>
                     </tr>
                     <tr>
                         <td><code>!online</code></td>
                         <td><code>!online</code></td>
-                        <td>Displays the number of players currently online.</td>
+                        <td>Shows the current number of players online on the server.</td>
                     </tr>
                     <tr>
                         <td><code>!discord</code></td>
                         <td><code>!discord</code></td>
-                        <td>Provides the link to join the Discord server: https://discord.gg/dN8jCQymN7</td>
+                        <td>Displays the invite link to the official Discord server.</td>
                     </tr>
                     <tr>
                         <td><code>!gay</code></td>
                         <td><code>!gay [target]</code></td>
-                        <td>Generates a humorous random percentage of how "gay" the target (or yourself) is.</td>
+                        <td>Shows a random funny percentage of how "gay" you or another player are (joke command).</td>
                     </tr>
                     <tr>
                         <td><code>!coords</code></td>
                         <td><code>!coords</code></td>
-                        <td>Generates and displays fake random coordinates in the Overworld.</td>
+                        <td>Shows completely fake random coordinates (for memes/trolling).</td>
                     </tr>
                     <tr>
                         <td><code>!pitch</code></td>
                         <td><code>!pitch</code></td>
-                        <td>Displays the bot's current camera pitch.</td>
+                        <td>Shows the bot's current camera pitch value.</td>
                     </tr>
                     <tr>
                         <td><code>!yaw</code></td>
                         <td><code>!yaw</code></td>
-                        <td>Displays the bot's current camera yaw.</td>
+                        <td>Shows the bot's current camera yaw value.</td>
                     </tr>
                     <tr>
                         <td><code>!doxx</code></td>
                         <td><code>!doxx [target]</code></td>
-                        <td>Generates and displays a fake IP address for the target (or yourself) as a joke.</td>
+                        <td>Shows a fake random IP address (purely for jokes — not real doxxing).</td>
                     </tr>
                     <tr>
                         <td><code>!health</code></td>
                         <td><code>!health</code></td>
-                        <td>Displays the bot's current health and hunger levels.</td>
+                        <td>Shows the bot's current health and hunger values.</td>
                     </tr>
                     <tr>
                         <td><code>!hunger</code></td>
                         <td><code>!hunger</code></td>
-                        <td>Displays the bot's current hunger and health levels.</td>
+                        <td>Shows the bot's current hunger and health values.</td>
                     </tr>
                     <tr>
                         <td><code>!y/n</code></td>
                         <td><code>!y/n</code></td>
-                        <td>Randomly responds with "YES" or "NO".</td>
+                        <td>Answers your question with a random YES or NO.</td>
                     </tr>
                     <tr>
                         <td><code>!roast</code></td>
-                        <td><code>!roast</code></td>
-                        <td>Delivers a random humorous roast message to the user.</td>
+                        <td><code>!roast &lt;username&gt;</code></td>
+                        <td>Sends a random savage/funny roast directed at the specified player.</td>
                     </tr>
                     <tr>
                         <td><code>!kit</code></td>
                         <td><code>!kit &lt;name&gt;</code></td>
-                        <td>Simulates receiving a kit with the specified name.</td>
+                        <td>Fake kit claim message (currently just cosmetic).</td>
                     </tr>
                     <tr>
                         <td><code>!rules</code></td>
                         <td><code>!rules</code></td>
-                        <td>Displays the server rules and how to report offenders.</td>
+                        <td>Shows basic server rules and how to report players.</td>
                     </tr>
                     <tr>
                         <td><code>!report</code></td>
                         <td><code>!report &lt;player&gt; [reason]</code></td>
-                        <td>Reports the specified player, optionally with a reason.</td>
+                        <td>Creates a fake/public report message for the specified player.</td>
                     </tr>
                     <tr>
                         <td><code>!8ball</code></td>
                         <td><code>!8ball &lt;question&gt;</code></td>
-                        <td>Provides a random Magic 8-Ball response to your question.</td>
+                        <td>Ask the Magic 8-Ball a question and get a random classic response.</td>
+                    </tr>
+
+                    <!-- New commands added here -->
+                    <tr>
+                        <td><code>!offlinemsg</code></td>
+                        <td><code>!offlinemsg &lt;player&gt; &lt;message&gt;</code></td>
+                        <td>Sends an offline message to the specified player. They will see it when they join the server (or sometimes when they chat).</td>
                     </tr>
                     <tr>
+                        <td><code>!ignore</code></td>
+                        <td><code>!ignore &lt;player&gt;</code></td>
+                        <td>Blocks a player from being able to send you offline messages using !offlinemsg.</td>
+                    </tr>
+                    <tr>
+                        <td><code>!unignore</code></td>
+                        <td><code>!unignore &lt;player&gt;</code></td>
+                        <td>Removes a player from your ignore list, allowing them to send you offline messages again.</td>
+                    </tr>
+
+                    <!-- Movement / utility commands -->
+                    <tr>
                         <td><code>!move</code></td>
-                        <td><code>!move &lt;forward/back/left/right/jump/stop/look&gt; [time in seconds or look params]</code></td>
-                        <td>Controls the bot's movement in the specified direction for an optional duration, or adjusts look direction (e.g., yaw/pitch or directions like forward/up).</td>
+                        <td><code>!move &lt;forward/back/left/right/jump/stop/look&gt; [time or look params]</code></td>
+                        <td>Makes the bot walk, jump, stop, or look in a direction. Supports timed movement and look yaw/pitch.</td>
                     </tr>
                     <tr>
                         <td><code>!goto</code></td>
                         <td><code>!goto &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></td>
-                        <td>Moves the bot to the specified coordinates using pathfinding.</td>
+                        <td>Makes the bot pathfind to the specified coordinates.</td>
                     </tr>
                     <tr>
                         <td><code>!come</code></td>
                         <td><code>!come</code></td>
-                        <td>Makes the bot move towards the player who issued the command.</td>
+                        <td>Makes the bot walk toward the player who used the command.</td>
                     </tr>
                     <tr>
                         <td><code>!follow</code></td>
                         <td><code>!follow &lt;player&gt;</code></td>
-                        <td>Makes the bot follow the specified player.</td>
+                        <td>Makes the bot continuously follow the specified player.</td>
                     </tr>
                     <tr>
                         <td><code>!attack</code></td>
-                        <td><code>!attack &lt;animal/playername/stop&gt;</code></td>
-                        <td>Makes the bot attack the specified target (animal or player) with critical hits, or stop attacking if "stop" is used. Limited to certain animals.</td>
+                        <td><code>!attack &lt;player/animal/stop&gt;</code></td>
+                        <td>Makes the bot attack a player or certain animals with crits. Use "stop" to cancel.</td>
                     </tr>
                 </tbody>
             </table>
         </section>
     </main>
     <footer>
-        <p>&copy; 2025 ExophsBot | Made for Ray by Quicoys | Last Updated: August 24, 2025</p>
+        <p>© 2025–2026 ExophsBot | Made for Ray by Quicoys | Last Updated: February 2026</p>
     </footer>
 </body>
 </html>
