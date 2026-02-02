@@ -10,9 +10,7 @@
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
-        html::-webkit-scrollbar {
-            display: none;
-        }
+        html::-webkit-scrollbar { display: none; }
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -20,82 +18,108 @@
             padding: 0;
             background-color: #2b2b2b;
             color: #e0e0e0;
-            height: 100%;
+            min-height: 100vh;
             overflow-x: hidden;
-            overflow-y: auto;
-            scrollbar-width: none;
         }
-        body::-webkit-scrollbar {
-            display: none;
-        }
+        body::-webkit-scrollbar { display: none; }
+
         header {
             background-color: #4b0082;
             color: #e0e0e0;
             padding: 20px;
             text-align: center;
         }
-        header h1 {
-            margin: 0;
-        }
+        header h1 { margin: 0; }
+
         nav {
             background-color: #3c3c3c;
-            color: #e0e0e0;
-            padding: 10px;
+            padding: 12px;
             text-align: center;
         }
         nav a {
             color: #d8bfd8;
             text-decoration: none;
-            margin: 0 15px;
+            margin: 0 18px;
+            font-weight: 500;
         }
-        nav a:hover {
-            color: #ffffff;
-        }
+        nav a:hover { color: white; }
+
         main {
             max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
+            margin: 25px auto;
+            padding: 25px;
             background-color: #333333;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            border-radius: 8px;
+            box-shadow: 0 0 14px rgba(0,0,0,0.6);
+            border-radius: 10px;
         }
-        section {
-            margin-bottom: 40px;
-        }
+
         h2 {
             border-bottom: 2px solid #6a0dad;
             padding-bottom: 10px;
             color: #d8bfd8;
+            margin-top: 0;
         }
+
+        /* Search Bar */
+        .search-container {
+            margin: 20px 0 30px;
+            position: relative;
+            max-width: 500px;
+        }
+        #commandSearch {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 16px;
+            border: 2px solid #6a0dad;
+            border-radius: 6px;
+            background-color: #2b2b2b;
+            color: #e0e0e0;
+            outline: none;
+        }
+        #commandSearch:focus {
+            border-color: #9d4fff;
+            box-shadow: 0 0 8px rgba(157, 79, 255, 0.4);
+        }
+        #noResults {
+            display: none;
+            color: #ff9999;
+            font-style: italic;
+            margin-top: 15px;
+            text-align: center;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 10px;
         }
         th, td {
             border: 1px solid #555555;
-            padding: 12px;
+            padding: 12px 14px;
             text-align: left;
         }
         th {
             background-color: #6a0dad;
-            color: #e0e0e0;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
-        tr:nth-child(even) {
-            background-color: #3c3c3c;
-        }
-        code {
-            background-color: #4b4b4b;
+        tr:nth-child(even) { background-color: #3c3c3c; }
+
+        .highlight {
+            background-color: rgba(157, 79, 255, 0.35);
             padding: 2px 4px;
-            border-radius: 4px;
-            color: #d8bfd8;
+            border-radius: 3px;
         }
+
         footer {
             background-color: #3c3c3c;
-            color: #e0e0e0;
+            color: #b0b0b0;
             text-align: center;
-            padding: 10px;
-            margin-top: 20px;
+            padding: 15px;
+            margin-top: 40px;
+            font-size: 0.9em;
         }
     </style>
 </head>
@@ -104,19 +128,28 @@
         <h1>ExophsBot Commands Documentation</h1>
         <p>Version 1.0.1 | For the 5B5T Minecraft Server</p>
     </header>
+
     <nav>
         <a href="#introduction">Introduction</a>
         <a href="#commands">Commands List</a>
     </nav>
+
     <main>
         <section id="introduction">
             <h2>Introduction</h2>
-            <p>Welcome to the official documentation for ExophsBot, a Minecraft bot designed for the 5B5T server. This bot provides various utility, fun, movement, and communication commands to enhance your gameplay experience. All commands are prefixed with <code>!</code> and can be used in the in-game chat.</p>
-            <p><strong>Note:</strong> This documentation lists public commands only. Admin-only commands (starting with <code>:</code>) are not included here. For any issues, questions or suggestions, join our Discord server using the <code>!discord</code> command in-game.</p>
+            <p>Welcome to the official documentation for ExophsBot, a Minecraft bot designed for the 5B5T server. This bot provides various utility, fun, movement, and communication commands to enhance your gameplay experience. All public commands are prefixed with <code>!</code> and can be used in in-game chat.</p>
+            <p><strong>Note:</strong> This page lists public commands only. Admin commands (starting with <code>:</code>) are not shown here. For questions or suggestions, join our Discord using <code>!discord</code>.</p>
         </section>
+
         <section id="commands">
             <h2>Commands List</h2>
-            <table>
+
+            <div class="search-container">
+                <input type="text" id="commandSearch" placeholder="Search commands... (e.g. offline, move, roast)">
+                <p id="noResults">No matching commands found.</p>
+            </div>
+
+            <table id="commandsTable">
                 <thead>
                     <tr>
                         <th>Command</th>
@@ -245,25 +278,21 @@
                         <td><code>!8ball &lt;question&gt;</code></td>
                         <td>Ask the Magic 8-Ball a question and get a random classic response.</td>
                     </tr>
-
-                    <!-- New commands added here -->
                     <tr>
                         <td><code>!offlinemsg</code></td>
                         <td><code>!offlinemsg &lt;player&gt; &lt;message&gt;</code></td>
-                        <td>Sends an offline message to the specified player. They will see it when they join the server (or sometimes when they chat).</td>
+                        <td>Sends an offline message to the specified player. They will see it when they join (or sometimes when they chat).</td>
                     </tr>
                     <tr>
                         <td><code>!ignore</code></td>
                         <td><code>!ignore &lt;player&gt;</code></td>
-                        <td>Blocks a player from being able to send you offline messages using !offlinemsg.</td>
+                        <td>Blocks a player from sending you offline messages via !offlinemsg.</td>
                     </tr>
                     <tr>
                         <td><code>!unignore</code></td>
                         <td><code>!unignore &lt;player&gt;</code></td>
-                        <td>Removes a player from your ignore list, allowing them to send you offline messages again.</td>
+                        <td>Removes a player from your ignore list so they can send you offline messages again.</td>
                     </tr>
-
-                    <!-- Movement / utility commands -->
                     <tr>
                         <td><code>!move</code></td>
                         <td><code>!move &lt;forward/back/left/right/jump/stop/look&gt; [time or look params]</code></td>
@@ -293,8 +322,60 @@
             </table>
         </section>
     </main>
+
     <footer>
         <p>© 2025–2026 ExophsBot | Made for Ray by Quicoys | Last Updated: February 2026</p>
     </footer>
+
+    <script>
+        const searchInput = document.getElementById('commandSearch');
+        const table = document.getElementById('commandsTable');
+        const rows = table.getElementsByTagName('tr');
+        const noResults = document.getElementById('noResults');
+
+        function highlightText(text, term) {
+            if (!term) return text;
+            const regex = new RegExp(`(${term})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        function filterTable() {
+            const filter = searchInput.value.toLowerCase().trim();
+            let visible = 0;
+
+            // Skip header row
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                if (cells.length < 3) continue;
+
+                const command = cells[0].textContent.toLowerCase();
+                const usage   = cells[1].textContent.toLowerCase();
+                const desc    = cells[2].textContent.toLowerCase();
+
+                const matches = 
+                    command.includes(filter) ||
+                    usage.includes(filter)   ||
+                    desc.includes(filter);
+
+                if (matches) {
+                    rows[i].style.display = '';
+                    visible++;
+
+                    // Highlight matching parts
+                    cells[0].innerHTML = highlightText(cells[0].textContent, filter);
+                    cells[1].innerHTML = highlightText(cells[1].textContent, filter);
+                    cells[2].innerHTML = highlightText(cells[2].textContent, filter);
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+
+            noResults.style.display = (visible === 0 && filter !== '') ? 'block' : 'none';
+        }
+
+        searchInput.addEventListener('input', filterTable);
+        // Optional: focus on load
+        // searchInput.focus();
+    </script>
 </body>
 </html>
