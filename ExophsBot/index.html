@@ -113,6 +113,28 @@
             padding: 0.15rem 0.3rem;
             border-radius: 3px;
         }
+        .changelog-entry {
+            margin-bottom: 1.5rem;
+        }
+        .changelog-entry h4 {
+            color: #b19cd9;
+            margin-bottom: 0.5rem;
+            font-size: 1.15rem;
+        }
+        .changelog-entry ul {
+            list-style: none;
+            padding-left: 1.2rem;
+        }
+        .changelog-entry li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        .changelog-entry li::before {
+            content: "→";
+            color: #9d4fff;
+            position: absolute;
+            left: -1.2rem;
+        }
         footer {
             background-color: #1a1a1a;
             color: #aaa;
@@ -144,10 +166,11 @@
 <body>
     <header>
         <h1>ExophsBot Commands Documentation</h1>
-        <p>Version 1.0.1 | For the 5B5T Minecraft Server</p>
+        <p>Version 1.1.0 | For the 5B5T Minecraft Server</p>
     </header>
     <nav>
         <a href="#introduction">Introduction</a>
+        <a href="#changelog">Changelog</a>
         <a href="#commands">Commands List</a>
     </nav>
     <main>
@@ -158,6 +181,29 @@
             <p>All public commands are prefixed with <code>!</code> and can be used in in-game chat or via DiscordSRV bridge.</p>
             <p><strong>Note:</strong> This page lists <strong>public commands only</strong>. Admin commands (starting with <code>:</code>) are not shown here.</p>
             <p>For questions or suggestions, join our Discord using <code>!discord</code>.</p>
+        </section>
+
+        <section id="changelog">
+            <h2>Changelog</h2>
+            <div class="changelog-entry">
+                <h4>Version 1.1.0 – February 3, 2026</h4>
+                <ul>
+                    <li>Added new offline messaging system: <code>!offlinemsg</code>, <code>!ignore</code>, <code>!unignore</code></li>
+                    <li>Added new fun/troll percentage commands: <code>!iq</code>, <code>!pp</code>/<code>!dick</code>/<code>!cock</code>, <code>!autistic</code>, <code>!retard</code>/<code>!retardness</code>, <code>!fat</code>, <code>!silly</code></li>
+                    <li>Added <code>!say</code> command with safety: cannot start with <code>/</code> (blocks server command attempts)</li>
+                    <li>Improved command handling for DiscordSRV bridge (messages now parsed correctly from <Discord> format)</li>
+                    <li>Message history now saved under real usernames (not "Discord")</li>
+                    <li>Minor bug fixes and performance tweaks</li>
+                </ul>
+            </div>
+            <div class="changelog-entry">
+                <h4>Version 1.0.1 – Initial Public Release</h4>
+                <ul>
+                    <li>Initial set of utility, movement, fun, and troll commands</li>
+                    <li>Basic DiscordSRV bridge support</li>
+                    <li>Admin whisper commands (: prefix)</li>
+                </ul>
+            </div>
         </section>
 
         <section id="commands">
@@ -392,7 +438,7 @@
         </section>
     </main>
     <footer>
-        <p>© 2025–2026 ExophsBot | Made for Ray by Quicoys | Last Updated: February 2026</p>
+        <p>© 2025–2026 ExophsBot | Made for Ray by Quicoys | Last Updated: February 3, 2026</p>
     </footer>
     <script>
         const searchInput = document.getElementById('commandSearch');
