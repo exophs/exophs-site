@@ -77,27 +77,10 @@
         }
         .table-wrapper {
             overflow-x: auto;
-            overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             margin: 1rem 0;
             border-radius: 8px;
             border: 1px solid #444;
-
-            /* Stronger hiding */
-            scrollbar-width: none !important;          /* Firefox */
-            -ms-overflow-style: none !important;       /* IE/Edge legacy */
-            scrollbar-gutter: stable both-edges;       /* Reserves space but can help in some cases (optional) */
-        }
-
-        .table-wrapper::-webkit-scrollbar {
-            display: none !important;                  /* WebKit browsers */
-            width: 0 !important;
-            height: 0 !important;
-            background: transparent !important;
-        }
-
-        .table-wrapper::-webkit-scrollbar-thumb {
-            background: transparent !important;
         }
         table {
             width: 100%;
