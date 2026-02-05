@@ -166,7 +166,7 @@
 <body>
     <header>
         <h1>ExophsBot Commands Documentation</h1>
-        <p>Version 1.1.0 | For the 5B5T Minecraft Server</p>
+        <p>Version 1.1.1 | For the 5B5T Minecraft Server</p>
     </header>
     <nav>
         <a href="#introduction">Introduction</a>
@@ -185,6 +185,12 @@
 
         <section id="changelog">
             <h2>Changelog</h2>
+            <div class="changelog-entry">
+                <h4>Version 1.1.1 – February 4, 2026</h4>
+                <ul>
+                    <li>Added <code>!say</code> — allows players to make the bot say custom messages (with filters to block commands, § codes, newlines, etc.)</li>
+                </ul>
+            </div>
             <div class="changelog-entry">
                 <h4>Version 1.1.0 – February 3, 2026</h4>
                 <ul>
@@ -208,7 +214,7 @@
         <section id="commands">
             <h2>Commands List</h2>
             <div class="search-container">
-                <input type="text" id="commandSearch" placeholder="Search commands... (e.g. offline, roast, move)">
+                <input type="text" id="commandSearch" placeholder="Search commands... (e.g. say, offline, roast, move)">
                 <p id="noResults">No matching commands found.</p>
             </div>
 
@@ -281,6 +287,11 @@
 
                         <!-- Fun / Troll Commands -->
                         <tr><td colspan="3"><h3>Fun / Troll Commands</h3></td></tr>
+                        <tr>
+                            <td><code>!say</code></td>
+                            <td><code>!say <message></code></td>
+                            <td>Makes the bot say your message (blocks real commands, § codes, newlines, very long messages)</td>
+                        </tr>
                         <tr>
                             <td><code>!gay</code></td>
                             <td><code>!gay [target]</code></td>
@@ -432,7 +443,7 @@
         </section>
     </main>
     <footer>
-        <p>© 2025–2026 ExophsBot | Made for Ray by Quicoys | Last Updated: February 3, 2026</p>
+        <p>© 2025–2026 ExophsBot | Made for Ray by Quicoys | Last Updated: February 4, 2026</p>
     </footer>
     <script>
         const searchInput = document.getElementById('commandSearch');
