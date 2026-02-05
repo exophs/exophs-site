@@ -77,10 +77,18 @@
         }
         .table-wrapper {
             overflow-x: auto;
+            overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             margin: 1rem 0;
             border-radius: 8px;
             border: 1px solid #444;
+
+            /* Hide scrollbar but keep scrolling functionality */
+            scrollbar-width: none;          /* Firefox */
+            -ms-overflow-style: none;       /* Internet Explorer + older Edge */
+        }
+        .table-wrapper::-webkit-scrollbar {
+            display: none;                  /* Chrome, Edge, Safari, new Edge */
         }
         table {
             width: 100%;
