@@ -113,9 +113,12 @@ text = await file.text();
 const lines = text.split('\n');
 const chat = [];
 
-const regex = /\[(\d{2}:\d{2}:\d{2})\].*?: <([^>]+)> (.*)/;
+const regex = /\[(\d{2}:\d{2}:\d{2})\].*\[CHAT\] <([^>]+)> (.*)/;
 
 for(const line of lines){
+if(line.includes("[System]")) continue;
+if(line.includes("[Meteor]")) continue;
+
 const match = line.match(regex);
 if(match){
 chat.push(`${match[1]} — ${match[2]}: ${match[3]}`);
@@ -150,6 +153,5 @@ a.click();
 URL.revokeObjectURL(url);
 });
 </script>
-
 </body>
 </html>
