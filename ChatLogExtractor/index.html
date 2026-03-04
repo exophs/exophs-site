@@ -6,8 +6,6 @@
 <title>Minecraft Log Chat Extractor</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-
-<!-- Minecraft Font -->
 <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
 
 <style>
@@ -36,21 +34,8 @@ height:100vh;
 }
 
 header{margin-bottom:25px;}
-
-h1{
-margin:0;
-font-weight:500;
-letter-spacing:2px;
-color:var(--peach);
-}
-
-.header-line{
-width:100%;
-height:2px;
-background:var(--subtext);
-opacity:.4;
-margin-top:15px;
-}
+h1{margin:0;font-weight:500;letter-spacing:2px;color:var(--peach);}
+.header-line{width:100%;height:2px;background:var(--subtext);opacity:.4;margin-top:15px;}
 
 main{
 display:flex;
@@ -71,7 +56,6 @@ text-align:center;
 cursor:pointer;
 transition:.2s;
 }
-
 .upload:hover{
 background:var(--surface0);
 border-color:var(--mauve);
@@ -95,7 +79,6 @@ font-weight:500;
 cursor:pointer;
 transition:.2s;
 }
-
 button:hover{
 background:var(--mauve);
 color:var(--base);
@@ -113,7 +96,11 @@ overflow:auto;
 max-height:45vh;
 }
 
-/* Minecraft Chat Message */
+.raw-view{
+font-family:monospace;
+white-space:pre-wrap;
+}
+
 .chat-line{
 display:flex;
 align-items:flex-start;
@@ -128,60 +115,24 @@ width:32px;
 height:32px;
 image-rendering:pixelated;
 flex-shrink:0;
+cursor:pointer;
 }
 
-.message{
-line-height:1.4;
-}
+.message{line-height:1.4;}
+.timestamp{color:#7a7a7a;margin-right:6px;}
+.username{font-weight:bold;margin-right:6px;color:#55FF55;}
+.text{color:#ffffff;}
 
-.timestamp{
-color:#7a7a7a;
-margin-right:6px;
-}
-
-.username{
-font-weight:bold;
-margin-right:6px;
-color:#55FF55;
-}
-
-.text{
-color:#ffffff;
-}
-
-/* Scrollbar */
-.output{
-scrollbar-width:thin;
-scrollbar-color:var(--mauve) var(--surface0);
-}
-
-.output::-webkit-scrollbar{
-width:10px;
-}
-
-.output::-webkit-scrollbar-track{
+.info-panel{
+margin-top:10px;
+padding:10px;
 background:var(--surface0);
+border:1px solid var(--surface1);
+font-size:13px;
+display:none;
 }
 
-.output::-webkit-scrollbar-thumb{
-background:var(--surface1);
-border-radius:6px;
-border:2px solid var(--surface0);
-}
-
-.output::-webkit-scrollbar-thumb:hover{
-background:var(--mauve);
-}
-
-.empty{
-opacity:.5;
-font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-}
-
-.footer-fade{
-height:50px;
-background:linear-gradient(to bottom,rgba(30,30,46,0) 0%,var(--base) 100%);
-}
+.empty{opacity:.5;}
 
 footer{
 padding:15px 0;
@@ -192,29 +143,11 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 }
-
-footer .brand{
-color:var(--peach);
-font-weight:500;
-}
-
-footer .center{
-display:flex;
-gap:20px;
-}
-
-footer a{
-color:var(--mauve);
-text-decoration:none;
-transition:.2s;
-}
-
+footer .brand{color:var(--peach);font-weight:500;}
+footer .center{display:flex;gap:20px;}
+footer a{color:var(--mauve);text-decoration:none;}
 footer a:hover{color:var(--peach);}
-
-footer .version{
-font-size:12px;
-opacity:.6;
-}
+footer .version{font-size:12px;opacity:.6;}
 </style>
 </head>
 
@@ -226,12 +159,14 @@ opacity:.6;
 </header>
 
 <main>
+
 <label class="upload">
 Upload Minecraft log (.log or .log.gz)
 <input type="file" id="fileInput" accept=".log,.gz">
 </label>
 
 <div class="actions" id="actions" style="display:none;">
+<button id="toggleBtn">Switch to Raw View</button>
 <button id="copyBtn">Copy</button>
 <button id="downloadBtn">Download</button>
 </div>
@@ -239,9 +174,10 @@ Upload Minecraft log (.log or .log.gz)
 <div class="output empty" id="output">
 Upload a file to extract chat messages.
 </div>
-</main>
 
-<div class="footer-fade"></div>
+<div class="info-panel" id="infoPanel"></div>
+
+</main>
 
 <footer>
 <div>
@@ -254,7 +190,7 @@ Upload a file to extract chat messages.
 </div>
 
 <div class="version">
-v1.1.2
+v1.2.0
 </div>
 </footer>
 
@@ -264,9 +200,35 @@ const output=document.getElementById('output');
 const actions=document.getElementById('actions');
 const copyBtn=document.getElementById('copyBtn');
 const downloadBtn=document.getElementById('downloadBtn');
+const toggleBtn=document.getElementById('toggleBtn');
+const infoPanel=document.getElementById('infoPanel');
+
+let currentView="minecraft";
+let rawText="";
 
 function getHeadURL(username){
 return `https://mc-heads.net/avatar/${username}/32`;
+}
+
+async function fetchPlayerInfo(username){
+infoPanel.style.display="block";
+infoPanel.innerHTML="Loading player info...";
+
+try{
+const res=await fetch(`https://api.ashcon.app/mojang/v2/user/${username}`);
+const data=await res.json();
+
+const created=data.created_at ? new Date(data.created_at).toLocaleDateString() : "Unknown";
+const history=data.username_history.map(n=>n.username).join(", ");
+
+infoPanel.innerHTML=
+`<strong>${username}</strong><br>
+UUID: ${data.uuid}<br>
+Created: ${created}<br>
+Past Usernames: ${history}`;
+}catch{
+infoPanel.innerHTML="Failed to load player data.";
+}
 }
 
 fileInput.addEventListener('change',async(e)=>{
@@ -282,6 +244,7 @@ text=pako.ungzip(new Uint8Array(buffer),{to:'string'});
 text=await file.text();
 }
 
+rawText=text;
 const lines=text.split('\n');
 const regex=/\[(\d{2}:\d{2}:\d{2})\].*\[CHAT\] <([^>]+)> (.*)/;
 
@@ -306,6 +269,7 @@ chatLine.className="chat-line";
 const head=document.createElement("img");
 head.className="head";
 head.src=getHeadURL(user);
+head.onclick=()=>fetchPlayerInfo(user);
 
 const messageDiv=document.createElement("div");
 messageDiv.className="message";
@@ -328,33 +292,29 @@ return;
 }
 
 output.classList.remove('empty');
+output.classList.remove('raw-view');
 actions.style.display="flex";
+currentView="minecraft";
+toggleBtn.textContent="Switch to Raw View";
 });
 
-function fallbackCopy(text){
-const textarea=document.createElement("textarea");
-textarea.value=text;
-textarea.style.position="fixed";
-textarea.style.opacity="0";
-document.body.appendChild(textarea);
-textarea.focus();
-textarea.select();
-document.execCommand("copy");
-document.body.removeChild(textarea);
+toggleBtn.addEventListener('click',()=>{
+if(currentView==="minecraft"){
+output.classList.add("raw-view");
+output.innerText=rawText;
+toggleBtn.textContent="Switch to Minecraft View";
+currentView="raw";
+infoPanel.style.display="none";
+}else{
+fileInput.dispatchEvent(new Event('change'));
 }
+});
 
 copyBtn.addEventListener('click',()=>{
 const text=output.innerText;
-if(!text)return;
-
-if(navigator.clipboard&&window.isSecureContext){
-navigator.clipboard.writeText(text).catch(()=>fallbackCopy(text));
-}else{
-fallbackCopy(text);
-}
-
+navigator.clipboard.writeText(text);
 copyBtn.textContent="Copied";
-setTimeout(()=>{copyBtn.textContent="Copy";},1000);
+setTimeout(()=>copyBtn.textContent="Copy",1000);
 });
 
 downloadBtn.addEventListener('click',()=>{
