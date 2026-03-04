@@ -8,12 +8,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 
 <style>
-:root {
+:root{
 --base:#1e1e2e;
 --mantle:#181825;
 --surface0:#313244;
 --surface1:#45475a;
---text:#cdd6f4;
+--text:#e0e0e0;
 --subtext:#a6adc8;
 --mauve:#cba6f7;
 --peach:#fab387;
@@ -26,7 +26,7 @@ margin:0;
 padding:30px 40px;
 background:var(--base);
 color:var(--text);
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
 display:flex;
 flex-direction:column;
 height:100vh;
@@ -102,22 +102,54 @@ border-color:var(--mauve);
 .output{
 margin-top:25px;
 width:100%;
-max-width:850px;
-background:var(--mantle);
+max-width:900px;
+background:#000000cc;
 border:1px solid var(--surface1);
 padding:20px;
-white-space:pre-wrap;
-font-size:14px;
-line-height:1.5;
 overflow:auto;
-max-height:40vh;
+max-height:45vh;
+font-family:monospace;
+}
 
-/* Firefox scrollbar */
+/* Minecraft Chat Message */
+.chat-line{
+display:flex;
+align-items:flex-start;
+gap:10px;
+margin-bottom:8px;
+}
+
+.head{
+width:32px;
+height:32px;
+image-rendering:pixelated;
+flex-shrink:0;
+}
+
+.message{
+line-height:1.4;
+}
+
+.timestamp{
+color:#7a7a7a;
+margin-right:6px;
+}
+
+.username{
+font-weight:bold;
+margin-right:6px;
+}
+
+.text{
+color:#ffffff;
+}
+
+/* Scrollbar */
+.output{
 scrollbar-width:thin;
 scrollbar-color:var(--mauve) var(--surface0);
 }
 
-/* WebKit scrollbar */
 .output::-webkit-scrollbar{
 width:10px;
 }
@@ -214,7 +246,7 @@ Upload a file to extract chat messages.
 </div>
 
 <div class="version">
-v1.0.9
+v1.1.0
 </div>
 </footer>
 
@@ -224,6 +256,10 @@ const output=document.getElementById('output');
 const actions=document.getElementById('actions');
 const copyBtn=document.getElementById('copyBtn');
 const downloadBtn=document.getElementById('downloadBtn');
+
+function getHeadURL(username){
+return `https://mc-heads.net/avatar/${username}/32`;
+}
 
 fileInput.addEventListener('change',async(e)=>{
 const file=e.target.files[0];
@@ -239,8 +275,10 @@ text=await file.text();
 }
 
 const lines=text.split('\n');
-const chat=[];
 const regex=/\[(\d{2}:\d{2}:\d{2})\].*\[CHAT\] <([^>]+)> (.*)/;
+
+output.innerHTML="";
+let found=false;
 
 for(const line of lines){
 if(line.includes("[System]"))continue;
@@ -248,18 +286,39 @@ if(line.includes("[Meteor]"))continue;
 
 const match=line.match(regex);
 if(match){
-chat.push(`${match[1]} — ${match[2]}: ${match[3]}`);
+found=true;
+
+const time=match[1];
+const user=match[2];
+const message=match[3];
+
+const chatLine=document.createElement("div");
+chatLine.className="chat-line";
+
+const head=document.createElement("img");
+head.className="head";
+head.src=getHeadURL(user);
+
+const messageDiv=document.createElement("div");
+messageDiv.className="message";
+messageDiv.innerHTML=
+`<span class="timestamp">[${time}]</span>
+<span class="username">${user}</span>
+<span class="text">${message}</span>`;
+
+chatLine.appendChild(head);
+chatLine.appendChild(messageDiv);
+output.appendChild(chatLine);
 }
 }
 
-if(chat.length===0){
+if(!found){
 output.textContent="No chat messages found.";
 output.classList.remove('empty');
 actions.style.display="none";
 return;
 }
 
-output.textContent=chat.join('\n');
 output.classList.remove('empty');
 actions.style.display="flex";
 });
@@ -277,7 +336,7 @@ document.body.removeChild(textarea);
 }
 
 copyBtn.addEventListener('click',()=>{
-const text=output.textContent;
+const text=output.innerText;
 if(!text)return;
 
 if(navigator.clipboard&&window.isSecureContext){
@@ -291,7 +350,7 @@ setTimeout(()=>{copyBtn.textContent="Copy";},1000);
 });
 
 downloadBtn.addEventListener('click',()=>{
-const blob=new Blob([output.textContent],{type:'text/plain'});
+const blob=new Blob([output.innerText],{type:'text/plain'});
 const url=URL.createObjectURL(blob);
 const a=document.createElement('a');
 a.href=url;
