@@ -26,7 +26,7 @@
 
 body{
   margin:0;
-  padding:30px 40px;
+  padding:30px 40px 80px; /* extra bottom padding for fixed links */
   background:var(--base);
   color:var(--text);
   font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
@@ -94,6 +94,7 @@ button{
   font-weight:500;
   cursor:pointer;
   transition:.2s;
+  border-radius:4px;
 }
 
 button:hover{
@@ -183,37 +184,37 @@ button:hover{
   background:linear-gradient(to bottom,rgba(30,30,46,0) 0%,var(--base) 100%);
 }
 
-footer{
-  padding:15px 0;
-  border-top:1px solid var(--surface1);
-  font-size:14px;
-  color:var(--subtext);
+/* Fixed link buttons at bottom */
+.fixed-footer{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:var(--base);
   display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-footer .brand{
-  color:var(--peach);
-  font-weight:500;
-}
-
-footer .center{
-  display:flex;
+  justify-content:center;
   gap:20px;
+  padding:10px 0;
+  border-top:1px solid var(--surface1);
+  z-index:100;
 }
 
-footer a{
-  color:var(--mauve);
+.fixed-footer a{
+  display:inline-block;
+  background:var(--surface0);
+  color:var(--text);
   text-decoration:none;
+  padding:8px 20px;
+  border-radius:6px;
+  border:1px solid var(--surface1);
+  font-weight:500;
   transition:.2s;
 }
 
-footer a:hover{color:var(--peach);}
-
-footer .version{
-  font-size:12px;
-  opacity:.6;
+.fixed-footer a:hover{
+  background:var(--mauve);
+  color:var(--base);
+  border-color:var(--mauve);
 }
 </style>
 </head>
@@ -244,19 +245,15 @@ footer .version{
 <div class="footer-fade"></div>
 
 <footer>
-  <div>
-    © 2026 <span class="brand">ray (exophs)</span>
-  </div>
-
-  <div class="center">
-    <a href="https://github.com/exophs" target="_blank">GitHub</a>
-    <a href="https://exophs.space" target="_blank">exophs.space</a>
-  </div>
-
-  <div class="version">
-    v1.1.3
+  <div class="version" style="text-align:right; padding-right:40px;">
+    v1.1.4
   </div>
 </footer>
+
+<div class="fixed-footer">
+  <a href="https://github.com/exophs" target="_blank">GitHub</a>
+  <a href="https://exophs.space" target="_blank">exophs.space</a>
+</div>
 
 <script>
 const fileInput=document.getElementById('fileInput');
