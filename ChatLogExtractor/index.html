@@ -7,7 +7,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 
-<link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
+<!-- Minecraft Font -->
+<link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
 
 <style>
 :root{
@@ -110,8 +111,6 @@ border:1px solid var(--surface1);
 padding:20px;
 overflow:auto;
 max-height:45vh;
-font-family:'Minecraftia', monospace;
-font-size:14px;
 }
 
 /* Minecraft Chat Message */
@@ -119,7 +118,9 @@ font-size:14px;
 display:flex;
 align-items:flex-start;
 gap:10px;
-margin-bottom:10px;
+margin-bottom:8px;
+font-family:'Minecraft', monospace;
+font-size:14px;
 }
 
 .head{
@@ -130,7 +131,7 @@ flex-shrink:0;
 }
 
 .message{
-line-height:1.6;
+line-height:1.4;
 }
 
 .timestamp{
@@ -141,7 +142,7 @@ margin-right:6px;
 .username{
 font-weight:bold;
 margin-right:6px;
-color:#55ffff;
+color:#55FF55;
 }
 
 .text{
@@ -172,7 +173,10 @@ border:2px solid var(--surface0);
 background:var(--mauve);
 }
 
-.empty{opacity:.5;}
+.empty{
+opacity:.5;
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
 
 .footer-fade{
 height:50px;
@@ -250,7 +254,7 @@ Upload a file to extract chat messages.
 </div>
 
 <div class="version">
-v1.1.1
+v1.1.2
 </div>
 </footer>
 
