@@ -21,20 +21,24 @@
             --peach: #fab387;
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            padding: 40px;
+            padding: 30px 40px;
             background: var(--base);
             color: var(--text);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            height: 100vh;
         }
 
         header {
-            margin-bottom: 40px;
+            margin-bottom: 25px;
         }
 
         h1 {
@@ -56,6 +60,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             flex: 1;
         }
 
@@ -64,7 +69,7 @@
             border: 1px solid var(--surface1);
             color: var(--subtext);
 
-            padding: 40px;
+            padding: 35px;
             width: 100%;
             max-width: 600px;
 
@@ -84,7 +89,7 @@
         }
 
         .actions {
-            margin-top: 20px;
+            margin-top: 15px;
             display: flex;
             gap: 15px;
         }
@@ -94,7 +99,7 @@
             color: var(--text);
             border: 1px solid var(--surface1);
 
-            padding: 10px 20px;
+            padding: 8px 18px;
             font-weight: 500;
             cursor: pointer;
             transition: .2s;
@@ -107,20 +112,20 @@
         }
 
         .output {
-            margin-top: 40px;
+            margin-top: 25px;
             width: 100%;
-            max-width: 900px;
+            max-width: 850px;
 
             background: var(--mantle);
             border: 1px solid var(--surface1);
 
-            padding: 30px;
+            padding: 20px;
             white-space: pre-wrap;
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.5;
 
             overflow: auto;
-            max-height: 500px;
+            max-height: 40vh;
         }
 
         .empty {
@@ -128,21 +133,23 @@
         }
 
         .footer-fade {
-            height: 80px;
+            height: 50px;
             background: linear-gradient(
                 to bottom,
                 rgba(30, 30, 46, 0) 0%,
-                rgba(30, 30, 46, 0.6) 50%,
                 var(--base) 100%
             );
         }
 
         footer {
-            padding: 30px 0;
-            text-align: center;
+            padding: 15px 0;
+            border-top: 1px solid var(--surface1);
             font-size: 14px;
             color: var(--subtext);
-            border-top: 1px solid var(--surface1);
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         footer .brand {
@@ -150,14 +157,14 @@
             font-weight: 500;
         }
 
-        footer .links {
-            margin-top: 10px;
+        footer .center {
+            display: flex;
+            gap: 20px;
         }
 
         footer a {
             color: var(--mauve);
             text-decoration: none;
-            margin: 0 10px;
             transition: .2s;
         }
 
@@ -166,7 +173,6 @@
         }
 
         footer .version {
-            margin-top: 10px;
             font-size: 12px;
             opacity: .6;
         }
@@ -203,14 +209,13 @@
             © 2026 <span class="brand">ray (exophs)</span>
         </div>
 
-        <div class="links">
+        <div class="center">
             <a href="https://github.com/exophs" target="_blank">GitHub</a>
-            •
             <a href="https://exoph.space" target="_blank">exoph.space</a>
         </div>
 
         <div class="version">
-            Version 1.0.3
+            v1.0.3
         </div>
     </footer>
 
