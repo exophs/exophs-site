@@ -11,254 +11,250 @@
 <link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
 
 <style>
-:root{
-  --base:#1e1e2e;
-  --mantle:#181825;
-  --surface0:#313244;
-  --surface1:#45475a;
-  --text:#e0e0e0;
-  --subtext:#a6adc8;
-  --mauve:#cba6f7;
-  --peach:#fab387;
+:root {
+  --base: #1e1e2e;
+  --mantle: #181825;
+  --surface0: #313244;
+  --surface1: #45475a;
+  --text: #e0e0e0;
+  --subtext: #a6adc8;
+  --mauve: #cba6f7;
+  --peach: #fab387;
 }
 
-*{box-sizing:border-box;}
+* { box-sizing: border-box; }
 
-body{
-  margin:0;
-  padding:30px 40px;
-  background:var(--base);
-  color:var(--text);
-  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-  display:flex;
-  flex-direction:column;
-  min-height:100vh;
+body {
+  margin: 0;
+  padding: 30px 40px;
+  background: var(--base);
+  color: var(--text);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-header{margin-bottom:25px;}
+header { margin-bottom: 25px; }
 
-h1{
-  margin:0;
-  font-weight:500;
-  letter-spacing:2px;
-  color:var(--peach);
+h1 {
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--peach);
 }
 
-.header-line{
-  width:100%;
-  height:2px;
-  background:var(--subtext);
-  opacity:.4;
-  margin-top:15px;
+.header-line {
+  width: 100%;
+  height: 2px;
+  background: var(--subtext);
+  opacity: .4;
+  margin-top: 15px;
 }
 
-main{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  flex:1;
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
 }
 
-.upload{
-  background:var(--mantle);
-  border:1px solid var(--surface1);
-  color:var(--subtext);
-  padding:35px;
-  width:100%;
-  max-width:600px;
-  text-align:center;
-  cursor:pointer;
-  transition:.2s;
+.upload {
+  background: var(--mantle);
+  border: 1px solid var(--surface1);
+  color: var(--subtext);
+  padding: 35px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  cursor: pointer;
+  transition: .2s;
 }
 
-.upload:hover{
-  background:var(--surface0);
-  border-color:var(--mauve);
-  color:var(--text);
+.upload:hover {
+  background: var(--surface0);
+  border-color: var(--mauve);
+  color: var(--text);
 }
 
-input{display:none;}
+input { display: none; }
 
-.actions{
-  margin-top:15px;
-  display:flex;
-  gap:15px;
+.actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 15px;
 }
 
-button{
-  background:var(--surface0);
-  color:var(--text);
-  border:1px solid var(--surface1);
-  padding:8px 18px;
-  font-weight:500;
-  cursor:pointer;
-  transition:.2s;
-  border-radius:4px;
+button {
+  background: var(--surface0);
+  color: var(--text);
+  border: 1px solid var(--surface1);
+  padding: 8px 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: .2s;
+  border-radius: 4px;
 }
 
-button:hover{
-  background:var(--mauve);
-  color:var(--base);
-  border-color:var(--mauve);
+button:hover {
+  background: var(--mauve);
+  color: var(--base);
+  border-color: var(--mauve);
 }
 
-.output{
-  margin-top:25px;
-  width:100%;
-  max-width:900px;
-  background:var(--mantle);
-  border:1px solid var(--surface1);
-  padding:20px;
-  overflow:auto;
-  max-height:45vh;
-  font-family:'Minecraftia', monospace;
+.output {
+  margin-top: 25px;
+  width: 100%;
+  max-width: 900px;
+  background: var(--mantle);
+  border: 1px solid var(--surface1);
+  padding: 20px;
+  overflow: auto;
+  max-height: 45vh;
+  font-family: 'Minecraftia', monospace;
 }
 
 /* Minecraft Chat Message */
-.chat-line{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  margin-bottom:8px;
-  font-size:14px;
+.chat-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 14px;
 }
 
-.head{
-  width:32px;
-  height:32px;
-  image-rendering:pixelated;
-  flex-shrink:0;
+.head {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
 }
 
-.message{
-  line-height:1.4;
+.message { line-height: 1.4; }
+
+.timestamp {
+  color: #7a7a7a;
+  margin-right: 6px;
 }
 
-.timestamp{
-  color:#7a7a7a;
-  margin-right:6px;
+.username {
+  font-weight: bold;
+  margin-right: 6px;
+  color: #55FF55;
 }
 
-.username{
-  font-weight:bold;
-  margin-right:6px;
-  color:#55FF55;
-}
-
-.text{
-  color:#ffffff;
-}
+.text { color: #ffffff; }
 
 /* Scrollbar */
-.output{
-  scrollbar-width:thin;
-  scrollbar-color:var(--mauve) var(--surface0);
+.output {
+  scrollbar-width: thin;
+  scrollbar-color: var(--mauve) var(--surface0);
 }
 
-.output::-webkit-scrollbar{
-  width:10px;
+.output::-webkit-scrollbar { width: 10px; }
+
+.output::-webkit-scrollbar-track { background: var(--surface0); }
+
+.output::-webkit-scrollbar-thumb {
+  background: var(--mauve);
+  border-radius: 6px;
+  border: 2px solid var(--surface0);
 }
 
-.output::-webkit-scrollbar-track{
-  background:var(--surface0);
+.output::-webkit-scrollbar-thumb:hover { background: var(--peach); }
+
+.empty {
+  opacity: .5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.output::-webkit-scrollbar-thumb{
-  background:var(--mauve);
-  border-radius:6px;
-  border:2px solid var(--surface0);
+.footer-fade {
+  height: 28px;
+  background: linear-gradient(to bottom, rgba(30,30,46,0) 0%, var(--base) 100%);
 }
 
-.output::-webkit-scrollbar-thumb:hover{
-  background:var(--peach);
+/* Footer - compact version */
+footer {
+  padding: 12px 0;
+  border-top: 1px solid var(--surface1);
+  font-size: 13px;
+  color: var(--subtext);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 44px;
 }
 
-.empty{
-  opacity:.5;
-  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+footer .left,
+footer .center,
+footer .right {
+  flex: 1;
 }
 
-.footer-fade{
-  height:50px;
-  background:linear-gradient(to bottom,rgba(30,30,46,0) 0%,var(--base) 100%);
+footer .left { min-width: 140px; }
+
+footer .right {
+  text-align: right;
+  min-width: 100px;
 }
 
-/* Updated Footer - spread out layout */
-footer{
-  padding:20px 0;
-  border-top:1px solid var(--surface1);
-  font-size:14px;
-  color:var(--subtext);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:16px;
+footer .center { text-align: center; }
+
+footer .brand {
+  color: var(--peach);
+  font-weight: 500;
 }
 
-footer .left{
-  flex:1;
-  min-width:140px;
+footer .links {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
-footer .center{
-  flex:1;
-  text-align:center;
+footer .link-btn {
+  background: var(--surface0);
+  color: var(--mauve);
+  border: 1px solid var(--surface1);
+  padding: 6px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all .2s;
+  font-size: 13px;
 }
 
-footer .right{
-  flex:1;
-  text-align:right;
-  min-width:100px;
+footer .link-btn:hover {
+  background: var(--mauve);
+  color: var(--base);
+  border-color: var(--mauve);
+  transform: translateY(-1px);
 }
 
-footer .brand{
-  color:var(--peach);
-  font-weight:500;
-}
-
-footer .links{
-  display:flex;
-  justify-content:center;
-  gap:16px;
-  flex-wrap:wrap;
-}
-
-footer .link-btn{
-  background:var(--surface0);
-  color:var(--mauve);
-  border:1px solid var(--surface1);
-  padding:8px 16px;
-  border-radius:6px;
-  text-decoration:none;
-  font-weight:500;
-  transition:all .2s;
-  font-size:14px;
-}
-
-footer .link-btn:hover{
-  background:var(--mauve);
-  color:var(--base);
-  border-color:var(--mauve);
-  transform:translateY(-1px);
-}
-
-footer .version{
-  font-size:12px;
-  opacity:.6;
+footer .version {
+  font-size: 11px;
+  opacity: 0.7;
 }
 
 /* Mobile adjustments */
 @media (max-width: 600px) {
   footer {
-    flex-direction:column;
-    text-align:center;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 0;
+    text-align: center;
   }
+  
   footer .left,
   footer .right {
-    text-align:center;
-    flex: none;
+    text-align: center;
+  }
+  
+  footer .links {
+    gap: 12px;
   }
 }
 </style>
@@ -307,16 +303,13 @@ footer .version{
 </footer>
 
 <script>
-// ────────────────────────────────────────────────
-// (script remains unchanged from previous version)
-// ────────────────────────────────────────────────
 const fileInput = document.getElementById('fileInput');
 const output = document.getElementById('output');
 const actions = document.getElementById('actions');
 const copyBtn = document.getElementById('copyBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 
-function getHeadURL(username){
+function getHeadURL(username) {
   return `https://mc-heads.net/avatar/${username}/32`;
 }
 
