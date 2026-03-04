@@ -6,192 +6,256 @@
 <title>Minecraft Log Chat Extractor</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+
+<!-- Minecraft Font -->
 <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
 
 <style>
 :root{
---base:#1e1e2e;
---mantle:#181825;
---surface0:#313244;
---surface1:#45475a;
---text:#e0e0e0;
---subtext:#a6adc8;
---mauve:#cba6f7;
---peach:#fab387;
+  --base:#1e1e2e;
+  --mantle:#181825;
+  --surface0:#313244;
+  --surface1:#45475a;
+  --text:#e0e0e0;
+  --subtext:#a6adc8;
+  --mauve:#cba6f7;
+  --peach:#fab387;
 }
 
 *{box-sizing:border-box;}
 
 body{
-margin:0;
-padding:30px 40px;
-background:var(--base);
-color:var(--text);
-font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-display:flex;
-flex-direction:column;
-height:100vh;
+  margin:0;
+  padding:30px 40px;
+  background:var(--base);
+  color:var(--text);
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  display:flex;
+  flex-direction:column;
+  height:100vh;
 }
 
 header{margin-bottom:25px;}
-h1{margin:0;font-weight:500;letter-spacing:2px;color:var(--peach);}
-.header-line{width:100%;height:2px;background:var(--subtext);opacity:.4;margin-top:15px;}
+
+h1{
+  margin:0;
+  font-weight:500;
+  letter-spacing:2px;
+  color:var(--peach);
+}
+
+.header-line{
+  width:100%;
+  height:2px;
+  background:var(--subtext);
+  opacity:.4;
+  margin-top:15px;
+}
 
 main{
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  flex:1;
 }
 
 .upload{
-background:var(--mantle);
-border:1px solid var(--surface1);
-color:var(--subtext);
-padding:35px;
-width:100%;
-max-width:600px;
-text-align:center;
-cursor:pointer;
-transition:.2s;
+  background:var(--mantle);
+  border:1px solid var(--surface1);
+  color:var(--subtext);
+  padding:35px;
+  width:100%;
+  max-width:600px;
+  text-align:center;
+  cursor:pointer;
+  transition:.2s;
 }
+
 .upload:hover{
-background:var(--surface0);
-border-color:var(--mauve);
-color:var(--text);
+  background:var(--surface0);
+  border-color:var(--mauve);
+  color:var(--text);
 }
 
 input{display:none;}
 
 .actions{
-margin-top:15px;
-display:flex;
-gap:15px;
+  margin-top:15px;
+  display:flex;
+  gap:15px;
 }
 
 button{
-background:var(--surface0);
-color:var(--text);
-border:1px solid var(--surface1);
-padding:8px 18px;
-font-weight:500;
-cursor:pointer;
-transition:.2s;
+  background:var(--surface0);
+  color:var(--text);
+  border:1px solid var(--surface1);
+  padding:8px 18px;
+  font-weight:500;
+  cursor:pointer;
+  transition:.2s;
 }
+
 button:hover{
-background:var(--mauve);
-color:var(--base);
-border-color:var(--mauve);
+  background:var(--mauve);
+  color:var(--base);
+  border-color:var(--mauve);
 }
 
 .output{
-margin-top:25px;
-width:100%;
-max-width:900px;
-background:var(--mantle);
-border:1px solid var(--surface1);
-padding:20px;
-overflow:auto;
-max-height:45vh;
+  margin-top:25px;
+  width:100%;
+  max-width:900px;
+  background:var(--mantle);
+  border:1px solid var(--surface1);
+  padding:20px;
+  overflow:auto;
+  max-height:45vh;
 }
 
-.raw-view{
-font-family:monospace;
-white-space:pre-wrap;
-}
-
+/* Minecraft Chat Message */
 .chat-line{
-display:flex;
-align-items:flex-start;
-gap:10px;
-margin-bottom:8px;
-font-family:'Minecraft', monospace;
-font-size:14px;
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:8px;
+  font-family:'Minecraft', monospace;
+  font-size:14px;
 }
 
 .head{
-width:32px;
-height:32px;
-image-rendering:pixelated;
-flex-shrink:0;
-cursor:pointer;
+  width:32px;
+  height:32px;
+  image-rendering:pixelated;
+  flex-shrink:0;
 }
 
-.message{line-height:1.4;}
-.timestamp{color:#7a7a7a;margin-right:6px;}
-.username{font-weight:bold;margin-right:6px;color:#55FF55;}
-.text{color:#ffffff;}
-
-.info-panel{
-margin-top:10px;
-padding:10px;
-background:var(--surface0);
-border:1px solid var(--surface1);
-font-size:13px;
-display:none;
+.message{
+  line-height:1.4;
 }
 
-.empty{opacity:.5;}
+.timestamp{
+  color:#7a7a7a;
+  margin-right:6px;
+}
+
+.username{
+  font-weight:bold;
+  margin-right:6px;
+  color:#55FF55;
+}
+
+.text{
+  color:#ffffff;
+}
+
+/* Scrollbar */
+.output{
+  scrollbar-width:thin;
+  scrollbar-color:var(--mauve) var(--surface0);
+}
+
+.output::-webkit-scrollbar{
+  width:10px;
+}
+
+.output::-webkit-scrollbar-track{
+  background:var(--surface0);
+}
+
+.output::-webkit-scrollbar-thumb{
+  background:var(--mauve);
+  border-radius:6px;
+  border:2px solid var(--surface0);
+}
+
+.output::-webkit-scrollbar-thumb:hover{
+  background:var(--peach);
+}
+
+.empty{
+  opacity:.5;
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+.footer-fade{
+  height:50px;
+  background:linear-gradient(to bottom,rgba(30,30,46,0) 0%,var(--base) 100%);
+}
 
 footer{
-padding:15px 0;
-border-top:1px solid var(--surface1);
-font-size:14px;
-color:var(--subtext);
-display:flex;
-justify-content:space-between;
-align-items:center;
+  padding:15px 0;
+  border-top:1px solid var(--surface1);
+  font-size:14px;
+  color:var(--subtext);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
-footer .brand{color:var(--peach);font-weight:500;}
-footer .center{display:flex;gap:20px;}
-footer a{color:var(--mauve);text-decoration:none;}
+
+footer .brand{
+  color:var(--peach);
+  font-weight:500;
+}
+
+footer .center{
+  display:flex;
+  gap:20px;
+}
+
+footer a{
+  color:var(--mauve);
+  text-decoration:none;
+  transition:.2s;
+}
+
 footer a:hover{color:var(--peach);}
-footer .version{font-size:12px;opacity:.6;}
+
+footer .version{
+  font-size:12px;
+  opacity:.6;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>Chat Log Extractor</h1>
-<div class="header-line"></div>
+  <h1>Chat Log Extractor</h1>
+  <div class="header-line"></div>
 </header>
 
 <main>
+  <label class="upload">
+    Upload Minecraft log (.log or .log.gz)
+    <input type="file" id="fileInput" accept=".log,.gz">
+  </label>
 
-<label class="upload">
-Upload Minecraft log (.log or .log.gz)
-<input type="file" id="fileInput" accept=".log,.gz">
-</label>
+  <div class="actions" id="actions" style="display:none;">
+    <button id="copyBtn">Copy</button>
+    <button id="downloadBtn">Download</button>
+  </div>
 
-<div class="actions" id="actions" style="display:none;">
-<button id="toggleBtn">Switch to Raw View</button>
-<button id="copyBtn">Copy</button>
-<button id="downloadBtn">Download</button>
-</div>
-
-<div class="output empty" id="output">
-Upload a file to extract chat messages.
-</div>
-
-<div class="info-panel" id="infoPanel"></div>
-
+  <div class="output empty" id="output">
+    Upload a file to extract chat messages.
+  </div>
 </main>
 
+<div class="footer-fade"></div>
+
 <footer>
-<div>
-© 2026 <span class="brand">ray (exophs)</span>
-</div>
+  <div>
+    © 2026 <span class="brand">ray (exophs)</span>
+  </div>
 
-<div class="center">
-<a href="https://github.com/exophs" target="_blank">GitHub</a>
-<a href="https://exophs.space" target="_blank">exophs.space</a>
-</div>
+  <div class="center">
+    <a href="https://github.com/exophs" target="_blank">GitHub</a>
+    <a href="https://exophs.space" target="_blank">exophs.space</a>
+  </div>
 
-<div class="version">
-v1.2.0
-</div>
+  <div class="version">
+    v1.3.0
+  </div>
 </footer>
 
 <script>
@@ -200,131 +264,105 @@ const output=document.getElementById('output');
 const actions=document.getElementById('actions');
 const copyBtn=document.getElementById('copyBtn');
 const downloadBtn=document.getElementById('downloadBtn');
-const toggleBtn=document.getElementById('toggleBtn');
-const infoPanel=document.getElementById('infoPanel');
-
-let currentView="minecraft";
-let rawText="";
 
 function getHeadURL(username){
-return `https://mc-heads.net/avatar/${username}/32`;
-}
-
-async function fetchPlayerInfo(username){
-infoPanel.style.display="block";
-infoPanel.innerHTML="Loading player info...";
-
-try{
-const res=await fetch(`https://api.ashcon.app/mojang/v2/user/${username}`);
-const data=await res.json();
-
-const created=data.created_at ? new Date(data.created_at).toLocaleDateString() : "Unknown";
-const history=data.username_history.map(n=>n.username).join(", ");
-
-infoPanel.innerHTML=
-`<strong>${username}</strong><br>
-UUID: ${data.uuid}<br>
-Created: ${created}<br>
-Past Usernames: ${history}`;
-}catch{
-infoPanel.innerHTML="Failed to load player data.";
-}
+  return `https://mc-heads.net/avatar/${username}/32`;
 }
 
 fileInput.addEventListener('change',async(e)=>{
-const file=e.target.files[0];
-if(!file)return;
+  const file=e.target.files[0];
+  if(!file)return;
 
-let text;
+  let text;
 
-if(file.name.endsWith('.gz')){
-const buffer=await file.arrayBuffer();
-text=pako.ungzip(new Uint8Array(buffer),{to:'string'});
-}else{
-text=await file.text();
-}
+  if(file.name.endsWith('.gz')){
+    const buffer=await file.arrayBuffer();
+    text=pako.ungzip(new Uint8Array(buffer),{to:'string'});
+  }else{
+    text=await file.text();
+  }
 
-rawText=text;
-const lines=text.split('\n');
-const regex=/\[(\d{2}:\d{2}:\d{2})\].*\[CHAT\] <([^>]+)> (.*)/;
+  const lines=text.split('\n');
+  const regex=/\[(\d{2}:\d{2}:\d{2})\].*\[CHAT\] <([^>]+)> (.*)/;
 
-output.innerHTML="";
-let found=false;
+  output.innerHTML="";
+  let found=false;
 
-for(const line of lines){
-if(line.includes("[System]"))continue;
-if(line.includes("[Meteor]"))continue;
+  for(const line of lines){
+    if(line.includes("[System]") || line.includes("[Meteor]")) continue;
 
-const match=line.match(regex);
-if(match){
-found=true;
+    const match=line.match(regex);
+    if(match){
+      found=true;
+      const time=match[1];
+      const user=match[2];
+      const message=match[3];
 
-const time=match[1];
-const user=match[2];
-const message=match[3];
+      const chatLine=document.createElement("div");
+      chatLine.className="chat-line";
 
-const chatLine=document.createElement("div");
-chatLine.className="chat-line";
+      const head=document.createElement("img");
+      head.className="head";
+      head.src=getHeadURL(user);
 
-const head=document.createElement("img");
-head.className="head";
-head.src=getHeadURL(user);
-head.onclick=()=>fetchPlayerInfo(user);
+      const messageDiv=document.createElement("div");
+      messageDiv.className="message";
+      messageDiv.innerHTML=
+        `<span class="timestamp">[${time}]</span>
+         <span class="username">${user}</span>
+         <span class="text">${message}</span>`;
 
-const messageDiv=document.createElement("div");
-messageDiv.className="message";
-messageDiv.innerHTML=
-`<span class="timestamp">[${time}]</span>
-<span class="username">${user}</span>
-<span class="text">${message}</span>`;
+      chatLine.appendChild(head);
+      chatLine.appendChild(messageDiv);
+      output.appendChild(chatLine);
+    }
+  }
 
-chatLine.appendChild(head);
-chatLine.appendChild(messageDiv);
-output.appendChild(chatLine);
-}
-}
+  if(!found){
+    output.textContent="No chat messages found.";
+    output.classList.remove('empty');
+    actions.style.display="none";
+    return;
+  }
 
-if(!found){
-output.textContent="No chat messages found.";
-output.classList.remove('empty');
-actions.style.display="none";
-return;
-}
-
-output.classList.remove('empty');
-output.classList.remove('raw-view');
-actions.style.display="flex";
-currentView="minecraft";
-toggleBtn.textContent="Switch to Raw View";
+  output.classList.remove('empty');
+  actions.style.display="flex";
 });
 
-toggleBtn.addEventListener('click',()=>{
-if(currentView==="minecraft"){
-output.classList.add("raw-view");
-output.innerText=rawText;
-toggleBtn.textContent="Switch to Minecraft View";
-currentView="raw";
-infoPanel.style.display="none";
-}else{
-fileInput.dispatchEvent(new Event('change'));
+function fallbackCopy(text){
+  const textarea=document.createElement("textarea");
+  textarea.value=text;
+  textarea.style.position="fixed";
+  textarea.style.opacity="0";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  document.execCommand("copy");
+  document.body.removeChild(textarea);
 }
-});
 
 copyBtn.addEventListener('click',()=>{
-const text=output.innerText;
-navigator.clipboard.writeText(text);
-copyBtn.textContent="Copied";
-setTimeout(()=>copyBtn.textContent="Copy",1000);
+  const text=output.innerText;
+  if(!text)return;
+
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(text).catch(()=>fallbackCopy(text));
+  }else{
+    fallbackCopy(text);
+  }
+
+  copyBtn.textContent="Copied";
+  setTimeout(()=>{copyBtn.textContent="Copy";},1000);
 });
 
 downloadBtn.addEventListener('click',()=>{
-const blob=new Blob([output.innerText],{type:'text/plain'});
-const url=URL.createObjectURL(blob);
-const a=document.createElement('a');
-a.href=url;
-a.download="chat.txt";
-a.click();
-URL.revokeObjectURL(url);
+  const blob=new Blob([output.innerText],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download="chat.txt";
+  a.click();
+  URL.revokeObjectURL(url);
 });
 </script>
 
