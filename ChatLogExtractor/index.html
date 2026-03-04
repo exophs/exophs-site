@@ -190,7 +190,7 @@ Upload a file to extract chat messages.
 </div>
 
 <div class="version">
-v1.2.1
+v1.2.0
 </div>
 </footer>
 
@@ -206,16 +206,8 @@ const infoPanel=document.getElementById('infoPanel');
 let currentView="minecraft";
 let rawText="";
 
-async function fetchUUID(username){
-const res=await fetch(`https://api.mojang.com/users/profiles/minecraft/${username}`);
-if(!res.ok) return null;
-return await res.json();
-}
-
-async function fetchNameHistory(uuid){
-const res=await fetch(`https://api.mojang.com/user/profiles/${uuid}/names`);
-if(!res.ok) return [];
-return await res.json();
+function getHeadURL(username){
+return `https://mc-heads.net/avatar/${username}/32`;
 }
 
 async function fetchPlayerInfo(username){
@@ -223,21 +215,17 @@ infoPanel.style.display="block";
 infoPanel.innerHTML="Loading player info...";
 
 try{
-const profile=await fetchUUID(username);
-if(!profile){
-infoPanel.innerHTML="Player not found.";
-return;
-}
+const res=await fetch(`https://api.ashcon.app/mojang/v2/user/${username}`);
+const data=await res.json();
 
-const uuid=profile.id;
-const history=await fetchNameHistory(uuid);
-
-const names=history.map(n=>n.name).join(", ");
+const created=data.created_at ? new Date(data.created_at).toLocaleDateString() : "Unknown";
+const history=data.username_history.map(n=>n.username).join(", ");
 
 infoPanel.innerHTML=
 `<strong>${username}</strong><br>
-UUID: ${uuid}<br>
-Past Usernames: ${names}`;
+UUID: ${data.uuid}<br>
+Created: ${created}<br>
+Past Usernames: ${history}`;
 }catch{
 infoPanel.innerHTML="Failed to load player data.";
 }
@@ -280,7 +268,7 @@ chatLine.className="chat-line";
 
 const head=document.createElement("img");
 head.className="head";
-head.src=`https://crafatar.com/avatars/${user}?size=32`;
+head.src=getHeadURL(user);
 head.onclick=()=>fetchPlayerInfo(user);
 
 const messageDiv=document.createElement("div");
@@ -323,7 +311,8 @@ fileInput.dispatchEvent(new Event('change'));
 });
 
 copyBtn.addEventListener('click',()=>{
-navigator.clipboard.writeText(output.innerText);
+const text=output.innerText;
+navigator.clipboard.writeText(text);
 copyBtn.textContent="Copied";
 setTimeout(()=>copyBtn.textContent="Copy",1000);
 });
