@@ -215,7 +215,7 @@
         </div>
 
         <div class="version">
-            v1.0.6
+            v1.0.7
         </div>
     </footer>
 
@@ -267,10 +267,29 @@
             actions.style.display = "flex";
         });
 
-        copyBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(output.textContent);
+        copyBtn.addEventListener('click', async () => {
+            const text = output.textContent;
+
+            try {
+                await navigator.clipboard.writeText(text);
+            } catch (err) {
+                const textarea = document.createElement("textarea");
+                textarea.value = text;
+                textarea.style.position = "fixed";
+                textarea.style.opacity = "0";
+                document.body.appendChild(textarea);
+
+                textarea.focus();
+                textarea.select();
+                document.execCommand("copy");
+
+                document.body.removeChild(textarea);
+            }
+
             copyBtn.textContent = "Copied";
-            setTimeout(() => copyBtn.textContent = "Copy", 1000);
+            setTimeout(() => {
+                copyBtn.textContent = "Copy";
+            }, 1000);
         });
 
         downloadBtn.addEventListener('click', () => {
