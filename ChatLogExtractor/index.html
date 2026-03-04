@@ -1,157 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minecraft Log Chat Extractor</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-<style>
-body{
-background:#000;
-color:#fff;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-display:flex;
-flex-direction:column;
-align-items:center;
-padding:40px;
-margin:0;
-}
-h1{
-font-weight:500;
-letter-spacing:-1px;
-margin-bottom:30px;
-}
-.upload{
-border:1px solid #fff;
-padding:40px;
-width:100%;
-max-width:600px;
-text-align:center;
-cursor:pointer;
-transition:.2s;
-}
-.upload:hover{
-background:#111;
-}
-input{
-display:none;
-}
-.output{
-margin-top:40px;
-width:100%;
-max-width:800px;
-background:#111;
-padding:30px;
-border:1px solid #fff;
-white-space:pre-wrap;
-font-size:14px;
-line-height:1.6;
-overflow:auto;
-max-height:500px;
-}
-.actions{
-margin-top:20px;
-display:flex;
-gap:15px;
-}
-button{
-background:#fff;
-color:#000;
-border:none;
-padding:10px 20px;
-cursor:pointer;
-font-weight:500;
-transition:.2s;
-}
-button:hover{
-background:#ccc;
-}
-.empty{
-opacity:.5;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Log Chat Extractor</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+
+    <style>
+        :root {
+            --base: #1e1e2e;
+            --mantle: #181825;
+            --surface0: #313244;
+            --surface1: #45475a;
+
+            --text: #cdd6f4;
+            --subtext: #a6adc8;
+
+            --mauve: #cba6f7;
+            --blue: #89b4fa;
+            --peach: #fab387;
+        }
+
+        body {
+            background: var(--base);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+            display: flex;
+            flex-direction: column;
+
+            padding: 40px;
+            margin: 0;
+        }
+
+        h1 {
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: var(--peach);
+            margin: 0;
+        }
+
+        .header-line {
+            width: 100%;
+            height: 2px;
+            background: var(--subtext);
+            margin: 15px 0 40px 0;
+            opacity: .4;
+        }
+
+        .upload {
+            background: var(--mantle);
+            border: 1px solid var(--surface1);
+            color: var(--subtext);
+
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+
+            text-align: center;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .upload:hover {
+            background: var(--surface0);
+            border-color: var(--mauve);
+            color: var(--text);
+        }
+
+        input {
+            display: none;
+        }
+
+        .output {
+            margin-top: 40px;
+            width: 100%;
+            max-width: 900px;
+
+            background: var(--mantle);
+            border: 1px solid var(--surface1);
+
+            padding: 30px;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.6;
+
+            overflow: auto;
+            max-height: 500px;
+            color: var(--text);
+        }
+
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            background: var(--surface0);
+            color: var(--text);
+            border: 1px solid var(--surface1);
+
+            padding: 10px 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        button:hover {
+            background: var(--mauve);
+            color: var(--base);
+            border-color: var(--mauve);
+        }
+
+        .empty {
+            opacity: .5;
+        }
+    </style>
 </head>
+
 <body>
 
-<h1>Chat Log Extractor</h1>
+    <h1>Chat Log Extractor</h1>
+    <div class="header-line"></div>
 
-<label class="upload">
-Upload Minecraft log (.log or .log.gz)
-<input type="file" id="fileInput" accept=".log,.gz">
-</label>
+    <label class="upload">
+        Upload Minecraft log (.log or .log.gz)
+        <input type="file" id="fileInput" accept=".log,.gz">
+    </label>
 
-<div class="actions" style="display:none;" id="actions">
-<button id="copyBtn">Copy</button>
-<button id="downloadBtn">Download</button>
-</div>
+    <div class="actions" id="actions" style="display: none;">
+        <button id="copyBtn">Copy</button>
+        <button id="downloadBtn">Download</button>
+    </div>
 
-<div class="output empty" id="output">
-Upload a file to extract chat messages.
-</div>
+    <div class="output empty" id="output">
+        Upload a file to extract chat messages.
+    </div>
 
-<script>
-const fileInput = document.getElementById('fileInput');
-const output = document.getElementById('output');
-const actions = document.getElementById('actions');
-const copyBtn = document.getElementById('copyBtn');
-const downloadBtn = document.getElementById('downloadBtn');
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const output = document.getElementById('output');
+        const actions = document.getElementById('actions');
+        const copyBtn = document.getElementById('copyBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
 
-fileInput.addEventListener('change', async e => {
-const file = e.target.files[0];
-if(!file) return;
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
 
-let text;
+            let text;
 
-if(file.name.endsWith('.gz')){
-const buffer = await file.arrayBuffer();
-const decompressed = pako.ungzip(new Uint8Array(buffer), { to: 'string' });
-text = decompressed;
-}else{
-text = await file.text();
-}
+            if (file.name.endsWith('.gz')) {
+                const buffer = await file.arrayBuffer();
+                const decompressed = pako.ungzip(new Uint8Array(buffer), { to: 'string' });
+                text = decompressed;
+            } else {
+                text = await file.text();
+            }
 
-const lines = text.split('\n');
-const chat = [];
+            const lines = text.split('\n');
+            const chat = [];
 
-const regex = /\[(\d{2}:\d{2}:\d{2})\].*\[CHAT\] <([^>]+)> (.*)/;
+            const regex = /\[(\d{2}:\d{2}:\d{2})\].*\[CHAT\] <([^>]+)> (.*)/;
 
-for(const line of lines){
-if(line.includes("[System]")) continue;
-if(line.includes("[Meteor]")) continue;
+            for (const line of lines) {
+                if (line.includes("[System]")) continue;
+                if (line.includes("[Meteor]")) continue;
 
-const match = line.match(regex);
-if(match){
-chat.push(`${match[1]} — ${match[2]}: ${match[3]}`);
-}
-}
+                const match = line.match(regex);
+                if (match) {
+                    const time = match[1];
+                    const username = match[2];
+                    const message = match[3];
 
-if(chat.length === 0){
-output.textContent = "No chat messages found.";
-output.classList.remove('empty');
-actions.style.display = "none";
-return;
-}
+                    chat.push(`${time} — ${username}: ${message}`);
+                }
+            }
 
-output.textContent = chat.join('\n');
-output.classList.remove('empty');
-actions.style.display = "flex";
-});
+            if (chat.length === 0) {
+                output.textContent = "No chat messages found.";
+                output.classList.remove('empty');
+                actions.style.display = "none";
+                return;
+            }
 
-copyBtn.addEventListener('click', () => {
-navigator.clipboard.writeText(output.textContent);
-copyBtn.textContent = "Copied";
-setTimeout(()=>copyBtn.textContent="Copy",1000);
-});
+            output.textContent = chat.join('\n');
+            output.classList.remove('empty');
+            actions.style.display = "flex";
+        });
 
-downloadBtn.addEventListener('click', () => {
-const blob = new Blob([output.textContent], { type: 'text/plain' });
-const url = URL.createObjectURL(blob);
-const a = document.createElement('a');
-a.href = url;
-a.download = "chat.txt";
-a.click();
-URL.revokeObjectURL(url);
-});
-</script>
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(output.textContent);
+
+            copyBtn.textContent = "Copied";
+            setTimeout(() => {
+                copyBtn.textContent = "Copy";
+            }, 1000);
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const blob = new Blob([output.textContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "chat.txt";
+            a.click();
+
+            URL.revokeObjectURL(url);
+        });
+    </script>
+
 </body>
 </html>
