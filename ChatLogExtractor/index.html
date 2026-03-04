@@ -4,12 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Minecraft Log Chat Extractor</title>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-
 <!-- Minecraftia Font -->
 <link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
-
 <style>
 :root {
   --base: #1e1e2e;
@@ -21,9 +18,7 @@
   --mauve: #cba6f7;
   --peach: #fab387;
 }
-
 * { box-sizing: border-box; }
-
 body {
   margin: 0;
   padding: 30px 40px;
@@ -33,17 +28,20 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  transition: background 0.2s;
 }
-
+body.drag-over {
+  background: #2a2a3f;
+  outline: 3px dashed var(--mauve);
+  outline-offset: -6px;
+}
 header { margin-bottom: 25px; }
-
 h1 {
   margin: 0;
   font-weight: 500;
   letter-spacing: 2px;
   color: var(--peach);
 }
-
 .header-line {
   width: 100%;
   height: 2px;
@@ -51,16 +49,14 @@ h1 {
   opacity: .4;
   margin-top: 15px;
 }
-
 main {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   flex: 1;
-  margin-bottom: 40px;          /* ← increased from ~0–25px → pushes footer lower */
+  margin-bottom: 40px;
 }
-
 .upload {
   background: var(--mantle);
   border: 1px solid var(--surface1);
@@ -71,22 +67,24 @@ main {
   text-align: center;
   cursor: pointer;
   transition: .2s;
+  border-radius: 8px;
 }
-
 .upload:hover {
   background: var(--surface0);
   border-color: var(--mauve);
   color: var(--text);
 }
-
+.upload.drag-hint {
+  background: var(--surface0);
+  border: 2px dashed var(--mauve);
+  color: var(--mauve);
+}
 input { display: none; }
-
 .actions {
   margin-top: 15px;
   display: flex;
   gap: 15px;
 }
-
 button {
   background: var(--surface0);
   color: var(--text);
@@ -97,13 +95,11 @@ button {
   transition: .2s;
   border-radius: 4px;
 }
-
 button:hover {
   background: var(--mauve);
   color: var(--base);
   border-color: var(--mauve);
 }
-
 .output {
   margin-top: 25px;
   width: 100%;
@@ -114,8 +110,8 @@ button:hover {
   overflow: auto;
   max-height: 45vh;
   font-family: 'Minecraftia', monospace;
+  border-radius: 6px;
 }
-
 /* Minecraft Chat Message */
 .chat-line {
   display: flex;
@@ -124,35 +120,28 @@ button:hover {
   margin-bottom: 8px;
   font-size: 14px;
 }
-
 .head {
   width: 32px;
   height: 32px;
   image-rendering: pixelated;
   flex-shrink: 0;
 }
-
 .message { line-height: 1.4; }
-
 .timestamp {
   color: #7a7a7a;
   margin-right: 6px;
 }
-
 .username {
   font-weight: bold;
   margin-right: 6px;
   color: #55FF55;
 }
-
 .text { color: #ffffff; }
-
 /* Scrollbar */
 .output {
   scrollbar-width: thin;
   scrollbar-color: var(--mauve) var(--surface0);
 }
-
 .output::-webkit-scrollbar { width: 10px; }
 .output::-webkit-scrollbar-track { background: var(--surface0); }
 .output::-webkit-scrollbar-thumb {
@@ -161,18 +150,14 @@ button:hover {
   border: 2px solid var(--surface0);
 }
 .output::-webkit-scrollbar-thumb:hover { background: var(--peach); }
-
 .empty {
   opacity: .5;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
 .footer-fade {
-  height: 50px;                    /* back to original taller fade */
+  height: 50px;
   background: linear-gradient(to bottom, rgba(30,30,46,0) 0%, var(--base) 100%);
 }
-
-/* Footer - reverted to more comfortable/taller original sizing */
 footer {
   padding: 20px 0;
   border-top: 1px solid var(--surface1);
@@ -184,23 +169,19 @@ footer {
   flex-wrap: wrap;
   gap: 16px;
 }
-
 footer .left { flex: 1; min-width: 140px; }
 footer .center { flex: 1; text-align: center; }
 footer .right { flex: 1; text-align: right; min-width: 100px; }
-
 footer .brand {
   color: var(--peach);
   font-weight: 500;
 }
-
 footer .links {
   display: flex;
   justify-content: center;
   gap: 16px;
   flex-wrap: wrap;
 }
-
 footer .link-btn {
   background: var(--surface0);
   color: var(--mauve);
@@ -212,19 +193,16 @@ footer .link-btn {
   transition: all .2s;
   font-size: 14px;
 }
-
 footer .link-btn:hover {
   background: var(--mauve);
   color: var(--base);
   border-color: var(--mauve);
   transform: translateY(-1px);
 }
-
 footer .version {
   font-size: 12px;
   opacity: .6;
 }
-
 /* Mobile adjustments */
 @media (max-width: 600px) {
   footer {
@@ -236,105 +214,104 @@ footer .version {
   footer .right {
     text-align: center;
   }
+  body { padding: 20px 24px; }
 }
 </style>
 </head>
-
 <body>
-
 <header>
   <h1>Chat Log Extractor</h1>
   <div class="header-line"></div>
 </header>
-
 <main>
-  <label class="upload">
-    Upload Minecraft log (.log or .log.gz)
+  <label class="upload" id="dropZone">
+    <span id="dropText">Upload Minecraft log (.log or .log.gz)<br>— or drag & drop here —</span>
     <input type="file" id="fileInput" accept=".log,.gz">
   </label>
-
   <div class="actions" id="actions" style="display:none;">
     <button id="copyBtn">Copy</button>
     <button id="downloadBtn">Download</button>
   </div>
-
   <div class="output empty" id="output">
     Upload a file to extract chat messages.
   </div>
 </main>
-
 <div class="footer-fade"></div>
-
 <footer>
   <div class="left">
     © 2026 <span class="brand">ray (exophs)</span>
   </div>
-
   <div class="center">
     <div class="links">
       <a href="https://github.com/exophs" target="_blank" class="link-btn">GitHub</a>
       <a href="https://exophs.space" target="_blank" class="link-btn">exophs.space</a>
     </div>
   </div>
-
   <div class="right">
-    <div class="version">v1.1.5</div>
+    <div class="version">v1.1.6 • drag & drop</div>
   </div>
 </footer>
 
 <script>
-// ────────────────────────────────────────────────
-// JavaScript remains unchanged
-// ────────────────────────────────────────────────
-const fileInput = document.getElementById('fileInput');
-const output = document.getElementById('output');
-const actions = document.getElementById('actions');
-const copyBtn = document.getElementById('copyBtn');
+const fileInput   = document.getElementById('fileInput');
+const output      = document.getElementById('output');
+const actions     = document.getElementById('actions');
+const copyBtn     = document.getElementById('copyBtn');
 const downloadBtn = document.getElementById('downloadBtn');
+const dropZone    = document.getElementById('dropZone');
+const dropText    = document.getElementById('dropText');
 
 function getHeadURL(username){
   return `https://mc-heads.net/avatar/${username}/32`;
 }
 
-fileInput.addEventListener('change',async(e)=>{
-  const file=e.target.files[0];
-  if(!file)return;
+function handleFiles(fileList) {
+  const file = fileList[0];
+  if (!file) return;
+  fileInput.files = fileList; // so the input stays in sync
+  processFile(file);
+}
 
+async function processFile(file) {
   let text;
-
-  if(file.name.endsWith('.gz')){
-    const buffer=await file.arrayBuffer();
-    text=pako.ungzip(new Uint8Array(buffer),{to:'string'});
-  }else{
-    text=await file.text();
+  try {
+    if (file.name.endsWith('.gz')) {
+      const buffer = await file.arrayBuffer();
+      text = pako.ungzip(new Uint8Array(buffer), { to: 'string' });
+    } else {
+      text = await file.text();
+    }
+  } catch (err) {
+    output.textContent = "Error reading file: " + err.message;
+    output.classList.remove('empty');
+    return;
   }
 
-  const lines=text.split('\n');
-  const regex=/\[(\d{2}:\d{2}:\d{2})\].*\[CHAT\] <([^>]+)> (.*)/;
+  const lines = text.split('\n');
+  const regex = /\[(\d{2}:\d{2}:\d{2})\].*\[CHAT\] <([^>]+)> (.*)/;
+  output.innerHTML = "";
+  let found = false;
 
-  output.innerHTML="";
-  let found=false;
+  for (const line of lines) {
+    if (line.includes("[System]") || line.includes("[Meteor]")) continue;
+    const match = line.match(regex);
+    if (match) {
+      found = true;
+      const time = match[1];
+      const user = match[2];
+      const message = match[3];
 
-  for(const line of lines){
-    if(line.includes("[System]") || line.includes("[Meteor]")) continue;
+      const chatLine = document.createElement("div");
+      chatLine.className = "chat-line";
 
-    const match=line.match(regex);
-    if(match){
-      found=true;
-      const time=match[1];
-      const user=match[2];
-      const message=match[3];
+      const head = document.createElement("img");
+      head.className = "head";
+      head.src = getHeadURL(user);
+      head.alt = user;
 
-      const chatLine=document.createElement("div");
-      chatLine.className="chat-line";
-
-      const head=document.createElement("img");
-      head.className="head";
-      head.src=getHeadURL(user);
-
-      const messageDiv=document.createElement("div");
-      messageDiv.className="message";
-      messageDiv.innerHTML=
+      const messageDiv = document.createElement("div");
+      messageDiv.className = "message";
+      messageDiv.innerHTML = 
         `<span class="timestamp">[${time}]</span>
          <span class="username">${user}</span>
          <span class="text">${message}</span>`;
@@ -345,22 +322,51 @@ fileInput.addEventListener('change',async(e)=>{
     }
   }
 
-  if(!found){
-    output.textContent="No chat messages found.";
+  if (!found) {
+    output.textContent = "No chat messages found in this log.";
     output.classList.remove('empty');
-    actions.style.display="none";
+    actions.style.display = "none";
     return;
   }
 
   output.classList.remove('empty');
-  actions.style.display="flex";
+  actions.style.display = "flex";
+}
+
+// ─── File input change ───────────────────────────────────────
+fileInput.addEventListener('change', (e) => {
+  handleFiles(e.target.files);
 });
 
-function fallbackCopy(text){
-  const textarea=document.createElement("textarea");
-  textarea.value=text;
-  textarea.style.position="fixed";
-  textarea.style.opacity="0";
+// ─── Drag & drop support ─────────────────────────────────────
+document.addEventListener('dragover', e => {
+  e.preventDefault();
+  document.body.classList.add('drag-over');
+  dropText.textContent = "Drop the log file here...";
+});
+
+document.addEventListener('dragleave', e => {
+  e.preventDefault();
+  document.body.classList.remove('drag-over');
+  dropText.textContent = "Upload Minecraft log (.log or .log.gz)\n— or drag & drop here —";
+});
+
+document.addEventListener('drop', e => {
+  e.preventDefault();
+  document.body.classList.remove('drag-over');
+  dropText.textContent = "Upload Minecraft log (.log or .log.gz)\n— or drag & drop here —";
+  
+  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    handleFiles(e.dataTransfer.files);
+  }
+});
+
+// ─── Copy & Download ─────────────────────────────────────────
+function fallbackCopy(text) {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
   document.body.appendChild(textarea);
   textarea.focus();
   textarea.select();
@@ -368,30 +374,31 @@ function fallbackCopy(text){
   document.body.removeChild(textarea);
 }
 
-copyBtn.addEventListener('click',()=>{
-  const text=output.innerText;
-  if(!text)return;
+copyBtn.addEventListener('click', () => {
+  const text = output.innerText;
+  if (!text) return;
 
-  if(navigator.clipboard&&window.isSecureContext){
-    navigator.clipboard.writeText(text).catch(()=>fallbackCopy(text));
-  }else{
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+  } else {
     fallbackCopy(text);
   }
 
-  copyBtn.textContent="Copied";
-  setTimeout(()=>{copyBtn.textContent="Copy";},1000);
+  copyBtn.textContent = "Copied!";
+  setTimeout(() => { copyBtn.textContent = "Copy"; }, 1200);
 });
 
-downloadBtn.addEventListener('click',()=>{
-  const blob=new Blob([output.innerText],{type:'text/plain'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download="chat.txt";
+downloadBtn.addEventListener('click', () => {
+  const text = output.innerText;
+  if (!text) return;
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = "minecraft-chat.txt";
   a.click();
   URL.revokeObjectURL(url);
 });
 </script>
-
 </body>
 </html>
