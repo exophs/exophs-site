@@ -18,35 +18,40 @@
             --subtext: #a6adc8;
 
             --mauve: #cba6f7;
-            --blue: #89b4fa;
             --peach: #fab387;
         }
 
         body {
+            margin: 0;
+            padding: 40px;
             background: var(--base);
             color: var(--text);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-            display: flex;
-            flex-direction: column;
-
-            padding: 40px;
-            margin: 0;
+        header {
+            margin-bottom: 40px;
         }
 
         h1 {
+            margin: 0;
             font-weight: 500;
             letter-spacing: 2px;
             color: var(--peach);
-            margin: 0;
         }
 
         .header-line {
             width: 100%;
             height: 2px;
             background: var(--subtext);
-            margin: 15px 0 40px 0;
             opacity: .4;
+            margin-top: 15px;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .upload {
@@ -73,24 +78,6 @@
             display: none;
         }
 
-        .output {
-            margin-top: 40px;
-            width: 100%;
-            max-width: 900px;
-
-            background: var(--mantle);
-            border: 1px solid var(--surface1);
-
-            padding: 30px;
-            white-space: pre-wrap;
-            font-size: 14px;
-            line-height: 1.6;
-
-            overflow: auto;
-            max-height: 500px;
-            color: var(--text);
-        }
-
         .actions {
             margin-top: 20px;
             display: flex;
@@ -114,6 +101,23 @@
             border-color: var(--mauve);
         }
 
+        .output {
+            margin-top: 40px;
+            width: 100%;
+            max-width: 900px;
+
+            background: var(--mantle);
+            border: 1px solid var(--surface1);
+
+            padding: 30px;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.6;
+
+            overflow: auto;
+            max-height: 500px;
+        }
+
         .empty {
             opacity: .5;
         }
@@ -122,22 +126,26 @@
 
 <body>
 
-    <h1>Chat Log Extractor</h1>
-    <div class="header-line"></div>
+    <header>
+        <h1>Chat Log Extractor</h1>
+        <div class="header-line"></div>
+    </header>
 
-    <label class="upload">
-        Upload Minecraft log (.log or .log.gz)
-        <input type="file" id="fileInput" accept=".log,.gz">
-    </label>
+    <main>
+        <label class="upload">
+            Upload Minecraft log (.log or .log.gz)
+            <input type="file" id="fileInput" accept=".log,.gz">
+        </label>
 
-    <div class="actions" id="actions" style="display: none;">
-        <button id="copyBtn">Copy</button>
-        <button id="downloadBtn">Download</button>
-    </div>
+        <div class="actions" id="actions" style="display: none;">
+            <button id="copyBtn">Copy</button>
+            <button id="downloadBtn">Download</button>
+        </div>
 
-    <div class="output empty" id="output">
-        Upload a file to extract chat messages.
-    </div>
+        <div class="output empty" id="output">
+            Upload a file to extract chat messages.
+        </div>
+    </main>
 
     <script>
         const fileInput = document.getElementById('fileInput');
@@ -171,11 +179,7 @@
 
                 const match = line.match(regex);
                 if (match) {
-                    const time = match[1];
-                    const username = match[2];
-                    const message = match[3];
-
-                    chat.push(`${time} — ${username}: ${message}`);
+                    chat.push(`${match[1]} — ${match[2]}: ${match[3]}`);
                 }
             }
 
@@ -193,11 +197,8 @@
 
         copyBtn.addEventListener('click', () => {
             navigator.clipboard.writeText(output.textContent);
-
             copyBtn.textContent = "Copied";
-            setTimeout(() => {
-                copyBtn.textContent = "Copy";
-            }, 1000);
+            setTimeout(() => copyBtn.textContent = "Copy", 1000);
         });
 
         downloadBtn.addEventListener('click', () => {
