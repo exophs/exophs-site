@@ -111,6 +111,29 @@ font-size:14px;
 line-height:1.5;
 overflow:auto;
 max-height:40vh;
+
+/* Firefox scrollbar */
+scrollbar-width:thin;
+scrollbar-color:var(--mauve) var(--surface0);
+}
+
+/* WebKit scrollbar */
+.output::-webkit-scrollbar{
+width:10px;
+}
+
+.output::-webkit-scrollbar-track{
+background:var(--surface0);
+}
+
+.output::-webkit-scrollbar-thumb{
+background:var(--surface1);
+border-radius:6px;
+border:2px solid var(--surface0);
+}
+
+.output::-webkit-scrollbar-thumb:hover{
+background:var(--mauve);
 }
 
 .empty{opacity:.5;}
@@ -191,7 +214,7 @@ Upload a file to extract chat messages.
 </div>
 
 <div class="version">
-v1.0.8
+v1.0.9
 </div>
 </footer>
 
