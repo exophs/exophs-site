@@ -58,6 +58,7 @@ main {
   align-items: center;
   justify-content: center;
   flex: 1;
+  margin-bottom: 40px;          /* ← increased from ~0–25px → pushes footer lower */
 }
 
 .upload {
@@ -153,15 +154,12 @@ button:hover {
 }
 
 .output::-webkit-scrollbar { width: 10px; }
-
 .output::-webkit-scrollbar-track { background: var(--surface0); }
-
 .output::-webkit-scrollbar-thumb {
   background: var(--mauve);
   border-radius: 6px;
   border: 2px solid var(--surface0);
 }
-
 .output::-webkit-scrollbar-thumb:hover { background: var(--peach); }
 
 .empty {
@@ -170,38 +168,26 @@ button:hover {
 }
 
 .footer-fade {
-  height: 28px;
+  height: 50px;                    /* back to original taller fade */
   background: linear-gradient(to bottom, rgba(30,30,46,0) 0%, var(--base) 100%);
 }
 
-/* Footer - compact version */
+/* Footer - reverted to more comfortable/taller original sizing */
 footer {
-  padding: 12px 0;
+  padding: 20px 0;
   border-top: 1px solid var(--surface1);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--subtext);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
-  min-height: 44px;
+  gap: 16px;
 }
 
-footer .left,
-footer .center,
-footer .right {
-  flex: 1;
-}
-
-footer .left { min-width: 140px; }
-
-footer .right {
-  text-align: right;
-  min-width: 100px;
-}
-
-footer .center { text-align: center; }
+footer .left { flex: 1; min-width: 140px; }
+footer .center { flex: 1; text-align: center; }
+footer .right { flex: 1; text-align: right; min-width: 100px; }
 
 footer .brand {
   color: var(--peach);
@@ -211,7 +197,7 @@ footer .brand {
 footer .links {
   display: flex;
   justify-content: center;
-  gap: 14px;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
@@ -219,12 +205,12 @@ footer .link-btn {
   background: var(--surface0);
   color: var(--mauve);
   border: 1px solid var(--surface1);
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: 6px;
   text-decoration: none;
   font-weight: 500;
   transition: all .2s;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 footer .link-btn:hover {
@@ -235,26 +221,20 @@ footer .link-btn:hover {
 }
 
 footer .version {
-  font-size: 11px;
-  opacity: 0.7;
+  font-size: 12px;
+  opacity: .6;
 }
 
 /* Mobile adjustments */
 @media (max-width: 600px) {
   footer {
     flex-direction: column;
-    gap: 8px;
-    padding: 10px 0;
     text-align: center;
+    gap: 12px;
   }
-  
   footer .left,
   footer .right {
     text-align: center;
-  }
-  
-  footer .links {
-    gap: 12px;
   }
 }
 </style>
@@ -303,55 +283,58 @@ footer .version {
 </footer>
 
 <script>
+// ────────────────────────────────────────────────
+// JavaScript remains unchanged
+// ────────────────────────────────────────────────
 const fileInput = document.getElementById('fileInput');
 const output = document.getElementById('output');
 const actions = document.getElementById('actions');
 const copyBtn = document.getElementById('copyBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 
-function getHeadURL(username) {
+function getHeadURL(username){
   return `https://mc-heads.net/avatar/${username}/32`;
 }
 
-fileInput.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+fileInput.addEventListener('change',async(e)=>{
+  const file=e.target.files[0];
+  if(!file)return;
 
   let text;
 
-  if (file.name.endsWith('.gz')) {
-    const buffer = await file.arrayBuffer();
-    text = pako.ungzip(new Uint8Array(buffer), { to: 'string' });
-  } else {
-    text = await file.text();
+  if(file.name.endsWith('.gz')){
+    const buffer=await file.arrayBuffer();
+    text=pako.ungzip(new Uint8Array(buffer),{to:'string'});
+  }else{
+    text=await file.text();
   }
 
-  const lines = text.split('\n');
-  const regex = /\[(\d{2}:\d{2}:\d{2})\].*\[CHAT\] <([^>]+)> (.*)/;
+  const lines=text.split('\n');
+  const regex=/\[(\d{2}:\d{2}:\d{2})\].*\[CHAT\] <([^>]+)> (.*)/;
 
-  output.innerHTML = "";
-  let found = false;
+  output.innerHTML="";
+  let found=false;
 
-  for (const line of lines) {
-    if (line.includes("[System]") || line.includes("[Meteor]")) continue;
+  for(const line of lines){
+    if(line.includes("[System]") || line.includes("[Meteor]")) continue;
 
-    const match = line.match(regex);
-    if (match) {
-      found = true;
-      const time = match[1];
-      const user = match[2];
-      const message = match[3];
+    const match=line.match(regex);
+    if(match){
+      found=true;
+      const time=match[1];
+      const user=match[2];
+      const message=match[3];
 
-      const chatLine = document.createElement("div");
-      chatLine.className = "chat-line";
+      const chatLine=document.createElement("div");
+      chatLine.className="chat-line";
 
-      const head = document.createElement("img");
-      head.className = "head";
-      head.src = getHeadURL(user);
+      const head=document.createElement("img");
+      head.className="head";
+      head.src=getHeadURL(user);
 
-      const messageDiv = document.createElement("div");
-      messageDiv.className = "message";
-      messageDiv.innerHTML = 
+      const messageDiv=document.createElement("div");
+      messageDiv.className="message";
+      messageDiv.innerHTML=
         `<span class="timestamp">[${time}]</span>
          <span class="username">${user}</span>
          <span class="text">${message}</span>`;
@@ -362,22 +345,22 @@ fileInput.addEventListener('change', async (e) => {
     }
   }
 
-  if (!found) {
-    output.textContent = "No chat messages found.";
+  if(!found){
+    output.textContent="No chat messages found.";
     output.classList.remove('empty');
-    actions.style.display = "none";
+    actions.style.display="none";
     return;
   }
 
   output.classList.remove('empty');
-  actions.style.display = "flex";
+  actions.style.display="flex";
 });
 
-function fallbackCopy(text) {
-  const textarea = document.createElement("textarea");
-  textarea.value = text;
-  textarea.style.position = "fixed";
-  textarea.style.opacity = "0";
+function fallbackCopy(text){
+  const textarea=document.createElement("textarea");
+  textarea.value=text;
+  textarea.style.position="fixed";
+  textarea.style.opacity="0";
   document.body.appendChild(textarea);
   textarea.focus();
   textarea.select();
@@ -385,26 +368,26 @@ function fallbackCopy(text) {
   document.body.removeChild(textarea);
 }
 
-copyBtn.addEventListener('click', () => {
-  const text = output.innerText;
-  if (!text) return;
+copyBtn.addEventListener('click',()=>{
+  const text=output.innerText;
+  if(!text)return;
 
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
-  } else {
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(text).catch(()=>fallbackCopy(text));
+  }else{
     fallbackCopy(text);
   }
 
-  copyBtn.textContent = "Copied";
-  setTimeout(() => { copyBtn.textContent = "Copy"; }, 1000);
+  copyBtn.textContent="Copied";
+  setTimeout(()=>{copyBtn.textContent="Copy";},1000);
 });
 
-downloadBtn.addEventListener('click', () => {
-  const blob = new Blob([output.innerText], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = "chat.txt";
+downloadBtn.addEventListener('click',()=>{
+  const blob=new Blob([output.innerText],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download="chat.txt";
   a.click();
   URL.revokeObjectURL(url);
 });
