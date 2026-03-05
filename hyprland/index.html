@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Hyprland Simulator 2026</title>
+  <title>Hyprland</title>
   <style>
     :root {
       --bg: #1e1e2e;
@@ -18,28 +18,24 @@
       --waybar-bg: rgba(0,0,0,0.65);
       --titlebar-bg: rgba(20,20,35,0.9);
     }
-
     [data-theme="mocha"] {
       --bg: #1e1e2e; --mantle: #181825; --crust: #11111b;
       --text: #cdd6f4; --subtext: #bac2de; --surface: #313244;
       --overlay: #6c7086; --accent: #89b4fa; --focused-border: #89b4fa;
       --border: rgba(203,166,247,0.18);
     }
-
     [data-theme="macchiato"] {
       --bg: #24273a; --mantle: #1e2030; --crust: #181926;
       --text: #cad3f5; --subtext: #b8c0e0; --surface: #363a4f;
       --overlay: #6e738d; --accent: #8aadf4; --focused-border: #8aadf4;
       --border: rgba(198,160,246,0.2);
     }
-
     [data-theme="frappe"] {
       --bg: #303446; --mantle: #292c3c; --crust: #232634;
       --text: #c6d0f5; --subtext: #b5bfe2; --surface: #414559;
       --overlay: #737994; --accent: #8caaee; --focused-border: #8caaee;
       --border: rgba(202,158,230,0.2);
     }
-
     [data-theme="latte"] {
       --bg: #eff1f5; --mantle: #e6e9ef; --crust: #dce0e8;
       --text: #4c4f69; --subtext: #5c5f77; --surface: #ccd0da;
@@ -48,7 +44,6 @@
       --waybar-bg: rgba(255,255,255,0.65);
       --titlebar-bg: rgba(220,225,235,0.9);
     }
-
     * { box-sizing: border-box; }
     html, body {
       margin: 0; padding: 0; height: 100%;
@@ -60,23 +55,19 @@
       transition: background-image 0.4s ease;
       user-select: none;
     }
-
     .content, .content * {
       user-select: text;
       -webkit-user-select: text;
       cursor: text;
     }
-
     body::before {
       content: ""; position: fixed; inset: 0;
       background: rgba(15,15,23,0.4); z-index: -2; pointer-events: none;
     }
-
-    .waybar, .controls, #keybinds-overlay, #theme-overlay,
+    .waybar, .controls, .theme-overlay,
     .titlebar, .min-tab, .palette-btn, .wallpaper-preview {
       user-select: none;
     }
-
     .waybar {
       position: fixed; top: 0; left: 0; right: 0; height: 36px;
       background: var(--waybar-bg);
@@ -87,10 +78,9 @@
       font-size: 14px; overflow: hidden;
     }
     .waybar > div { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .waybar-left   { text-align: left; }
+    .waybar-left { text-align: left; }
     .waybar-center { text-align: center; font-weight: 500; }
-    .waybar-right  { text-align: right; display: flex; align-items: center; gap: 20px; }
-
+    .waybar-right { text-align: right; display: flex; align-items: center; gap: 20px; }
     .workspaces button {
       background: transparent; border: none; color: var(--text);
       padding: 4px 10px; margin: 0 4px; border-radius: 4px;
@@ -100,7 +90,6 @@
       background: rgba(0,170,255,0.35); color: var(--accent);
     }
     .workspaces button:hover { background: rgba(255,255,255,0.12); }
-
     .minimized-tabs { display: flex; gap: 8px; }
     .min-tab {
       background: rgba(50,50,70,0.8); color: var(--text);
@@ -110,9 +99,7 @@
       white-space: nowrap; transition: all 0.16s;
     }
     .min-tab:hover { background: rgba(80,80,100,0.9); }
-
     #desktop { position: absolute; inset: 42px 12px 12px 12px; }
-
     .window {
       position: absolute; min-width: 340px; min-height: 240px;
       background: rgba(30,30,46,0.82); backdrop-filter: blur(14px);
@@ -126,7 +113,6 @@
       border-color: var(--focused-border);
       box-shadow: 0 12px 36px rgba(137,180,250,0.22);
     }
-
     .titlebar {
       height: 34px; background: var(--titlebar-bg);
       border-bottom: 1px solid var(--overlay);
@@ -135,15 +121,12 @@
     }
     .titlebar .buttons { display: flex; gap: 8px; margin-right: 12px; }
     .btn { width: 12px; height: 12px; border-radius: 50%; transition: all 0.14s; }
-    .btn.close    { background: #f38ba8; }
+    .btn.close { background: #f38ba8; }
     .btn.minimize { background: #fab387; }
     .btn.maximize { background: #a6e3a1; }
     .btn:hover { filter: brightness(1.3); transform: scale(1.15); }
-
     .title { flex: 1; text-align: center; color: var(--subtext); }
-
     .content { padding: 16px; font-size: 14px; line-height: 1.5; }
-
     .controls {
       position: fixed; bottom: 16px; left: 16px; z-index: 10000;
       display: flex; gap: 12px;
@@ -158,14 +141,13 @@
       background: rgba(40,40,60,0.95); border-color: var(--accent);
       transform: translateY(-1px);
     }
-
-    #keybinds-overlay, #theme-overlay {
+    #theme-overlay {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
       display: none; align-items: center; justify-content: center;
       z-index: 10001;
     }
-    .keybinds-window, .theme-window {
+    .theme-window {
       background: var(--surface); backdrop-filter: blur(16px);
       border: 1px solid var(--border); border-radius: 14px;
       width: 640px; max-height: 85vh; overflow-y: auto;
@@ -173,16 +155,6 @@
       color: var(--text);
     }
     h2 { margin: 0 0 16px; color: var(--accent); }
-    table { width: 100%; border-collapse: collapse; }
-    td { padding: 10px 12px; border-bottom: 1px solid var(--overlay); vertical-align: top; }
-    .key { 
-      background: var(--mantle); 
-      padding: 4px 10px; 
-      border-radius: 6px; 
-      font-family: monospace; 
-      color: var(--accent); 
-      white-space: nowrap;
-    }
     .section { margin-bottom: 28px; }
     .palette-btn {
       padding: 10px 16px; margin: 6px; border: 1px solid var(--border);
@@ -204,7 +176,6 @@
   </style>
 </head>
 <body data-theme="mocha">
-
 <div class="waybar">
   <div class="waybar-left">
     <span class="workspaces" id="workspaces">
@@ -219,33 +190,10 @@
     <span class="minimized-tabs" id="minimized-tabs"></span>
   </div>
 </div>
-
 <div id="desktop"></div>
-
 <div class="controls">
   <button onclick="spawnWindow()">New Window</button>
-  <button onclick="document.getElementById('keybinds-overlay').style.display='flex'">Keybinds</button>
   <button onclick="document.getElementById('theme-overlay').style.display='flex'">Themes</button>
-</div>
-
-<div id="keybinds-overlay" onclick="if(event.target===this)this.style.display='none'">
-  <div class="keybinds-window">
-    <h2>Active Keybinds in this Hyprland Simulator</h2>
-    <table>
-      <tr><td><span class="key">Click titlebar</span></td><td>Drag / move the window</td></tr>
-      <tr><td><span class="key">Click window body</span></td><td>Focus / bring window to front</td></tr>
-      <tr><td><span class="key">1 / 2 / 3 / 4</span></td><td>Switch workspace (or click numbers in waybar)</td></tr>
-      <tr><td><span class="key">Alt + X</span></td><td>Close focused window</td></tr>
-      <tr><td><span class="key">Orange dot</span></td><td>Minimize window to waybar tab</td></tr>
-      <tr><td><span class="key">Click minimized tab</span></td><td>Restore and focus window</td></tr>
-      <tr><td><span class="key">Green dot</span></td><td>Maximize window to fill desktop</td></tr>
-      <tr><td><span class="key">Red dot</span></td><td>Close / kill window</td></tr>
-      <tr><td><span class="key">"New Window" button</span></td><td>Spawn new floating window</td></tr>
-      <tr><td><span class="key">"Themes" button</span></td><td>Open theme & wallpaper selector</td></tr>
-      <tr><td><span class="key">"Keybinds" button</span></td><td>Open / close this help overlay</td></tr>
-    </table>
-    <p style="margin-top:20px; text-align:center; color:var(--overlay);">Click outside to close</p>
-  </div>
 </div>
 
 <div id="theme-overlay" onclick="if(event.target===this)this.style.display='none'">
@@ -261,7 +209,6 @@
     <div class="section">
       <h3>Wallpaper</h3>
       <div style="display:flex; flex-wrap:wrap; justify-content:center;">
-        <img src="https://hyprland.org/imgs/blog/contestWinners/Kath.png" class="wallpaper-preview selected" onclick="setWallpaper(this.src)" alt="Original Kath">
         <img src="https://confusing.wtf/u/cold-alley.png" class="wallpaper-preview" onclick="setWallpaper(this.src)" alt="Cold Alley">
         <img src="https://confusing.wtf/u/metropolis-mocha-v1.png" class="wallpaper-preview" onclick="setWallpaper(this.src)" alt="Metropolis Mocha">
         <img src="https://confusing.wtf/u/panes.jpg" class="wallpaper-preview" onclick="setWallpaper(this.src)" alt="Panes">
@@ -281,6 +228,10 @@ let currentWorkspace = 1;
 let zIndex = 10;
 let focused = null;
 let windowCounter = 0;
+let dragging = false;
+let dragX = 0;
+let dragY = 0;
+let dragTarget = null;
 
 function setTheme(flavor) {
   document.body.dataset.theme = flavor;
@@ -315,16 +266,15 @@ function spawnWindow() {
   const win = document.createElement('div');
   win.className = 'window visible';
   win.dataset.workspace = currentWorkspace;
-  win.style.left   = (80 + Math.random()*700)  + 'px';
-  win.style.top    = (80 + Math.random()*400) + 'px';
-  win.style.width  = '480px';
+  win.style.left = (80 + Math.random()*700) + 'px';
+  win.style.top = (80 + Math.random()*400) + 'px';
+  win.style.width = '480px';
   win.style.height = '360px';
   win.style.zIndex = zIndex++;
-
   win.innerHTML = `
     <div class="titlebar">
       <div class="buttons">
-        <div class="btn close"    onclick="this.closest('.window').remove()"></div>
+        <div class="btn close" onclick="closeWindow(this.closest('.window'))"></div>
         <div class="btn minimize" onclick="minimizeWindow(this.closest('.window'))"></div>
         <div class="btn maximize" onclick="maximizeWindow(this.closest('.window'))"></div>
       </div>
@@ -341,7 +291,6 @@ Memory: 64GiB
       </pre>
     </div>
   `;
-
   document.getElementById('desktop').appendChild(win);
   makeDraggable(win);
   makeFocusable(win);
@@ -376,22 +325,16 @@ function maximizeWindow(win) {
 
 function makeDraggable(win) {
   const tb = win.querySelector('.titlebar');
-  let drag = false, ox, oy;
   tb.onpointerdown = e => {
     if (e.button !== 0) return;
-    drag = true;
+    dragTarget = win;
     focusWindow(win);
     const r = win.getBoundingClientRect();
-    ox = e.clientX - r.left;
-    oy = e.clientY - r.top;
+    dragX = e.clientX - r.left;
+    dragY = e.clientY - r.top;
+    dragging = true;
     e.preventDefault();
   };
-  document.onpointermove = e => {
-    if (!drag) return;
-    win.style.left = (e.clientX - ox) + 'px';
-    win.style.top  = (e.clientY - oy) + 'px';
-  };
-  document.onpointerup = () => drag = false;
 }
 
 function makeFocusable(win) {
@@ -408,10 +351,17 @@ function focusWindow(win) {
   focused = win;
 }
 
+function closeWindow(win) {
+  win.remove();
+  if (focused === win) focused = null;
+  if (document.querySelectorAll('.window').length === 0) {
+    windowCounter = 0;
+  }
+}
+
 function closeFocusedWindow() {
   if (focused) {
-    focused.remove();
-    focused = null;
+    closeWindow(focused);
   }
 }
 
@@ -425,14 +375,23 @@ document.addEventListener('keydown', e => {
 function updateClock() {
   const n = new Date();
   document.getElementById('clock').textContent =
-    n.toLocaleTimeString([], { hour12: false }) + '  •  ' +
+    n.toLocaleTimeString([], { hour12: false }) + ' • ' +
     n.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 }
-
 updateClock();
 setInterval(updateClock, 1000);
-
 document.querySelector('.wallpaper-preview').classList.add('selected');
+
+document.onpointermove = e => {
+  if (!dragging || !dragTarget) return;
+  dragTarget.style.left = (e.clientX - dragX) + 'px';
+  dragTarget.style.top = (e.clientY - dragY) + 'px';
+};
+
+document.onpointerup = () => {
+  dragging = false;
+  dragTarget = null;
+};
 </script>
 </body>
 </html>
