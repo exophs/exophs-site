@@ -6,8 +6,8 @@
 <link rel="icon" href="https://raw.githubusercontent.com/exophs/favicon/main/favicon_io/favicon.ico" />
 <title>About Me - Ray</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap">
+
 <style>
-/* ---------------- Catppuccin Mocha Colors ---------------- */
 :root {
     --mocha-base: #1e1e2e;
     --mocha-mantle: #181825;
@@ -31,23 +31,22 @@ body {
     color: var(--mocha-text);
     background-color: var(--mocha-base);
     height: 100vh;
-    overflow: hidden; /* hide native scrollbar */
+    overflow: hidden;
 }
 
-/* ---------------- Scrollable Container ---------------- */
+/* Scroll container (hidden scrollbar but still scrollable) */
 .scroll-container {
     height: 100%;
     width: 100%;
-    overflow-y: scroll; /* scrolling enabled */
-    scrollbar-width: none; /* Firefox */
+    overflow-y: scroll;
+    scrollbar-width: none;
 }
 
 .scroll-container::-webkit-scrollbar {
-    width: 0px; /* Chrome, Edge, Safari */
+    width: 0px;
     background: transparent;
 }
 
-/* ---------------- Container ---------------- */
 .container {
     max-width: 900px;
     width: 100%;
@@ -58,7 +57,6 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-/* ---------------- Header ---------------- */
 h1 {
     font-family: 'Montserrat', sans-serif;
     font-size: 2.5em;
@@ -75,7 +73,6 @@ h3 {
     text-align: center;
 }
 
-/* ---------------- Profile ---------------- */
 .profile-pic {
     width: 150px;
     height: 150px;
@@ -91,9 +88,7 @@ h3 {
     box-shadow: 0 0 20px var(--mocha-lavender);
 }
 
-/* ---------------- Text ---------------- */
 p {
-    font-family: 'Roboto', sans-serif;
     font-size: 1em;
     margin-bottom: 15px;
     line-height: 1.6;
@@ -101,7 +96,6 @@ p {
     text-align: center;
 }
 
-/* ---------------- Buttons ---------------- */
 .back-button, .contacts-button {
     display: inline-block;
     margin: 0 5px;
@@ -118,7 +112,6 @@ p {
     color: var(--mocha-peach);
 }
 
-/* ---------------- Tech Icons ---------------- */
 .tech-icons {
     display: flex;
     flex-wrap: wrap;
@@ -137,7 +130,6 @@ p {
     transform: scale(1.2);
 }
 
-/* ---------------- Collage ---------------- */
 .collage {
     display: flex;
     flex-wrap: wrap;
@@ -160,11 +152,13 @@ p {
     box-shadow: 0 0 15px var(--mocha-green);
 }
 
-/* ---------------- Lightbox ---------------- */
+/* Lightbox */
 .lightbox {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: none;
     justify-content: center;
     align-items: center;
@@ -194,20 +188,6 @@ p {
 .lightbox .next { right: 20px; top: 50%; transform: translateY(-50%); }
 .lightbox .close { right: 20px; }
 
-/* ---------------- Footer ---------------- */
-footer {
-    text-align: center;
-    padding: 15px 0;
-    font-size: 14px;
-    color: var(--mocha-subtext);
-    width: 100%;
-    background-color: var(--mocha-mantle);
-    border-top: 1px solid #2a2a3a;
-    box-sizing: border-box;
-    margin-top: 40px;
-}
-
-/* ---------------- Tooltip ---------------- */
 .preview-tooltip {
     position: relative;
     cursor: pointer;
@@ -225,7 +205,6 @@ footer {
     padding: 8px;
     border-radius: 8px;
     transition: opacity 0.3s ease;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
 .preview-tooltip:hover .preview {
@@ -234,63 +213,72 @@ footer {
 }
 </style>
 </head>
+
 <body>
 
 <div class="scroll-container">
-    <div class="container">
-        <div style="text-align:center; margin-bottom:20px;">
-            <a href="https://exophs.space" class="back-button">Back</a>
-            <a href="https://exophs.space/about/contacts/" class="contacts-button">Contacts</a>
-        </div>
 
-        <h1>Hi, I'm Ray</h1>
-        <h3>Small Web Developer</h3>
-        <img src="https://avatars.githubusercontent.com/u/91388963?v=4" alt="Profile Picture" class="profile-pic">
+<div class="container">
 
-        <p>
-            I'm 18 years old, living in Pennsylvania, USA. I enjoy creating websites and learning new web technologies.
-        </p>
+<div style="text-align:center; margin-bottom:20px;">
+<a href="https://exophs.space" class="back-button">Back</a>
+<a href="https://exophs.space/about/contacts/" class="contacts-button">Contacts</a>
+</div>
 
-        <p>
-            Currently working on 
-            <span class="preview-tooltip">
-                <a href="https://github.com/exophs/exophs.github.io" target="_blank">exophs.github.io</a>
-                <span class="preview">
-                    <img src="https://ray.confusing.wtf/u/xoSHbY.png" alt="Preview of exophs.github.io">
-                </span>
-            </span> 
-            and this website.
-        </p>
+<h1>Hi, I'm Ray</h1>
+<h3>Small Web Developer</h3>
 
-        <div class="tech-icons">
-            <a href="https://www.w3schools.com/css/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="CSS3"></a>
-            <a href="https://www.w3.org/html/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="HTML5"></a>
-            <a href="https://www.java.com" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="Java"></a>
-            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="JavaScript"></a>
-            <a href="https://www.linux.org/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg" alt="Linux"></a>
-            <a href="https://www.python.org" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="Python"></a>
-        </div>
+<img src="https://avatars.githubusercontent.com/u/91388963?v=4" class="profile-pic">
 
-        <h3>This is my cat Pixie</h3>
-        <div class="collage">
-            <img src="https://images.confusing.wtf/r/42Wo9O.jpeg?compress=false" alt="Collage Image 1">
-            <img src="https://images.confusing.wtf/r/8jcAUh.jpeg?compress=false" alt="Collage Image 2">
-            <img src="https://images.confusing.wtf/r/UfeHQT.jpeg?compress=false" alt="Collage Image 3">
-            <img src="https://images.confusing.wtf/r/adKDTm.jpeg?compress=false" alt="Collage Image 4">
-        </div>
-    </div>
+<p>
+Hi, my name is Ray. I'm 18 years old and I live in Pennsylvania, USA. I'm a small web developer with a passion for making websites. I enjoy experimenting with different designs and learning new web technologies.
+</p>
+
+<p>
+I'm currently working on
+<span class="preview-tooltip">
+<a href="https://exophs.space" target="_blank">exophs.space</a>
+<span class="preview">
+<img src="https://ray.confusing.wtf/u/xoSHbY.png" style="width:100%">
+</span>
+</span>
+and this website that you're on right now.
+</p>
+
+<p>I'm currently learning HTML.</p>
+
+<p>
+I also enjoy playing video games like Minecraft, Grand Theft Auto 5, and Roblox (but my main account is now terminated sadly).
+</p>
+
+<div class="tech-icons">
+<a href="https://www.w3schools.com/css/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg"></a>
+<a href="https://www.w3.org/html/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg"></a>
+<a href="https://www.java.com" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg"></a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg"></a>
+<a href="https://www.linux.org/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg"></a>
+<a href="https://www.python.org" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg"></a>
+</div>
+
+<h3>This is my cat Pixie</h3>
+
+<div class="collage">
+<img src="https://images.confusing.wtf/r/42Wo9O.jpeg?compress=false">
+<img src="https://images.confusing.wtf/r/8jcAUh.jpeg?compress=false">
+<img src="https://images.confusing.wtf/r/UfeHQT.jpeg?compress=false">
+<img src="https://images.confusing.wtf/r/adKDTm.jpeg?compress=false">
+</div>
+
+</div>
+
 </div>
 
 <div id="lightbox" class="lightbox">
-    <button class="close">&times;</button>
-    <button class="prev">&#10094;</button>
-    <button class="next">&#10095;</button>
-    <img id="lightbox-img" alt="Lightbox Image">
+<button class="close">&times;</button>
+<button class="prev">&#10094;</button>
+<button class="next">&#10095;</button>
+<img id="lightbox-img">
 </div>
-
-<footer>
-    <p>© 2026 <a href="https://exophs.is-a.dev">exophs</a>. All rights reserved.</p>
-</footer>
 
 <script>
 const lightbox = document.getElementById('lightbox');
@@ -300,32 +288,37 @@ let currentIndex = 0;
 
 images.forEach((img, i) => img.addEventListener('click', () => openLightbox(i)));
 
-function openLightbox(i) {
-    currentIndex = i;
-    lightbox.style.display = 'flex';
-    lightboxImg.src = images[i].src;
+function openLightbox(i){
+currentIndex = i;
+lightbox.style.display = 'flex';
+lightboxImg.src = images[i].src;
 }
 
-function closeLightbox() { lightbox.style.display = 'none'; }
-
-function changeImage(dir) {
-    currentIndex = (currentIndex + dir + images.length) % images.length;
-    lightboxImg.src = images[currentIndex].src;
+function closeLightbox(){
+lightbox.style.display = 'none';
 }
 
-document.querySelector('.lightbox .close').addEventListener('click', closeLightbox);
-document.querySelector('.lightbox .prev').addEventListener('click', () => changeImage(-1));
-document.querySelector('.lightbox .next').addEventListener('click', () => changeImage(1));
+function changeImage(dir){
+currentIndex = (currentIndex + dir + images.length) % images.length;
+lightboxImg.src = images[currentIndex].src;
+}
 
-document.addEventListener('keydown', e => {
-    if(lightbox.style.display === 'flex'){
-        if(e.key === 'Escape') closeLightbox();
-        else if(e.key === 'ArrowLeft') changeImage(-1);
-        else if(e.key === 'ArrowRight') changeImage(1);
-    }
+document.querySelector('.close').onclick = closeLightbox;
+document.querySelector('.prev').onclick = () => changeImage(-1);
+document.querySelector('.next').onclick = () => changeImage(1);
+
+document.addEventListener('keydown', e=>{
+if(lightbox.style.display === 'flex'){
+if(e.key === 'Escape') closeLightbox();
+if(e.key === 'ArrowLeft') changeImage(-1);
+if(e.key === 'ArrowRight') changeImage(1);
+}
 });
 
-lightbox.addEventListener('click', e => { if(e.target === lightbox) closeLightbox(); });
+lightbox.addEventListener('click', e=>{
+if(e.target === lightbox) closeLightbox();
+});
 </script>
+
 </body>
 </html>
