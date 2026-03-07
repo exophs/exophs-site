@@ -14,27 +14,15 @@
   <meta property="og:url" content="http://exophs.space">
   <meta property="og:type" content="website">
   <link rel="canonical" href="https://exophs.space">
-
   <style>
-    @font-face {
-      font-family: 'MinecraftRegular';
-      src: url('https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/MinecraftRegular-Bmg3.otf?v=1727558152366') format('opentype');
-    }
-    @font-face {
-      font-family: 'MinecraftBold';
-      src: url('https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/MinecraftBold-nMK1.otf?v=1727558147987') format('opentype');
-    }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
-      font-family: 'MinecraftRegular', monospace;
+      font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "DejaVu Sans Mono", "Roboto Mono", Consolas, Monaco, "Courier New", monospace;
       background: #080c10;
       color: #e8edf2;
       min-height: 100vh;
       overflow-x: hidden;
     }
-
     /* scanlines, kinda subtle but i like it */
     body::after {
       content: '';
@@ -50,14 +38,12 @@
       pointer-events: none;
       z-index: 999;
     }
-
     #particles-js {
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
     }
-
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -72,19 +58,15 @@
       border-bottom: 1px solid rgba(255,255,255,0.07);
       transition: transform 0.4s ease;
     }
-
     nav.hide { transform: translateY(-100%); }
-
     .nav-logo {
-      font-family: 'MinecraftBold', monospace;
+      font-weight: bold;
       font-size: 14px;
       color: #7effd4;
       letter-spacing: 0.15em;
       text-decoration: none;
     }
-
     .nav-logo span { color: #5a6a7a; }
-
     .hamburger {
       display: flex;
       flex-direction: column;
@@ -92,7 +74,6 @@
       cursor: pointer;
       padding: 6px;
     }
-
     .hamburger div {
       width: 22px;
       height: 2px;
@@ -101,11 +82,9 @@
       transition: all 0.3s ease;
       transform-origin: center;
     }
-
     .hamburger.open div:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .hamburger.open div:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .hamburger.open div:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
     .slide-menu {
       position: fixed;
       top: 0; right: 0;
@@ -122,17 +101,13 @@
       transform: translateX(100%);
       transition: transform 0.5s cubic-bezier(0.77,0,0.175,1);
     }
-
     .slide-menu.open { transform: translateX(0); }
-
     .slide-menu a {
       text-decoration: none;
       display: block;
       margin-bottom: 28px;
     }
-
     .menu-item {
-      font-family: 'MinecraftRegular', monospace;
       font-size: 13px;
       color: #5a6a7a;
       letter-spacing: 0.2em;
@@ -151,10 +126,8 @@
       width: 100%;
       text-align: left;
     }
-
     .menu-item:hover { color: #7effd4; border-bottom-color: #7effd4; }
     .menu-item .num { font-size: 10px; color: #7effd4; opacity: 0.6; min-width: 20px; }
-
     .menu-warn {
       font-size: 9px;
       color: #ff6b9d;
@@ -163,7 +136,6 @@
       display: block;
       margin-left: 32px;
     }
-
     .menu-overlay {
       position: fixed;
       inset: 0;
@@ -173,9 +145,7 @@
       pointer-events: none;
       transition: opacity 0.4s;
     }
-
     .menu-overlay.open { opacity: 1; pointer-events: all; }
-
     main {
       position: relative;
       z-index: 1;
@@ -186,13 +156,11 @@
       justify-content: center;
       padding: 80px 24px 60px;
     }
-
     .hero {
       text-align: center;
       max-width: 700px;
       width: 100%;
     }
-
     .dot {
       width: 7px; height: 7px;
       border-radius: 50%;
@@ -200,12 +168,10 @@
       flex-shrink: 0;
       animation: pulse 2.5s ease infinite;
     }
-
     @keyframes pulse {
       0%,100% { box-shadow: 0 0 0 0 rgba(126,255,212,0.4); }
       50% { box-shadow: 0 0 0 5px rgba(126,255,212,0); }
     }
-
     .eyebrow {
       font-size: 11px;
       letter-spacing: 0.35em;
@@ -215,9 +181,8 @@
       opacity: 0;
       animation: fadeUp 0.8s 0.2s forwards;
     }
-
     .hero-name {
-      font-family: 'MinecraftBold', monospace;
+      font-weight: bold;
       font-size: clamp(52px, 10vw, 96px);
       line-height: 1;
       letter-spacing: -0.02em;
@@ -230,11 +195,9 @@
       display: inline-block;
       transition: text-shadow 0.3s ease;
     }
-
     .hero-name:hover {
       text-shadow: 0 0 40px rgba(126,255,212,0.35), 0 0 80px rgba(126,255,212,0.15);
     }
-
     .hero-sub {
       font-size: 13px;
       color: #5a6a7a;
@@ -243,13 +206,11 @@
       opacity: 0;
       animation: fadeUp 0.8s 0.6s forwards;
     }
-
     .typewriter-wrap {
       margin-bottom: 40px;
       opacity: 0;
       animation: fadeUp 0.8s 0.8s forwards;
     }
-
     .typewriter-card {
       display: inline-flex;
       align-items: center;
@@ -264,15 +225,12 @@
       min-width: 300px;
       justify-content: flex-start;
     }
-
     .typewriter-prompt {
       color: #7effd4;
       opacity: 0.7;
       flex-shrink: 0;
     }
-
     #typewriter { color: #e8edf2; white-space: nowrap; }
-
     .cursor-blink {
       display: inline-block;
       width: 2px;
@@ -282,14 +240,11 @@
       vertical-align: middle;
       animation: blink 1s step-end infinite;
     }
-
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
     .countdown-wrap {
       opacity: 0;
       animation: fadeUp 0.8s 1.0s forwards;
     }
-
     .countdown-label {
       font-size: 10px;
       letter-spacing: 0.3em;
@@ -297,23 +252,20 @@
       text-transform: uppercase;
       margin-bottom: 16px;
     }
-
     .countdown-grid {
       display: flex;
       gap: 12px;
       justify-content: center;
       flex-wrap: wrap;
     }
-
     .countdown-unit {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 6px;
     }
-
     .countdown-num {
-      font-family: 'MinecraftBold', monospace;
+      font-weight: bold;
       font-size: clamp(28px, 5vw, 44px);
       line-height: 1;
       color: #e8edf2;
@@ -326,32 +278,27 @@
       position: relative;
       overflow: hidden;
     }
-
     /* give each unit a lil different border tint */
     .countdown-unit:nth-child(2) .countdown-num { border-color: rgba(126,255,212,0.2); }
     .countdown-unit:nth-child(3) .countdown-num { border-color: rgba(255,107,157,0.15); }
     .countdown-unit:nth-child(4) .countdown-num { border-color: rgba(255,209,102,0.15); }
-
     .countdown-num::before {
       content: '';
       position: absolute;
       inset: 0;
       background: linear-gradient(180deg, rgba(126,255,212,0.04) 0%, transparent 100%);
     }
-
     .countdown-lbl {
       font-size: 9px;
       letter-spacing: 0.25em;
       color: #5a6a7a;
       text-transform: uppercase;
     }
-
     #secret-message {
       margin-top: 40px;
       opacity: 0;
       animation: fadeIn 0.6s forwards;
     }
-
     #secret-message a {
       font-size: 11px;
       color: #ffd166;
@@ -363,12 +310,10 @@
       border-radius: 2px;
       transition: all 0.3s;
     }
-
     #secret-message a:hover {
       background: rgba(255,209,102,0.08);
       border-color: #ffd166;
     }
-
     /* lil corner brackets, not sure why i like these but i do */
     .corner {
       position: fixed;
@@ -379,7 +324,6 @@
     }
     .corner-tl { top: 70px; left: 20px; border-top: 1px solid rgba(126,255,212,0.2); border-left: 1px solid rgba(126,255,212,0.2); }
     .corner-br { bottom: 40px; right: 20px; border-bottom: 1px solid rgba(126,255,212,0.2); border-right: 1px solid rgba(126,255,212,0.2); }
-
     .hint {
       position: fixed;
       bottom: 24px;
@@ -389,7 +333,6 @@
       opacity: 0;
       animation: fadeIn 1s 2s forwards;
     }
-
     .hint p {
       font-size: 10px;
       letter-spacing: 0.2em;
@@ -402,7 +345,6 @@
       backdrop-filter: blur(8px);
       white-space: nowrap;
     }
-
     footer {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -413,39 +355,31 @@
       padding: 0 32px 16px;
       pointer-events: none;
     }
-
     footer p {
       font-size: 10px;
       color: #5a6a7a;
       letter-spacing: 0.1em;
       pointer-events: all;
     }
-
     footer a { color: #5a6a7a; text-decoration: none; transition: color 0.2s; }
     footer a:hover { color: #7effd4; }
-
     .birthday-msg {
-      font-family: 'MinecraftBold', monospace;
+      font-weight: bold;
       font-size: clamp(16px, 3vw, 24px);
       color: #ffd166;
       letter-spacing: 0.15em;
       text-align: center;
     }
-
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
     @keyframes fadeIn { to { opacity: 1; } }
-
     @keyframes numFlip {
       from { opacity: 0; transform: translateY(-8px); }
-      to   { opacity: 1; transform: translateY(0); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
     .flip { animation: numFlip 0.2s ease forwards; }
-
     @media (max-width: 480px) {
       .typewriter-card { min-width: unset; width: 100%; }
       .countdown-num { min-width: 56px; font-size: 28px; }
@@ -454,12 +388,9 @@
   </style>
 </head>
 <body>
-
 <div id="particles-js"></div>
-
 <div class="corner corner-tl"></div>
 <div class="corner corner-br"></div>
-
 <nav id="main-nav">
   <a href="https://exophs.is-a.dev/" class="nav-logo">
     <span>.</span>exophs
@@ -468,16 +399,14 @@
     <div></div><div></div><div></div>
   </div>
 </nav>
-
 <div class="menu-overlay" id="menuOverlay"></div>
-
 <div class="slide-menu" id="slideMenu">
   <a href="https://exophs.space/about/" aria-label="About Me">
     <div class="menu-item"><span class="num">01</span> About Me</div>
   </a>
   <a href="https://exophs.space/geocities/" aria-label="Silly Geocities Thing">
     <div class="menu-item"><span class="num">02</span> Geocities thing</div>
-    <span class="menu-warn">&#9888; Epilepsy warning: flashing lights</span>
+    <span class="menu-warn">⚠ Epilepsy warning: flashing lights</span>
   </a>
   <a href="https://exophs.space/text-editor/" aria-label="Text Editor">
     <div class="menu-item"><span class="num">03</span> Text Editor</div>
@@ -489,19 +418,13 @@
     <div class="menu-item"><span class="num">05</span> Terminal V2</div>
   </a>
 </div>
-
 <main>
   <div class="hero">
-    </div>
-
     <p class="eyebrow">Welcome to my website, have a look around</p>
-
     <a href="https://exophs.is-a.dev/" style="text-decoration:none;">
       <h1 class="hero-name" id="main-title">Hey Chat</h1>
     </a>
-
-    <p class="hero-sub">// exophs &nbsp;&middot;&nbsp; builder of things &nbsp;&middot;&nbsp; .exophs on discord</p>
-
+    <p class="hero-sub">// exophs &nbsp;·&nbsp; builder of things &nbsp;·&nbsp; .exophs on discord</p>
     <div class="typewriter-wrap">
       <div class="typewriter-card">
         <span class="typewriter-prompt">~$</span>
@@ -509,9 +432,8 @@
         <span class="cursor-blink"></span>
       </div>
     </div>
-
     <div class="countdown-wrap" id="countdownWrap">
-      <p class="countdown-label">countdown to 19th birthday &mdash; oct 16</p>
+      <p class="countdown-label">countdown to 19th birthday — oct 16</p>
       <div class="countdown-grid" id="countdownGrid">
         <div class="countdown-unit">
           <div class="countdown-num" id="cd-days">000</div>
@@ -531,25 +453,21 @@
         </div>
       </div>
     </div>
-
     <div id="secret-message" style="display:none; margin-top:32px;">
-      <a href="https://exophs.space/this/is/not/a/secret/">&#128273; click here to reveal the secret page</a>
+      <a href="https://exophs.space/this/is/not/a/secret/">🔒 click here to reveal the secret page</a>
     </div>
   </div>
 </main>
-
 <div class="hint" id="hintMessage">
-  <p>find the hidden secret &mdash; hint: the title</p>
+  <p>find the hidden secret — hint: the title</p>
 </div>
-
 <footer>
-  <p>&copy; 2026 <a href="https://exophs.is-a.dev">exophs</a></p>
+  <p>© 2026 <a href="https://exophs.is-a.dev">exophs</a></p>
   <p id="footerTime"></p>
 </footer>
-
 <script>
+// ────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-
   if (typeof particlesJS !== 'undefined') {
     particlesJS('particles-js', {
       particles: {
@@ -592,13 +510,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const hamburger = document.getElementById('hamburger');
   const slideMenu = document.getElementById('slideMenu');
   const menuOverlay = document.getElementById('menuOverlay');
-
   hamburger.addEventListener('click', () => {
     slideMenu.classList.toggle('open');
     menuOverlay.classList.toggle('open');
     hamburger.classList.toggle('open');
   });
-
   menuOverlay.addEventListener('click', () => {
     slideMenu.classList.remove('open');
     menuOverlay.classList.remove('open');
@@ -637,15 +553,13 @@ document.addEventListener('DOMContentLoaded', () => {
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
   }
-
   shuffle(texts);
-  let tIdx = 0, cIdx = 0, deleting = false;
 
+  let tIdx = 0, cIdx = 0, deleting = false;
   function type() {
     const el = document.getElementById('typewriter');
     const cur = texts[tIdx];
     const speed = deleting ? 40 : 120;
-
     if (!deleting && cIdx < cur.length) {
       el.textContent = cur.slice(0, cIdx + 1);
       cIdx++;
@@ -666,10 +580,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   setTimeout(type, 1200);
 
-  const cdDays  = document.getElementById('cd-days');
+  const cdDays = document.getElementById('cd-days');
   const cdHours = document.getElementById('cd-hours');
-  const cdMins  = document.getElementById('cd-mins');
-  const cdSecs  = document.getElementById('cd-secs');
+  const cdMins = document.getElementById('cd-mins');
+  const cdSecs = document.getElementById('cd-secs');
   const countdownWrap = document.getElementById('countdownWrap');
 
   function pad(n, len = 2) { return String(n).padStart(len, '0'); }
@@ -686,18 +600,15 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateCountdown() {
     const target = new Date(2026, 9, 16, 0, 0, 0);
     const diff = target - new Date();
-
     if (diff <= 0) {
-      countdownWrap.innerHTML = '<p class="birthday-msg">&#127874; happy birthday!! you\'re 19!! &#127874;</p>';
+      countdownWrap.innerHTML = '<p class="birthday-msg">🎉 happy birthday!! you\'re 19!! 🎉</p>';
       return;
     }
-
-    flip(cdDays,  pad(Math.floor(diff / 86400000), 3));
+    flip(cdDays, pad(Math.floor(diff / 86400000), 3));
     flip(cdHours, pad(Math.floor((diff % 86400000) / 3600000)));
-    flip(cdMins,  pad(Math.floor((diff % 3600000) / 60000)));
-    flip(cdSecs,  pad(Math.floor((diff % 60000) / 1000)));
+    flip(cdMins, pad(Math.floor((diff % 3600000) / 60000)));
+    flip(cdSecs, pad(Math.floor((diff % 60000) / 1000)));
   }
-
   updateCountdown();
   setInterval(updateCountdown, 1000);
 
@@ -707,9 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   updateClock();
   setInterval(updateClock, 1000);
-
 });
 </script>
-
 </body>
 </html>
