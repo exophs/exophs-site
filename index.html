@@ -4,10 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Welcome to Ray's site! Explore my projects, enjoy the countdown to my birthday, and find hidden secrets!">
-  <meta name="keywords" content="Ray, projects, countdown, secrets, personal website">
+  <meta name="keywords" content="Ray, exophs, projects, countdown, secrets, personal website">
   <link rel="icon" href="https://raw.githubusercontent.com/exophs/favicon/main/favicon_io/favicon.ico">
   <title>ray's site</title>
-  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
   <meta property="og:title" content="Hey Chat">
   <meta property="og:description" content="My website">
@@ -15,327 +14,702 @@
   <meta property="og:url" content="http://exophs.space">
   <meta property="og:type" content="website">
   <link rel="canonical" href="https://exophs.space">
+
   <style>
     @font-face {
       font-family: 'MinecraftRegular';
       src: url('https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/MinecraftRegular-Bmg3.otf?v=1727558152366') format('opentype');
-      font-weight: normal;
-      font-style: normal;
     }
-
     @font-face {
       font-family: 'MinecraftBold';
       src: url('https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/MinecraftBold-nMK1.otf?v=1727558147987') format('opentype');
-      font-weight: bold;
-      font-style: normal;
     }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: 'MinecraftRegular', sans-serif, Arial;
-      margin: 0;
-      padding: 0;
+      font-family: 'MinecraftRegular', monospace;
+      background: #080c10;
+      color: #e8edf2;
+      min-height: 100vh;
       overflow-x: hidden;
     }
 
-    .title {
-      font-family: 'MinecraftRegular', sans-serif;
+    /* scanlines, kinda subtle but i like it */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 999;
     }
 
-    .instructions h2,
-    .instructions h3,
-    h1,
-    h2,
-    h3,
-    p {
-      font-family: 'MinecraftBold', sans-serif;
-    }
-
-    button {
-      font-family: 'MinecraftRegular', sans-serif;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .no-underline {
-      text-decoration: none;
-      color: inherit;
-      outline: none;
-    }
-
-    .no-underline:hover {
-      text-decoration: none;
-    }
-
-    .no-underline:focus {
-      outline: none;
+    #particles-js {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
     }
 
     nav {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 20px 0;
-      z-index: 1000;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 32px;
+      height: 60px;
       display: flex;
-      justify-content: center;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-      overflow: hidden;
-      transition: opacity 0.3s ease;
-      opacity: 1;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(8,12,16,0.7);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      transition: transform 0.4s ease;
     }
 
-    nav::before {
+    nav.hide { transform: translateY(-100%); }
+
+    .nav-logo {
+      font-family: 'MinecraftBold', monospace;
+      font-size: 14px;
+      color: #7effd4;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: #5a6a7a; }
+
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    .hamburger div {
+      width: 22px;
+      height: 2px;
+      background: #e8edf2;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.open div:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open div:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open div:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .slide-menu {
+      position: fixed;
+      top: 0; right: 0;
+      width: min(320px, 85vw);
+      height: 100vh;
+      background: rgba(10,14,18,0.97);
+      backdrop-filter: blur(24px);
+      border-left: 1px solid rgba(255,255,255,0.07);
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 40px;
+      transform: translateX(100%);
+      transition: transform 0.5s cubic-bezier(0.77,0,0.175,1);
+    }
+
+    .slide-menu.open { transform: translateX(0); }
+
+    .slide-menu a {
+      text-decoration: none;
+      display: block;
+      margin-bottom: 28px;
+    }
+
+    .menu-item {
+      font-family: 'MinecraftRegular', monospace;
+      font-size: 13px;
+      color: #5a6a7a;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .menu-item:hover { color: #7effd4; border-bottom-color: #7effd4; }
+    .menu-item .num { font-size: 10px; color: #7effd4; opacity: 0.6; min-width: 20px; }
+
+    .menu-warn {
+      font-size: 9px;
+      color: #ff6b9d;
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+      display: block;
+      margin-left: 32px;
+    }
+
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 140;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+    }
+
+    .menu-overlay.open { opacity: 1; pointer-events: all; }
+
+    main {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px 60px;
+    }
+
+    .hero {
+      text-align: center;
+      max-width: 700px;
+      width: 100%;
+    }
+
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #7effd4;
+      flex-shrink: 0;
+      animation: pulse 2.5s ease infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(126,255,212,0.4); }
+      50% { box-shadow: 0 0 0 5px rgba(126,255,212,0); }
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      color: #7effd4;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-name {
+      font-family: 'MinecraftBold', monospace;
+      font-size: clamp(52px, 10vw, 96px);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: #e8edf2;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+      text-shadow: 0 0 80px rgba(126,255,212,0.12);
+      cursor: pointer;
+      display: inline-block;
+      transition: text-shadow 0.3s ease;
+    }
+
+    .hero-name:hover {
+      text-shadow: 0 0 40px rgba(126,255,212,0.35), 0 0 80px rgba(126,255,212,0.15);
+    }
+
+    .hero-sub {
+      font-size: 13px;
+      color: #5a6a7a;
+      letter-spacing: 0.15em;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+
+    .typewriter-wrap {
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .typewriter-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 4px;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      min-height: 44px;
+      min-width: 300px;
+      justify-content: flex-start;
+    }
+
+    .typewriter-prompt {
+      color: #7effd4;
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+
+    #typewriter { color: #e8edf2; white-space: nowrap; }
+
+    .cursor-blink {
+      display: inline-block;
+      width: 2px;
+      height: 13px;
+      background: #7effd4;
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .countdown-wrap {
+      opacity: 0;
+      animation: fadeUp 0.8s 1.0s forwards;
+    }
+
+    .countdown-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: #5a6a7a;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .countdown-grid {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .countdown-num {
+      font-family: 'MinecraftBold', monospace;
+      font-size: clamp(28px, 5vw, 44px);
+      line-height: 1;
+      color: #e8edf2;
+      min-width: 70px;
+      text-align: center;
+      padding: 14px 10px 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* give each unit a lil different border tint */
+    .countdown-unit:nth-child(2) .countdown-num { border-color: rgba(126,255,212,0.2); }
+    .countdown-unit:nth-child(3) .countdown-num { border-color: rgba(255,107,157,0.15); }
+    .countdown-unit:nth-child(4) .countdown-num { border-color: rgba(255,209,102,0.15); }
+
+    .countdown-num::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(26, 26, 26, 0.8);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      z-index: -1;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(126,255,212,0.04) 0%, transparent 100%);
     }
 
-    nav.hidden {
-      display: none;
+    .countdown-lbl {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      color: #5a6a7a;
+      text-transform: uppercase;
+    }
+
+    #secret-message {
+      margin-top: 40px;
       opacity: 0;
+      animation: fadeIn 0.6s forwards;
     }
 
-    .menu {
-      z-index: 1001;
+    #secret-message a {
+      font-size: 11px;
+      color: #ffd166;
+      text-decoration: none;
+      letter-spacing: 0.2em;
+      border: 1px dashed rgba(255,209,102,0.4);
+      padding: 8px 16px;
+      display: inline-block;
+      border-radius: 2px;
+      transition: all 0.3s;
     }
 
-    .wrapper {
-      padding-top: 80px;
+    #secret-message a:hover {
+      background: rgba(255,209,102,0.08);
+      border-color: #ffd166;
+    }
+
+    /* lil corner brackets, not sure why i like these but i do */
+    .corner {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .corner-tl { top: 70px; left: 20px; border-top: 1px solid rgba(126,255,212,0.2); border-left: 1px solid rgba(126,255,212,0.2); }
+    .corner-br { bottom: 40px; right: 20px; border-bottom: 1px solid rgba(126,255,212,0.2); border-right: 1px solid rgba(126,255,212,0.2); }
+
+    .hint {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      opacity: 0;
+      animation: fadeIn 1s 2s forwards;
+    }
+
+    .hint p {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: #5a6a7a;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 99px;
+      background: rgba(8,12,16,0.8);
+      backdrop-filter: blur(8px);
+      white-space: nowrap;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 32px 16px;
+      pointer-events: none;
+    }
+
+    footer p {
+      font-size: 10px;
+      color: #5a6a7a;
+      letter-spacing: 0.1em;
+      pointer-events: all;
+    }
+
+    footer a { color: #5a6a7a; text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: #7effd4; }
+
+    .birthday-msg {
+      font-family: 'MinecraftBold', monospace;
+      font-size: clamp(16px, 3vw, 24px);
+      color: #ffd166;
+      letter-spacing: 0.15em;
+      text-align: center;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    @keyframes numFlip {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .flip { animation: numFlip 0.2s ease forwards; }
+
+    @media (max-width: 480px) {
+      .typewriter-card { min-width: unset; width: 100%; }
+      .countdown-num { min-width: 56px; font-size: 28px; }
+      footer { padding: 0 16px 12px; }
     }
   </style>
 </head>
 <body>
-  <nav>
-    <div style="color: white; font-size: 16px; font-family: 'MinecraftRegular', sans-serif; line-height: 0; margin: 0; padding: 0; width: 100%; text-align: left; padding-left: 20px;">
-      Welcome to my site!!!!
+
+<div id="particles-js"></div>
+
+<div class="corner corner-tl"></div>
+<div class="corner corner-br"></div>
+
+<nav id="main-nav">
+  <a href="https://exophs.is-a.dev/" class="nav-logo">
+    <span>.</span>exophs
+  </a>
+  <div class="hamburger" id="hamburger">
+    <div></div><div></div><div></div>
+  </div>
+</nav>
+
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<div class="slide-menu" id="slideMenu">
+  <a href="https://exophs.space/about/" aria-label="About Me">
+    <div class="menu-item"><span class="num">01</span> About Me</div>
+  </a>
+  <a href="https://exophs.space/geocities/" aria-label="Silly Geocities Thing">
+    <div class="menu-item"><span class="num">02</span> Geocities thing</div>
+    <span class="menu-warn">&#9888; Epilepsy warning: flashing lights</span>
+  </a>
+  <a href="https://exophs.space/text-editor/" aria-label="Text Editor">
+    <div class="menu-item"><span class="num">03</span> Text Editor</div>
+  </a>
+  <a href="https://exophs.space/terminal/" aria-label="Terminal">
+    <div class="menu-item"><span class="num">04</span> Terminal</div>
+  </a>
+  <a href="https://exophs.space/terminal/terminalV2/" aria-label="TerminalV2">
+    <div class="menu-item"><span class="num">05</span> Terminal V2</div>
+  </a>
+</div>
+
+<main>
+  <div class="hero">
     </div>
-  </nav>
 
-  <div id="particles-js"></div>
+    <p class="eyebrow">Welcome to my website, have a look around</p>
 
-  <div class="wrapper">
-    <div role="main">
-      <a class="links_underline" href="https://exophs.is-a.dev/" aria-label="Visit Exophs GitHub Page">
-        <h1 class="title" id="main-title">Hey chat</h1>
-      </a>
-      <p style="font-size: 18px; margin-top: 10px; color: #ffffff; font-family: 'MinecraftRegular', sans-serif;">
-        Welcome to my website! Explore more by clicking the three lines at the top.
-      </p>
-      <div class="instructions">
-        <h2><span id="typewriter">&nbsp;</span></h2>
-        <div class="countdown-container">
-          <h3 id="countdown"></h3>
+    <a href="https://exophs.is-a.dev/" style="text-decoration:none;">
+      <h1 class="hero-name" id="main-title">Hey Chat</h1>
+    </a>
+
+    <p class="hero-sub">// exophs &nbsp;&middot;&nbsp; builder of things &nbsp;&middot;&nbsp; .exophs on discord</p>
+
+    <div class="typewriter-wrap">
+      <div class="typewriter-card">
+        <span class="typewriter-prompt">~$</span>
+        <span id="typewriter"></span>
+        <span class="cursor-blink"></span>
+      </div>
+    </div>
+
+    <div class="countdown-wrap" id="countdownWrap">
+      <p class="countdown-label">countdown to 19th birthday &mdash; oct 16</p>
+      <div class="countdown-grid" id="countdownGrid">
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-days">000</div>
+          <div class="countdown-lbl">days</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-hours">00</div>
+          <div class="countdown-lbl">hours</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-mins">00</div>
+          <div class="countdown-lbl">mins</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-secs">00</div>
+          <div class="countdown-lbl">secs</div>
         </div>
       </div>
-      <div id="secret-message" style="display: none;">
-        <a href="https://exophs.space/this/is/not/a/secret/" style="color: yellow; text-decoration: none;">Click here to reveal the secret page!</a>
-      </div>
+    </div>
+
+    <div id="secret-message" style="display:none; margin-top:32px;">
+      <a href="https://exophs.space/this/is/not/a/secret/">&#128273; click here to reveal the secret page</a>
     </div>
   </div>
+</main>
 
-  <div class="hint" id="hintMessage">
-    <p>Can you find the hidden secret? Hint: title!</p>
-  </div>
+<div class="hint" id="hintMessage">
+  <p>find the hidden secret &mdash; hint: the title</p>
+</div>
 
-  <div class="three-lines" id="menuButton">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
+<footer>
+  <p>&copy; 2026 <a href="https://exophs.is-a.dev">exophs</a></p>
+  <p id="footerTime"></p>
+</footer>
 
-  <div class="menu" id="menu">
-    <div class="button-container">
-      <a href="https://exophs.space/about/" aria-label="About Me">
-        <button style="background: linear-gradient(45deg, #6a1b9a, #4a148c);">About Me</button>
-      </a>
-      <a href="https://exophs.space/geocities/" aria-label="Silly Geocities Thing">
-        <button class="rainbow-button" style="font-family: 'Comic Sans MS', cursive;">silly geocities thing i made</button>
-        <div class="tooltip">⚠️ Epilepsy Warning: Flashing lights may trigger seizures ⚠️</div>
-      </a>
-      <a href="https://exophs.space/text-editor/" aria-label="Text Editor">
-        <button style="background: linear-gradient(45deg, #1976d2, #0d47a1);">Text Editor</button>
-      </a>
-      <a href="https://exophs.space/terminal/" aria-label="Terminal">
-        <button style="background: linear-gradient(45deg, #1976d2, #0d47a1);">Terminal</button>
-      </a>
-      <a href="https://exophs.space/terminal/terminalV2/" aria-label="TerminalV2">
-        <button style="background: linear-gradient(45deg, #1976d2, #0d47a1);">TerminalV2</button>
-      </a>
-    </div>
-  </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (typeof particlesJS === 'undefined') {
-        console.error('particlesJS is not loaded');
-        return;
-      }
-
-      particlesJS('particles-js', {
-        particles: {
-          number: { value: 80 },
-          color: { value: "#ffffff" },
-          shape: { type: "circle" },
-          opacity: { value: 0.5 },
-          size: { value: 3 },
-          line_linked: {
-            enable: true,
-            distance: 200,
-            color: "#ffffff",
-            opacity: 0.3,
-            width: 1
-          },
-          move: {
-            enable: true,
-            speed: 0.5,
-            direction: "none",
-            random: true,
-            straight: false,
-            out_mode: "out",
-            bounce: false
-          }
+  if (typeof particlesJS !== 'undefined') {
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 60 },
+        color: { value: "#7effd4" },
+        shape: { type: "circle" },
+        opacity: { value: 0.18, random: true },
+        size: { value: 1.5, random: true },
+        line_linked: {
+          enable: true,
+          distance: 160,
+          color: "#7effd4",
+          opacity: 0.06,
+          width: 1
         },
-        interactivity: {
-          detect_on: "canvas",
-          events: {
-            onhover: {
-              enable: true,
-              mode: "grab",
-              repulse: {
-                distance: 100,
-                duration: 0.4
-              }
-            },
-            onclick: {
-              enable: true,
-              mode: "push",
-              push: {
-                particles_nb: 4
-              }
-            },
-            resize: true
-          }
+        move: {
+          enable: true,
+          speed: 0.4,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out"
         }
-      });
-
-      const mainTitle = document.getElementById('main-title');
-      const secretMessage = document.getElementById('secret-message');
-
-      mainTitle.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        secretMessage.style.display = 'block';
-      });
-
-      const menuButton = document.getElementById('menuButton');
-      const menu = document.getElementById('menu');
-      const nav = document.querySelector('nav');
-
-      menuButton.addEventListener('click', () => {
-        const isOpening = !menu.classList.contains('visible');
-
-        menu.classList.toggle('visible');
-        menuButton.classList.toggle('open');
-
-        if (isOpening) {
-          nav.style.opacity = '0';
-          menuOpenSound.currentTime = 0;
-          menuOpenSound.play().catch(e => console.log("Open sound play failed:", e));
-          setTimeout(() => {
-            nav.classList.add('hidden');
-          }, 300);
-        } else {
-          setTimeout(() => {
-            nav.style.opacity = '0';
-            nav.classList.remove('hidden');
-            void nav.offsetWidth;
-            nav.style.opacity = '1';
-          }, 400);
-        }
-      });
-
-      const texts = [
-        "Add me on Discord: .exophs",
-        "Visit my GitHub for more projects",
-        "i love my friends",
-        "i can see you, yeah you!"
-      ];
-
-      function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "grab" },
+          onclick: { enable: true, mode: "push" },
+          resize: true
+        },
+        modes: {
+          grab: { distance: 140, line_linked: { opacity: 0.25 } },
+          push: { particles_nb: 3 }
         }
       }
-
-      shuffleArray(texts);
-      let textIndex = 0;
-      let charIndex = 0;
-      let isDeleting = false;
-
-      function type() {
-        const element = document.getElementById("typewriter");
-        const currentText = texts[textIndex];
-        const speed = isDeleting ? 50 : 150;
-
-        if (charIndex < currentText.length && !isDeleting) {
-          element.innerHTML = "&nbsp;" + currentText.slice(0, charIndex + 1);
-          charIndex++;
-          setTimeout(type, speed);
-        } else if (isDeleting && charIndex > 0) {
-          element.innerHTML = "&nbsp;" + currentText.slice(0, charIndex - 1);
-          charIndex--;
-          setTimeout(type, speed);
-        } else if (!isDeleting && charIndex === currentText.length) {
-          isDeleting = true;
-          setTimeout(type, 1000);
-        } else if (isDeleting && charIndex === 0) {
-          isDeleting = false;
-          textIndex = (textIndex + 1) % texts.length;
-          if (textIndex === 0) {
-            shuffleArray(texts);
-          }
-          setTimeout(type, 500);
-        }
-      }
-
-      setTimeout(type, 1000);
-
-      function updateCountdown() {
-        const targetDate = new Date(2026, 9, 16, 0, 0, 0);
-        const now = new Date();
-        const timeDifference = targetDate - now;
-
-        if (timeDifference <= 0) {
-          document.getElementById('countdown').innerHTML = "It's my birthday!! I'm now 18!";
-          return;
-        }
-
-        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-        document.getElementById('countdown').innerHTML =
-          `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
-      }
-
-      setInterval(updateCountdown, 1000);
     });
-  </script>
+  }
 
-  <footer>
-    <p>© 2025 <a href="https://exophs.is-a.dev" class="no-underline">exophs</a>. All rights reserved.</p>
-  </footer>
+  const hamburger = document.getElementById('hamburger');
+  const slideMenu = document.getElementById('slideMenu');
+  const menuOverlay = document.getElementById('menuOverlay');
+
+  hamburger.addEventListener('click', () => {
+    slideMenu.classList.toggle('open');
+    menuOverlay.classList.toggle('open');
+    hamburger.classList.toggle('open');
+  });
+
+  menuOverlay.addEventListener('click', () => {
+    slideMenu.classList.remove('open');
+    menuOverlay.classList.remove('open');
+    hamburger.classList.remove('open');
+  });
+
+  // right click the title to find the secret :)
+  document.getElementById('main-title').addEventListener('contextmenu', e => {
+    e.preventDefault();
+    document.getElementById('secret-message').style.display = 'block';
+  });
+
+  let pressTimer;
+  document.getElementById('main-title').addEventListener('touchstart', () => {
+    pressTimer = setTimeout(() => {
+      document.getElementById('secret-message').style.display = 'block';
+    }, 800);
+  });
+  document.getElementById('main-title').addEventListener('touchend', () => clearTimeout(pressTimer));
+
+  const texts = [
+    "add me on discord: .exophs",
+    "visit my github for more projects",
+    "i can see you, yeah you!",
+    "what are you looking at?",
+    ":3",
+    "<3",
+    "meow",
+    "hey fag",
+    "do you like my website?",
+  ];
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  shuffle(texts);
+  let tIdx = 0, cIdx = 0, deleting = false;
+
+  function type() {
+    const el = document.getElementById('typewriter');
+    const cur = texts[tIdx];
+    const speed = deleting ? 40 : 120;
+
+    if (!deleting && cIdx < cur.length) {
+      el.textContent = cur.slice(0, cIdx + 1);
+      cIdx++;
+      setTimeout(type, speed);
+    } else if (deleting && cIdx > 0) {
+      el.textContent = cur.slice(0, cIdx - 1);
+      cIdx--;
+      setTimeout(type, speed);
+    } else if (!deleting && cIdx === cur.length) {
+      deleting = true;
+      setTimeout(type, 1800);
+    } else {
+      deleting = false;
+      tIdx = (tIdx + 1) % texts.length;
+      if (tIdx === 0) shuffle(texts);
+      setTimeout(type, 400);
+    }
+  }
+  setTimeout(type, 1200);
+
+  const cdDays  = document.getElementById('cd-days');
+  const cdHours = document.getElementById('cd-hours');
+  const cdMins  = document.getElementById('cd-mins');
+  const cdSecs  = document.getElementById('cd-secs');
+  const countdownWrap = document.getElementById('countdownWrap');
+
+  function pad(n, len = 2) { return String(n).padStart(len, '0'); }
+
+  function flip(el, val) {
+    if (el.textContent !== val) {
+      el.textContent = val;
+      el.classList.remove('flip');
+      void el.offsetWidth;
+      el.classList.add('flip');
+    }
+  }
+
+  function updateCountdown() {
+    const target = new Date(2026, 9, 16, 0, 0, 0);
+    const diff = target - new Date();
+
+    if (diff <= 0) {
+      countdownWrap.innerHTML = '<p class="birthday-msg">&#127874; happy birthday!! you\'re 19!! &#127874;</p>';
+      return;
+    }
+
+    flip(cdDays,  pad(Math.floor(diff / 86400000), 3));
+    flip(cdHours, pad(Math.floor((diff % 86400000) / 3600000)));
+    flip(cdMins,  pad(Math.floor((diff % 3600000) / 60000)));
+    flip(cdSecs,  pad(Math.floor((diff % 60000) / 1000)));
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  function updateClock() {
+    document.getElementById('footerTime').textContent =
+      new Date().toLocaleTimeString('en-US', { hour12: false });
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+});
+</script>
+
 </body>
 </html>
