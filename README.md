@@ -1,7 +1,7 @@
 # My website
 
 Personal website & creative coding playground  
-→ https://exophs.space
+https://exophs.space
 
 A collection of small web experiments, interactive demos, mini-projects, visual toys, and random stuff built with plain HTML, CSS, and JavaScript.
 
