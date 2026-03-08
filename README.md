@@ -1,11 +1,11 @@
 # My website
 
-Personal website & creative coding playground  
+my personal website i make little projects on to mess around with code i guess 
 https://exophs.space
 
-A collection of small web experiments, interactive demos, mini-projects, visual toys, and random stuff built with plain HTML, CSS, and JavaScript.
+a collection of mini projects
 
-## What's inside
+## whats inside
 
 | Folder              | Description                                      |
 |---------------------|--------------------------------------------------|
