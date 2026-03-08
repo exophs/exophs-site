@@ -39,7 +39,12 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar { display: none; }
 
 body {
   font-family: 'DM Sans', sans-serif;
@@ -47,7 +52,10 @@ body {
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
+  scrollbar-width: none;
 }
+
+body::-webkit-scrollbar { display: none; }
 
 body::before {
   content: '';
