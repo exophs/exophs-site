@@ -5,211 +5,471 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="icon" href="https://raw.githubusercontent.com/exophs/favicon/main/favicon_io/favicon.ico" />
 <title>About Me - Ray</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap">
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <style>
 :root {
-    --mocha-base: #1e1e2e;
-    --mocha-mantle: #181825;
-    --mocha-crust: #11111b;
-    --mocha-text: #cdd6f4;
-    --mocha-subtext: #bac2de;
-    --mocha-blue: #89b4fa;
-    --mocha-peach: #fab387;
-    --mocha-green: #a6e3a1;
-    --mocha-lavender: #b4befe;
+  --crust:     #11111b;
+  --mantle:    #181825;
+  --base:      #1e1e2e;
+  --surface0:  #313244;
+  --surface1:  #45475a;
+  --surface2:  #585b70;
+  --overlay0:  #6c7086;
+  --overlay1:  #7f849c;
+  --overlay2:  #9399b2;
+  --subtext0:  #a6adc8;
+  --subtext1:  #bac2de;
+  --text:      #cdd6f4;
+  --lavender:  #b4befe;
+  --blue:      #89b4fa;
+  --sapphire:  #74c7ec;
+  --sky:       #89dceb;
+  --teal:      #94e2d5;
+  --green:     #a6e3a1;
+  --yellow:    #f9e2af;
+  --peach:     #fab387;
+  --maroon:    #eba0ac;
+  --red:       #f38ba8;
+  --mauve:     #cba6f7;
+  --pink:      #f5c2e7;
+  --flamingo:  #f2cdcd;
+  --rosewater: #f5e0dc;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
 
 body {
-    font-family: 'Roboto', sans-serif;
-    color: var(--mocha-text);
-    background-color: var(--mocha-base);
-    height: 100vh;
-    overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--base);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* Scroll container (hidden scrollbar but still scrollable) */
-.scroll-container {
-    height: 100%;
-    width: 100%;
-    overflow-y: scroll;
-    scrollbar-width: none;
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 10%, rgba(203,166,247,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 10% 80%, rgba(137,180,250,0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-.scroll-container::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.025) 2px, rgba(0,0,0,0.025) 4px
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 1;
+  animation: scanlines 10s linear infinite;
 }
 
-.container {
-    max-width: 900px;
-    width: 100%;
-    background-color: var(--mocha-mantle);
-    border-radius: 15px;
-    padding: 30px 40px;
-    margin: 40px auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+@keyframes scanlines {
+  from { background-position: 0 0; }
+  to   { background-position: 0 100px; }
+}
+
+.page {
+  position: relative;
+  z-index: 2;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 60px 24px 100px;
+}
+
+/* ── NAV ── */
+.topnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 72px;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.1s forwards;
+}
+
+.topnav a {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--overlay1);
+  padding: 7px 14px;
+  border: 1px solid var(--surface1);
+  border-radius: 3px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.topnav a:hover { color: var(--mauve); border-color: var(--mauve); }
+
+.topnav-right { display: flex; gap: 10px; }
+
+/* ── HERO SECTION ── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 80px;
+}
+
+.hero-left {
+  opacity: 0;
+  animation: fadeUp 0.7s 0.2s forwards;
+}
+
+.hero-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--mauve);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-label::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--mauve);
+  opacity: 0.5;
 }
 
 h1 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 2.5em;
-    margin-bottom: 5px;
-    color: var(--mocha-lavender);
-    text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(40px, 7vw, 72px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 12px;
 }
 
-h3 {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
-    color: var(--mocha-peach);
-    margin-bottom: 20px;
-    text-align: center;
+h1 span { color: var(--mauve); }
+
+.hero-role {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--overlay1);
+  letter-spacing: 0.1em;
+  margin-bottom: 28px;
 }
 
-.profile-pic {
-    width: 150px;
-    height: 150px;
-    border-radius: 15px;
-    margin: 0 auto 20px;
-    display: block;
-    object-fit: cover;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.hero-desc {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--subtext1);
+  max-width: 480px;
 }
 
-.profile-pic:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px var(--mocha-lavender);
+.hero-right {
+  opacity: 0;
+  animation: fadeUp 0.7s 0.35s forwards;
+  flex-shrink: 0;
 }
 
-p {
-    font-size: 1em;
-    margin-bottom: 15px;
-    line-height: 1.6;
-    color: var(--mocha-subtext);
-    text-align: center;
+.avatar-wrap {
+  position: relative;
+  width: 160px;
 }
 
-.back-button, .contacts-button {
-    display: inline-block;
-    margin: 0 5px;
-    padding: 6px 12px;
-    background-color: var(--mocha-crust);
-    border-radius: 8px;
-    font-weight: bold;
-    color: var(--mocha-blue);
-    transition: all 0.2s ease;
+.avatar-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(203,166,247,0.3), rgba(137,180,250,0.15), transparent);
+  z-index: -1;
 }
 
-.back-button:hover, .contacts-button:hover {
-    background-color: var(--mocha-base);
-    color: var(--mocha-peach);
+.avatar-wrap img {
+  width: 160px;
+  height: 160px;
+  border-radius: 14px;
+  object-fit: cover;
+  display: block;
+  border: 1px solid var(--surface1);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-.tech-icons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin: 25px 0;
+.avatar-wrap img:hover {
+  transform: scale(1.04) rotate(-1deg);
+  box-shadow: 0 20px 60px rgba(203,166,247,0.2);
 }
 
-.tech-icons img {
-    width: 40px;
-    height: 40px;
-    transition: transform 0.2s ease;
+/* ── DIVIDER ── */
+.rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--surface1), transparent);
+  margin: 56px 0;
+  opacity: 0;
+  animation: fadeIn 0.8s 0.5s forwards;
 }
 
-.tech-icons img:hover {
-    transform: scale(1.2);
+/* ── SECTION LABELS ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--overlay0);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--surface1);
+}
+
+/* ── ABOUT CARDS ── */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 80px;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.4s forwards;
+}
+
+.card {
+  background: var(--mantle);
+  border: 1px solid var(--surface0);
+  border-radius: 10px;
+  padding: 20px 22px;
+  transition: border-color 0.25s, transform 0.25s;
+}
+
+.card:hover {
+  border-color: var(--surface2);
+  transform: translateY(-2px);
+}
+
+.card-icon {
+  font-size: 20px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.card-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--overlay1);
+  margin-bottom: 8px;
+}
+
+.card-body {
+  font-size: 14px;
+  color: var(--subtext0);
+  line-height: 1.6;
+}
+
+.card-body strong { color: var(--subtext1); font-weight: 600; }
+
+/* ── TECH ── */
+.tech-section {
+  margin-bottom: 80px;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.5s forwards;
+}
+
+.tech-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tech-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--mantle);
+  border: 1px solid var(--surface0);
+  border-radius: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--subtext1);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.tech-chip:hover {
+  border-color: var(--mauve);
+  color: var(--mauve);
+  background: rgba(203,166,247,0.05);
+}
+
+.tech-chip img {
+  width: 18px;
+  height: 18px;
+}
+
+/* ── CAT SECTION ── */
+.cat-section {
+  margin-bottom: 80px;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.6s forwards;
+}
+
+.cat-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.cat-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cat-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--peach);
+  letter-spacing: 0.1em;
 }
 
 .collage {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin: 25px 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
 }
 
-.collage img {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+.collage-item {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid var(--surface0);
 }
 
-.collage img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px var(--mocha-green);
+.collage-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
 }
 
-/* Lightbox */
+.collage-item:hover img { transform: scale(1.08); }
+
+.collage-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(203,166,247,0.1);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.collage-item:hover::after { opacity: 1; }
+
+/* ── LIGHTBOX ── */
 .lightbox {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0,0,0,0.85);
-    z-index: 1000;
+  position: fixed;
+  inset: 0;
+  background: rgba(17,17,27,0.92);
+  backdrop-filter: blur(12px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
 }
 
-.lightbox img {
-    max-width: 80%;
-    max-height: 80%;
-    border-radius: 10px;
+.lightbox.active { display: flex; }
+
+.lightbox-img-wrap {
+  position: relative;
+  max-width: 80vw;
+  max-height: 80vh;
 }
 
-.lightbox .close, .lightbox .prev, .lightbox .next {
-    position: fixed;
-    top: 20px;
-    background-color: var(--mocha-crust);
-    color: var(--mocha-text);
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 50%;
-    font-size: 18px;
+.lightbox-img-wrap img {
+  max-width: 80vw;
+  max-height: 80vh;
+  border-radius: 10px;
+  display: block;
+  border: 1px solid var(--surface1);
 }
 
-.lightbox .prev { left: 20px; top: 50%; transform: translateY(-50%); }
-.lightbox .next { right: 20px; top: 50%; transform: translateY(-50%); }
-.lightbox .close { right: 20px; }
-
-.preview-tooltip {
-    position: relative;
-    cursor: pointer;
+.lb-btn {
+  position: fixed;
+  background: var(--mantle);
+  border: 1px solid var(--surface1);
+  color: var(--subtext1);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
 }
 
-.preview-tooltip .preview {
-    visibility: hidden;
-    opacity: 0;
-    position: absolute;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 300px;
-    background-color: var(--mocha-crust);
-    padding: 8px;
-    border-radius: 8px;
-    transition: opacity 0.3s ease;
+.lb-btn:hover { background: var(--surface0); color: var(--mauve); }
+.lb-close { top: 20px; right: 20px; }
+.lb-prev  { left: 20px; top: 50%; transform: translateY(-50%); }
+.lb-next  { right: 20px; top: 50%; transform: translateY(-50%); }
+
+/* ── FOOTER ── */
+.page-footer {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--overlay0);
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 0.8s 0.8s forwards;
 }
 
-.preview-tooltip:hover .preview {
-    visibility: visible;
-    opacity: 1;
+.page-footer a { color: var(--overlay0); text-decoration: none; transition: color 0.2s; }
+.page-footer a:hover { color: var(--mauve); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { order: -1; }
+  .avatar-wrap { width: 120px; }
+  .avatar-wrap img { width: 120px; height: 120px; }
+  .collage { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
 <script>
@@ -217,110 +477,143 @@ p {
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
-
 <body>
 
-<div class="scroll-container">
+<div class="page">
 
-<div class="container">
+  <nav class="topnav">
+    <a href="https://exophs.space">← back</a>
+    <div class="topnav-right">
+      <a href="https://exophs.space/about/contacts/">contacts</a>
+    </div>
+  </nav>
 
-<div style="text-align:center; margin-bottom:20px;">
-<a href="https://exophs.space" class="back-button">Back</a>
-<a href="https://exophs.space/about/contacts/" class="contacts-button">Contacts</a>
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-label">about me</p>
+      <h1>Hi, I'm <span>Ray</span></h1>
+      <p class="hero-role">// small web developer</p>
+      <p class="hero-desc">
+        18 years old, based in Pennsylvania, USA. I build websites, experiment with designs, and learn new web technologies along the way.
+      </p>
+    </div>
+    <div class="hero-right">
+      <div class="avatar-wrap">
+        <img src="https://avatars.githubusercontent.com/u/91388963?v=4" alt="Ray's avatar">
+      </div>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <div class="about-grid">
+    <div class="card">
+      <span class="card-icon">📍</span>
+      <p class="card-title">Location</p>
+      <p class="card-body"><strong>Pennsylvania</strong>, USA</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">💻</span>
+      <p class="card-title">Currently working on</p>
+      <p class="card-body">
+        <a href="https://exophs.is-a.dev/" target="_blank" style="color:var(--blue);text-decoration:none;">exophs.is-a.dev</a> &amp; <a href="https://exophs.space" style="color:var(--blue);text-decoration:none;">exophs.space</a>
+      </p>
+    </div>
+    <div class="card">
+      <span class="card-icon">📖</span>
+      <p class="card-title">Currently learning</p>
+      <p class="card-body"><strong>HTML</strong> &amp; web technologies</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🎮</span>
+      <p class="card-title">Games I play</p>
+      <p class="card-body">Minecraft, GTA 5, Roblox <span style="color:var(--overlay0);font-size:12px;">(main acc terminated 😔)</span></p>
+    </div>
+  </div>
+
+  <section class="tech-section">
+    <p class="section-label">tech stack</p>
+    <div class="tech-grid">
+      <a href="https://www.w3.org/html/" target="_blank" class="tech-chip">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg"> HTML5
+      </a>
+      <a href="https://www.w3schools.com/css/" target="_blank" class="tech-chip">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg"> CSS3
+      </a>
+      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" class="tech-chip">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg"> JavaScript
+      </a>
+      <a href="https://www.python.org" target="_blank" class="tech-chip">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg"> Python
+      </a>
+      <a href="https://www.java.com" target="_blank" class="tech-chip">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg"> Java
+      </a>
+      <a href="https://www.linux.org/" target="_blank" class="tech-chip">
+        <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg"> Linux
+      </a>
+    </div>
+  </section>
+
+  <section class="cat-section">
+    <p class="section-label">my cat</p>
+    <div class="cat-header">
+      <span class="cat-name">Pixie</span>
+      <span class="cat-sub">🐈 the resident menace</span>
+    </div>
+    <div class="collage" id="collage">
+      <div class="collage-item"><img src="https://images.confusing.wtf/r/42Wo9O.jpeg?compress=false" alt="Pixie"></div>
+      <div class="collage-item"><img src="https://images.confusing.wtf/r/8jcAUh.jpeg?compress=false" alt="Pixie"></div>
+      <div class="collage-item"><img src="https://images.confusing.wtf/r/UfeHQT.jpeg?compress=false" alt="Pixie"></div>
+      <div class="collage-item"><img src="https://images.confusing.wtf/r/adKDTm.jpeg?compress=false" alt="Pixie"></div>
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    <p>© 2026 <a href="https://exophs.space">exophs</a> &nbsp;·&nbsp; <a href="https://exophs.is-a.dev">exophs.is-a.dev</a></p>
+  </footer>
+
 </div>
 
-<h1>Hi, I'm Ray</h1>
-<h3>Small Web Developer</h3>
-
-<img src="https://avatars.githubusercontent.com/u/91388963?v=4" class="profile-pic">
-
-<p>
-Hi, my name is Ray. I'm 18 years old and I live in Pennsylvania, USA. I'm a small web developer with a passion for making websites. I enjoy experimenting with different designs and learning new web technologies.
-</p>
-
-<p>
-I'm currently working on
-<span class="preview-tooltip">
-<a href="https://exophs.is-a.dev/" target="_blank">Stellar</a>
-<span class="preview">
-<img src="https://confusing.wtf/u/cfDHAD.png" style="width:100%">
-</span>
-</span>
-and this website that you're on right now.
-</p>
-
-<p>I'm currently learning HTML.</p>
-
-<p>
-I also enjoy playing video games like Minecraft, Grand Theft Auto 5, and Roblox (but my main account is now terminated sadly).
-</p>
-
-<div class="tech-icons">
-<a href="https://www.w3schools.com/css/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg"></a>
-<a href="https://www.w3.org/html/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg"></a>
-<a href="https://www.java.com" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg"></a>
-<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg"></a>
-<a href="https://www.linux.org/" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg"></a>
-<a href="https://www.python.org" target="_blank"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg"></a>
-</div>
-
-<h3>This is my cat Pixie</h3>
-
-<div class="collage">
-<img src="https://images.confusing.wtf/r/42Wo9O.jpeg?compress=false">
-<img src="https://images.confusing.wtf/r/8jcAUh.jpeg?compress=false">
-<img src="https://images.confusing.wtf/r/UfeHQT.jpeg?compress=false">
-<img src="https://images.confusing.wtf/r/adKDTm.jpeg?compress=false">
-</div>
-
-</div>
-
-</div>
-
-<div id="lightbox" class="lightbox">
-<button class="close">&times;</button>
-<button class="prev">&#10094;</button>
-<button class="next">&#10095;</button>
-<img id="lightbox-img">
+<div class="lightbox" id="lightbox">
+  <button class="lb-btn lb-close" id="lb-close">&times;</button>
+  <button class="lb-btn lb-prev" id="lb-prev">&#10094;</button>
+  <button class="lb-btn lb-next" id="lb-next">&#10095;</button>
+  <div class="lightbox-img-wrap">
+    <img id="lb-img" src="" alt="">
+  </div>
 </div>
 
 <script>
+const items = document.querySelectorAll('.collage-item');
 const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.getElementById('lightbox-img');
-const images = document.querySelectorAll('.collage img');
-let currentIndex = 0;
+const lbImg = document.getElementById('lb-img');
+let cur = 0;
 
-images.forEach((img, i) => img.addEventListener('click', () => openLightbox(i)));
-
-function openLightbox(i){
-currentIndex = i;
-lightbox.style.display = 'flex';
-lightboxImg.src = images[i].src;
+function open(i) {
+  cur = i;
+  lbImg.src = items[i].querySelector('img').src;
+  lightbox.classList.add('active');
 }
 
-function closeLightbox(){
-lightbox.style.display = 'none';
+function close() { lightbox.classList.remove('active'); }
+
+function move(d) {
+  cur = (cur + d + items.length) % items.length;
+  lbImg.src = items[cur].querySelector('img').src;
 }
 
-function changeImage(dir){
-currentIndex = (currentIndex + dir + images.length) % images.length;
-lightboxImg.src = images[currentIndex].src;
-}
+items.forEach((el, i) => el.addEventListener('click', () => open(i)));
+document.getElementById('lb-close').addEventListener('click', close);
+document.getElementById('lb-prev').addEventListener('click', () => move(-1));
+document.getElementById('lb-next').addEventListener('click', () => move(1));
+lightbox.addEventListener('click', e => { if (e.target === lightbox) close(); });
 
-document.querySelector('.close').onclick = closeLightbox;
-document.querySelector('.prev').onclick = () => changeImage(-1);
-document.querySelector('.next').onclick = () => changeImage(1);
-
-document.addEventListener('keydown', e=>{
-if(lightbox.style.display === 'flex'){
-if(e.key === 'Escape') closeLightbox();
-if(e.key === 'ArrowLeft') changeImage(-1);
-if(e.key === 'ArrowRight') changeImage(1);
-}
-});
-
-lightbox.addEventListener('click', e=>{
-if(e.target === lightbox) closeLightbox();
+document.addEventListener('keydown', e => {
+  if (!lightbox.classList.contains('active')) return;
+  if (e.key === 'Escape') close();
+  if (e.key === 'ArrowLeft') move(-1);
+  if (e.key === 'ArrowRight') move(1);
 });
 </script>
 
