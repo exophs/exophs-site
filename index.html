@@ -15,15 +15,43 @@
   <meta property="og:type" content="website">
   <link rel="canonical" href="https://exophs.space">
   <style>
+    :root {
+      --crust:      #11111b;
+      --mantle:     #181825;
+      --base:       #1e1e2e;
+      --surface0:   #313244;
+      --surface1:   #45475a;
+      --surface2:   #585b70;
+      --overlay0:   #6c7086;
+      --overlay1:   #7f849c;
+      --overlay2:   #9399b2;
+      --subtext0:   #a6adc8;
+      --subtext1:   #bac2de;
+      --text:       #cdd6f4;
+      --lavender:   #b4befe;
+      --blue:       #89b4fa;
+      --sapphire:   #74c7ec;
+      --sky:        #89dceb;
+      --teal:       #94e2d5;
+      --green:      #a6e3a1;
+      --yellow:     #f9e2af;
+      --peach:      #fab387;
+      --maroon:     #eba0ac;
+      --red:        #f38ba8;
+      --mauve:      #cba6f7;
+      --pink:       #f5c2e7;
+      --flamingo:   #f2cdcd;
+      --rosewater:  #f5e0dc;
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "DejaVu Sans Mono", "Roboto Mono", Consolas, Monaco, "Courier New", monospace;
-      background: #080c10;
-      color: #e8edf2;
+      background: var(--base);
+      color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
     }
-    /* scanlines, kinda subtle but i like it */
     body::after {
       content: '';
       position: fixed;
@@ -35,8 +63,14 @@
         rgba(0,0,0,0.03) 2px,
         rgba(0,0,0,0.03) 4px
       );
+      background-size: 100% 4px;
       pointer-events: none;
       z-index: 999;
+      animation: scanlines 8s linear infinite;
+    }
+    @keyframes scanlines {
+      from { background-position: 0 0; }
+      to { background-position: 0 100px; }
     }
     #particles-js {
       position: fixed;
@@ -53,20 +87,20 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(8,12,16,0.7);
+      background: rgba(30,30,46,0.7);
       backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255,255,255,0.07);
+      border-bottom: 1px solid rgba(180,190,254,0.1);
       transition: transform 0.4s ease;
     }
     nav.hide { transform: translateY(-100%); }
     .nav-logo {
       font-weight: bold;
       font-size: 14px;
-      color: #7effd4;
+      color: var(--mauve);
       letter-spacing: 0.15em;
       text-decoration: none;
     }
-    .nav-logo span { color: #5a6a7a; }
+    .nav-logo span { color: var(--overlay0); }
     .hamburger {
       display: flex;
       flex-direction: column;
@@ -77,7 +111,7 @@
     .hamburger div {
       width: 22px;
       height: 2px;
-      background: #e8edf2;
+      background: var(--text);
       border-radius: 2px;
       transition: all 0.3s ease;
       transform-origin: center;
@@ -87,33 +121,37 @@
     .hamburger.open div:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
     .slide-menu {
       position: fixed;
-      top: 0; right: 0;
-      width: min(320px, 85vw);
-      height: 100vh;
-      background: rgba(10,14,18,0.97);
+      top: 0; left: 0; right: 0;
+      width: 100%;
+      height: auto;
+      background: rgba(24,24,37,0.97);
       backdrop-filter: blur(24px);
-      border-left: 1px solid rgba(255,255,255,0.07);
+      border-bottom: 1px solid rgba(180,190,254,0.1);
       z-index: 150;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
       justify-content: center;
-      padding: 60px 40px;
-      transform: translateX(100%);
+      gap: 0 40px;
+      padding: 80px 40px 40px;
+      transform: translateY(-110%);
       transition: transform 0.5s cubic-bezier(0.77,0,0.175,1);
     }
-    .slide-menu.open { transform: translateX(0); }
+    .slide-menu.open { transform: translateY(0); }
     .slide-menu a {
       text-decoration: none;
       display: block;
-      margin-bottom: 28px;
+      margin-bottom: 0;
+      width: min(200px, 85vw);
     }
     .menu-item {
       font-size: 13px;
-      color: #5a6a7a;
+      color: var(--overlay1);
       letter-spacing: 0.2em;
       text-transform: uppercase;
       padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
+      border-bottom: 1px solid rgba(180,190,254,0.08);
       transition: all 0.25s ease;
       display: flex;
       align-items: center;
@@ -126,11 +164,11 @@
       width: 100%;
       text-align: left;
     }
-    .menu-item:hover { color: #7effd4; border-bottom-color: #7effd4; }
-    .menu-item .num { font-size: 10px; color: #7effd4; opacity: 0.6; min-width: 20px; }
+    .menu-item:hover { color: var(--mauve); border-bottom-color: var(--mauve); }
+    .menu-item .num { font-size: 10px; color: var(--mauve); opacity: 0.6; min-width: 20px; }
     .menu-warn {
       font-size: 9px;
-      color: #ff6b9d;
+      color: var(--red);
       letter-spacing: 0.1em;
       margin-top: 4px;
       display: block;
@@ -164,18 +202,18 @@
     .dot {
       width: 7px; height: 7px;
       border-radius: 50%;
-      background: #7effd4;
+      background: var(--green);
       flex-shrink: 0;
       animation: pulse 2.5s ease infinite;
     }
     @keyframes pulse {
-      0%,100% { box-shadow: 0 0 0 0 rgba(126,255,212,0.4); }
-      50% { box-shadow: 0 0 0 5px rgba(126,255,212,0); }
+      0%,100% { box-shadow: 0 0 0 0 rgba(166,227,161,0.4); }
+      50% { box-shadow: 0 0 0 5px rgba(166,227,161,0); }
     }
     .eyebrow {
       font-size: 11px;
       letter-spacing: 0.35em;
-      color: #7effd4;
+      color: var(--mauve);
       text-transform: uppercase;
       margin-bottom: 20px;
       opacity: 0;
@@ -186,23 +224,24 @@
       font-size: clamp(52px, 10vw, 96px);
       line-height: 1;
       letter-spacing: -0.02em;
-      color: #e8edf2;
+      color: var(--text);
       margin-bottom: 8px;
       opacity: 0;
       animation: fadeUp 0.8s 0.4s forwards;
-      text-shadow: 0 0 80px rgba(126,255,212,0.12);
+      text-shadow: 0 0 80px rgba(203,166,247,0.12);
       cursor: pointer;
       display: inline-block;
       transition: text-shadow 0.3s ease;
     }
     .hero-name:hover {
-      text-shadow: 0 0 40px rgba(126,255,212,0.35), 0 0 80px rgba(126,255,212,0.15);
+      text-shadow: 0 0 40px rgba(203,166,247,0.35), 0 0 80px rgba(203,166,247,0.15);
     }
     .hero-sub {
       font-size: 13px;
-      color: #5a6a7a;
+      color: var(--overlay0);
       letter-spacing: 0.15em;
-      margin-bottom: 48px;
+      margin-top: 10px;
+      margin-bottom: 20px;
       opacity: 0;
       animation: fadeUp 0.8s 0.6s forwards;
     }
@@ -216,8 +255,8 @@
       align-items: center;
       gap: 10px;
       padding: 12px 20px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(49,50,68,0.6);
+      border: 1px solid rgba(180,190,254,0.1);
       border-radius: 4px;
       font-size: 13px;
       letter-spacing: 0.05em;
@@ -226,16 +265,16 @@
       justify-content: flex-start;
     }
     .typewriter-prompt {
-      color: #7effd4;
+      color: var(--mauve);
       opacity: 0.7;
       flex-shrink: 0;
     }
-    #typewriter { color: #e8edf2; white-space: nowrap; }
+    #typewriter { color: var(--text); white-space: nowrap; }
     .cursor-blink {
       display: inline-block;
       width: 2px;
       height: 13px;
-      background: #7effd4;
+      background: var(--mauve);
       margin-left: 2px;
       vertical-align: middle;
       animation: blink 1s step-end infinite;
@@ -248,7 +287,7 @@
     .countdown-label {
       font-size: 10px;
       letter-spacing: 0.3em;
-      color: #5a6a7a;
+      color: var(--overlay0);
       text-transform: uppercase;
       margin-bottom: 16px;
     }
@@ -268,30 +307,29 @@
       font-weight: bold;
       font-size: clamp(28px, 5vw, 44px);
       line-height: 1;
-      color: #e8edf2;
+      color: var(--text);
       min-width: 70px;
       text-align: center;
       padding: 14px 10px 10px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(49,50,68,0.6);
+      border: 1px solid rgba(180,190,254,0.1);
       border-radius: 4px;
       position: relative;
       overflow: hidden;
     }
-    /* give each unit a lil different border tint */
-    .countdown-unit:nth-child(2) .countdown-num { border-color: rgba(126,255,212,0.2); }
-    .countdown-unit:nth-child(3) .countdown-num { border-color: rgba(255,107,157,0.15); }
-    .countdown-unit:nth-child(4) .countdown-num { border-color: rgba(255,209,102,0.15); }
+    .countdown-unit:nth-child(2) .countdown-num { border-color: rgba(148,226,213,0.25); }
+    .countdown-unit:nth-child(3) .countdown-num { border-color: rgba(243,139,168,0.2); }
+    .countdown-unit:nth-child(4) .countdown-num { border-color: rgba(249,226,175,0.2); }
     .countdown-num::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(126,255,212,0.04) 0%, transparent 100%);
+      background: linear-gradient(180deg, rgba(203,166,247,0.04) 0%, transparent 100%);
     }
     .countdown-lbl {
       font-size: 9px;
       letter-spacing: 0.25em;
-      color: #5a6a7a;
+      color: var(--overlay0);
       text-transform: uppercase;
     }
     #secret-message {
@@ -301,20 +339,19 @@
     }
     #secret-message a {
       font-size: 11px;
-      color: #ffd166;
+      color: var(--yellow);
       text-decoration: none;
       letter-spacing: 0.2em;
-      border: 1px dashed rgba(255,209,102,0.4);
+      border: 1px dashed rgba(249,226,175,0.4);
       padding: 8px 16px;
       display: inline-block;
       border-radius: 2px;
       transition: all 0.3s;
     }
     #secret-message a:hover {
-      background: rgba(255,209,102,0.08);
-      border-color: #ffd166;
+      background: rgba(249,226,175,0.08);
+      border-color: var(--yellow);
     }
-    /* lil corner brackets, not sure why i like these but i do */
     .corner {
       position: fixed;
       width: 60px;
@@ -322,8 +359,8 @@
       pointer-events: none;
       z-index: 2;
     }
-    .corner-tl { top: 70px; left: 20px; border-top: 1px solid rgba(126,255,212,0.2); border-left: 1px solid rgba(126,255,212,0.2); }
-    .corner-br { bottom: 40px; right: 20px; border-bottom: 1px solid rgba(126,255,212,0.2); border-right: 1px solid rgba(126,255,212,0.2); }
+    .corner-tl { top: 70px; left: 20px; border-top: 1px solid rgba(203,166,247,0.2); border-left: 1px solid rgba(203,166,247,0.2); }
+    .corner-br { bottom: 40px; right: 20px; border-bottom: 1px solid rgba(203,166,247,0.2); border-right: 1px solid rgba(203,166,247,0.2); }
     .hint {
       position: fixed;
       bottom: 24px;
@@ -336,12 +373,12 @@
     .hint p {
       font-size: 10px;
       letter-spacing: 0.2em;
-      color: #5a6a7a;
+      color: var(--overlay0);
       text-transform: uppercase;
       padding: 8px 16px;
-      border: 1px solid rgba(255,255,255,0.07);
+      border: 1px solid rgba(180,190,254,0.1);
       border-radius: 99px;
-      background: rgba(8,12,16,0.8);
+      background: rgba(24,24,37,0.8);
       backdrop-filter: blur(8px);
       white-space: nowrap;
     }
@@ -357,16 +394,16 @@
     }
     footer p {
       font-size: 10px;
-      color: #5a6a7a;
+      color: var(--overlay0);
       letter-spacing: 0.1em;
       pointer-events: all;
     }
-    footer a { color: #5a6a7a; text-decoration: none; transition: color 0.2s; }
-    footer a:hover { color: #7effd4; }
+    footer a { color: var(--overlay0); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--mauve); }
     .birthday-msg {
       font-weight: bold;
       font-size: clamp(16px, 3vw, 24px);
-      color: #ffd166;
+      color: var(--yellow);
       letter-spacing: 0.15em;
       text-align: center;
     }
@@ -470,20 +507,19 @@
   <p id="footerTime"></p>
 </footer>
 <script>
-// ────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof particlesJS !== 'undefined') {
     particlesJS('particles-js', {
       particles: {
         number: { value: 60 },
-        color: { value: "#7effd4" },
+        color: { value: "#cba6f7" },
         shape: { type: "circle" },
         opacity: { value: 0.18, random: true },
         size: { value: 1.5, random: true },
         line_linked: {
           enable: true,
           distance: 160,
-          color: "#7effd4",
+          color: "#cba6f7",
           opacity: 0.06,
           width: 1
         },
@@ -525,7 +561,6 @@ document.addEventListener('DOMContentLoaded', () => {
     hamburger.classList.remove('open');
   });
 
-  // right click the title to find the secret :)
   document.getElementById('main-title').addEventListener('contextmenu', e => {
     e.preventDefault();
     document.getElementById('secret-message').style.display = 'block';
