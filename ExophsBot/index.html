@@ -149,6 +149,7 @@
         .tag-added { background: #1a4a2e; color: #6ee79b; }
         .tag-removed { background: #4a1a1a; color: #ff8080; }
         .tag-fixed { background: #1a2e4a; color: #80c8ff; }
+        .tag-disabled { background: #3a3a1a; color: #ffd080; }
         footer {
             background-color: #1a1a1a;
             color: #aaa;
@@ -180,7 +181,7 @@
 <body>
     <header>
         <h1>ExophsBot Commands Documentation</h1>
-        <p>Version 2.0.0 | For the 5B5T Minecraft Server</p>
+        <p>Version 2.0.1 | For the 5B5T Minecraft Server</p>
     </header>
     <nav>
         <a href="#introduction">Introduction</a>
@@ -201,10 +202,19 @@
             <h2>Changelog</h2>
 
             <div class="changelog-entry">
+                <h4>Version 2.0.1 – March 2026</h4>
+                <ul>
+                    <li><span class="tag tag-disabled">Disabled</span> <code>!ping</code> — temporarily disabled due to server-side ping spoofing by the TAB plugin causing inaccurate results</li>
+                </ul>
+            </div>
+
+            <div class="changelog-entry">
                 <h4>Version 2.0.0 – March 2026</h4>
                 <ul>
-                    <li><span class="tag tag-added">Added</span> <!-- describe added features here --></li>
-                    <li><span class="tag tag-removed">Removed</span> <!-- describe removed features here --></li>
+                    <li><span class="tag tag-added">Added</span> Discord bridge with webhook support for bridging in-game chat to Discord</li>
+                    <li><span class="tag tag-added">Added</span> Auto-login and auto-home on respawn</li>
+                    <li><span class="tag tag-added">Added</span> Broadcast message system (random messages every 5 minutes)</li>
+                    <li><span class="tag tag-added">Added</span> Self-defense system — bot retaliates when attacked by non-admins</li>
                 </ul>
             </div>
 
@@ -262,7 +272,7 @@
                         <tr>
                             <td><code>!ping</code></td>
                             <td><code>!ping [username]</code></td>
-                            <td>Shows your ping or another player's ping (returns "unknown" if not available).</td>
+                            <td>Command is currently disabled.</td>
                         </tr>
                         <tr>
                             <td><code>!info</code></td>
