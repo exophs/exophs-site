@@ -135,6 +135,20 @@
             position: absolute;
             left: -1.2rem;
         }
+        .tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.15em 0.5em;
+            border-radius: 4px;
+            margin-right: 0.4rem;
+            vertical-align: middle;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .tag-added { background: #1a4a2e; color: #6ee79b; }
+        .tag-removed { background: #4a1a1a; color: #ff8080; }
+        .tag-fixed { background: #1a2e4a; color: #80c8ff; }
         footer {
             background-color: #1a1a1a;
             color: #aaa;
@@ -166,7 +180,7 @@
 <body>
     <header>
         <h1>ExophsBot Commands Documentation</h1>
-        <p>Version 1.1.1 | For the 5B5T Minecraft Server</p>
+        <p>Version 2.0.0 | For the 5B5T Minecraft Server</p>
     </header>
     <nav>
         <a href="#introduction">Introduction</a>
@@ -185,28 +199,37 @@
 
         <section id="changelog">
             <h2>Changelog</h2>
+
+            <div class="changelog-entry">
+                <h4>Version 2.0.0 – March 2026</h4>
+                <ul>
+                    <li><span class="tag tag-added">Added</span> <!-- describe added features here --></li>
+                    <li><span class="tag tag-removed">Removed</span> <!-- describe removed features here --></li>
+                </ul>
+            </div>
+
             <div class="changelog-entry">
                 <h4>Version 1.1.1 – February 4, 2026</h4>
                 <ul>
-                    <li>Added <code>!say</code> — allows players to make the bot say custom messages (with filters to block commands, § codes, newlines, etc.)</li>
+                    <li><span class="tag tag-added">Added</span> <code>!say</code> — allows players to make the bot say custom messages (with filters to block commands, § codes, newlines, etc.)</li>
                 </ul>
             </div>
             <div class="changelog-entry">
                 <h4>Version 1.1.0 – February 3, 2026</h4>
                 <ul>
-                    <li>Added new offline messaging system: <code>!offlinemsg</code>, <code>!ignore</code>, <code>!unignore</code></li>
-                    <li>Added new fun/troll percentage commands: <code>!iq</code>, <code>!pp</code>/<code>!dick</code>/<code>!cock</code>, <code>!autistic</code>, <code>!retard</code>/<code>!retardness</code>, <code>!fat</code>, <code>!silly</code></li>
-                    <li>Improved command handling for DiscordSRV bridge (messages now parsed correctly from <Discord> format)</li>
-                    <li>Message history now saved under real usernames (not "Discord")</li>
-                    <li>Minor bug fixes and performance tweaks</li>
+                    <li><span class="tag tag-added">Added</span> New offline messaging system: <code>!offlinemsg</code>, <code>!ignore</code>, <code>!unignore</code></li>
+                    <li><span class="tag tag-added">Added</span> New fun/troll percentage commands: <code>!iq</code>, <code>!pp</code>/<code>!dick</code>/<code>!cock</code>, <code>!autistic</code>, <code>!retard</code>/<code>!retardness</code>, <code>!fat</code>, <code>!silly</code></li>
+                    <li><span class="tag tag-fixed">Fixed</span> Improved command handling for DiscordSRV bridge (messages now parsed correctly from &lt;Discord&gt; format)</li>
+                    <li><span class="tag tag-fixed">Fixed</span> Message history now saved under real usernames (not "Discord")</li>
+                    <li><span class="tag tag-fixed">Fixed</span> Minor bug fixes and performance tweaks</li>
                 </ul>
             </div>
             <div class="changelog-entry">
                 <h4>Version 1.0.1 – Initial Public Release</h4>
                 <ul>
-                    <li>Initial set of utility, movement, fun, and troll commands</li>
-                    <li>Basic DiscordSRV bridge support</li>
-                    <li>Admin whisper commands (: prefix)</li>
+                    <li><span class="tag tag-added">Added</span> Initial set of utility, movement, fun, and troll commands</li>
+                    <li><span class="tag tag-added">Added</span> Basic DiscordSRV bridge support</li>
+                    <li><span class="tag tag-added">Added</span> Admin whisper commands (: prefix)</li>
                 </ul>
             </div>
         </section>
@@ -271,17 +294,17 @@
                         <tr><td colspan="3"><h3>Message History</h3></td></tr>
                         <tr>
                             <td><code>!lastmsg</code></td>
-                            <td><code>!lastmsg <username></code></td>
+                            <td><code>!lastmsg &lt;username&gt;</code></td>
                             <td>Shows the most recent message sent by the specified player.</td>
                         </tr>
                         <tr>
                             <td><code>!firstmsg</code></td>
-                            <td><code>!firstmsg <username></code></td>
+                            <td><code>!firstmsg &lt;username&gt;</code></td>
                             <td>Shows the first recorded message sent by the specified player.</td>
                         </tr>
                         <tr>
                             <td><code>!randommsg</code></td>
-                            <td><code>!randommsg <username></code></td>
+                            <td><code>!randommsg &lt;username&gt;</code></td>
                             <td>Picks and displays a random message from the player's history.</td>
                         </tr>
 
@@ -289,7 +312,7 @@
                         <tr><td colspan="3"><h3>Fun / Troll Commands</h3></td></tr>
                         <tr>
                             <td><code>!say</code></td>
-                            <td><code>!say <message></code></td>
+                            <td><code>!say &lt;message&gt;</code></td>
                             <td>Makes the bot say your message (blocks real commands, § codes, newlines, very long messages)</td>
                         </tr>
                         <tr>
@@ -329,12 +352,12 @@
                         </tr>
                         <tr>
                             <td><code>!roast</code></td>
-                            <td><code>!roast <username></code></td>
+                            <td><code>!roast &lt;username&gt;</code></td>
                             <td>Sends a random savage/funny roast directed at the specified player.</td>
                         </tr>
                         <tr>
                             <td><code>!8ball</code></td>
-                            <td><code>!8ball <question></code></td>
+                            <td><code>!8ball &lt;question&gt;</code></td>
                             <td>Ask the Magic 8-Ball a question and get a random classic response.</td>
                         </tr>
                         <tr>
@@ -357,17 +380,17 @@
                         <tr><td colspan="3"><h3>Offline Messaging</h3></td></tr>
                         <tr>
                             <td><code>!offlinemsg</code></td>
-                            <td><code>!offlinemsg <player> <message></code></td>
+                            <td><code>!offlinemsg &lt;player&gt; &lt;message&gt;</code></td>
                             <td>Sends an offline message — the player sees it when they join (or sometimes when they chat).</td>
                         </tr>
                         <tr>
                             <td><code>!ignore</code></td>
-                            <td><code>!ignore <player></code></td>
+                            <td><code>!ignore &lt;player&gt;</code></td>
                             <td>Blocks a player from sending you offline messages via !offlinemsg.</td>
                         </tr>
                         <tr>
                             <td><code>!unignore</code></td>
-                            <td><code>!unignore <player></code></td>
+                            <td><code>!unignore &lt;player&gt;</code></td>
                             <td>Removes a player from your ignore list for offline messages.</td>
                         </tr>
 
@@ -375,12 +398,12 @@
                         <tr><td colspan="3"><h3>Movement & Combat</h3></td></tr>
                         <tr>
                             <td><code>!move</code></td>
-                            <td><code>!move <forward/back/left/right/jump/stop/look> [time or look params]</code></td>
+                            <td><code>!move &lt;forward/back/left/right/jump/stop/look&gt; [time or look params]</code></td>
                             <td>Makes the bot walk, jump, stop, or look in a direction (supports timed movement and yaw/pitch).</td>
                         </tr>
                         <tr>
                             <td><code>!goto</code></td>
-                            <td><code>!goto <x> <y> <z></code></td>
+                            <td><code>!goto &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></td>
                             <td>Makes the bot pathfind to the specified coordinates.</td>
                         </tr>
                         <tr>
@@ -390,12 +413,12 @@
                         </tr>
                         <tr>
                             <td><code>!follow</code></td>
-                            <td><code>!follow <player></code></td>
+                            <td><code>!follow &lt;player&gt;</code></td>
                             <td>Makes the bot continuously follow the specified player.</td>
                         </tr>
                         <tr>
                             <td><code>!attack</code></td>
-                            <td><code>!attack <player/animal/stop></code></td>
+                            <td><code>!attack &lt;player/animal/stop&gt;</code></td>
                             <td>Makes the bot attack a player or certain animals with crits. Use "stop" to cancel.</td>
                         </tr>
 
@@ -403,7 +426,7 @@
                         <tr><td colspan="3"><h3>Other / Misc</h3></td></tr>
                         <tr>
                             <td><code>!kit</code></td>
-                            <td><code>!kit <name></code></td>
+                            <td><code>!kit &lt;name&gt;</code></td>
                             <td>Fake kit claim message (currently cosmetic only).</td>
                         </tr>
                         <tr>
@@ -413,7 +436,7 @@
                         </tr>
                         <tr>
                             <td><code>!report</code></td>
-                            <td><code>!report <player> [reason]</code></td>
+                            <td><code>!report &lt;player&gt; [reason]</code></td>
                             <td>Creates a fake/public report message for the specified player.</td>
                         </tr>
                         <tr>
@@ -443,7 +466,7 @@
         </section>
     </main>
     <footer>
-        <p>© 2025–2026 ExophsBot | Made for Ray by Quicoys | Last Updated: February 4, 2026</p>
+        <p>© 2025–2026 ExophsBot | Made for Ray by Quicoys | Last Updated: March 2026</p>
     </footer>
     <script>
         const searchInput = document.getElementById('commandSearch');
