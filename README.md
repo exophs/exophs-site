@@ -1,5 +1,7 @@
 # My website
 
+![Preview](https://i.imgur.com/aY6E6R8.png)
+
 my personal website i make little projects on to mess around with code i guess 
 https://exophs.space
 
