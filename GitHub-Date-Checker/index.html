@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Date Checker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .repo-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+    <div class="max-w-2xl mx-auto py-12 px-6">
+        <div class="text-center mb-10">
+            <h1 class="text-5xl font-bold tracking-tight mb-3">GitHub Date Checker</h1>
+            <p class="text-zinc-400 text-lg">Check repository or user creation & update dates</p>
+        </div>
+
+        <div class="flex justify-center mb-6">
+            <div class="bg-zinc-900 rounded-3xl p-1 flex">
+                <button onclick="setMode('repo')" id="btn-repo"
+                    class="px-6 py-2 rounded-3xl font-medium transition-all">Repository</button>
+                <button onclick="setMode('user')" id="btn-user"
+                    class="px-6 py-2 rounded-3xl font-medium transition-all">User</button>
+            </div>
+        </div>
+
+        <div class="bg-zinc-900 rounded-2xl p-8 border border-zinc-800 mb-8">
+            <div class="flex gap-3">
+                <input 
+                    type="text" 
+                    id="input"
+                    placeholder="exophs/stellar  or  exophs"
+                    class="flex-1 bg-zinc-950 border border-zinc-700 focus:border-blue-500 rounded-xl px-5 py-4 text-lg outline-none transition-colors"
+                    onkeypress="if(event.key === 'Enter') check()">
+                <button 
+                    onclick="check()"
+                    class="bg-white text-black font-semibold px-8 rounded-xl hover:bg-zinc-200 transition-colors flex items-center gap-2">
+                    Check
+                </button>
+            </div>
+            <p id="example-text" class="text-xs text-zinc-500 mt-3 text-center">Example: exophs/stellar (repo) or exophs (user)</p>
+        </div>
+
+        <div id="result" class="hidden">
+            <div class="repo-card bg-zinc-900 border border-zinc-700 rounded-3xl p-8">
+                <div class="flex items-center gap-4 mb-8">
+                    <div id="avatar" class="w-16 h-16 rounded-2xl bg-zinc-800 overflow-hidden border border-zinc-700"></div>
+                    <div>
+                        <a id="title-link" target="_blank" class="text-3xl font-semibold hover:text-blue-400 transition-colors block"></a>
+                        <p id="subtitle" class="text-zinc-400"></p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-zinc-950 rounded-2xl p-6 border border-zinc-800">
+                        <div class="flex items-center gap-3 text-emerald-400 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2" />
+                            </svg>
+                            <span class="font-medium" id="created-label">Created</span>
+                        </div>
+                        <div id="created-date" class="text-3xl font-mono font-semibold"></div>
+                        <div id="created-relative" class="text-zinc-500 mt-1"></div>
+                    </div>
+
+                    <div class="bg-zinc-950 rounded-2xl p-6 border border-zinc-800">
+                        <div class="flex items-center gap-3 text-amber-400 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 01-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span class="font-medium">Last Updated</span>
+                        </div>
+                        <div id="updated-date" class="text-3xl font-mono font-semibold"></div>
+                        <div id="updated-relative" class="text-zinc-500 mt-1"></div>
+                    </div>
+                </div>
+
+                <div id="extra-info" class="mt-8 pt-6 border-t border-zinc-800 text-sm"></div>
+
+                <div class="mt-8 pt-6 border-t border-zinc-800 text-xs text-zinc-500 flex justify-between">
+                    <div>Data from GitHub API</div>
+                    <button onclick="copyToClipboard()" class="hover:text-white transition-colors flex items-center gap-1">
+                          Copy JSON
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="error" class="hidden bg-red-950 border border-red-900 text-red-400 rounded-2xl p-6 text-center">
+            <p id="error-message" class="font-medium"></p>
+        </div>
+
+        <div class="text-center text-zinc-600 text-sm mt-12">
+            Supports both repositories and users • No data stored
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'repo';
+
+        function setMode(mode) {
+            currentMode = mode;
+            const btnRepo = document.getElementById('btn-repo');
+            const btnUser = document.getElementById('btn-user');
+
+            if (mode === 'repo') {
+                btnRepo.classList.add('bg-zinc-800', 'text-white');
+                btnUser.classList.remove('bg-zinc-800', 'text-white');
+                document.getElementById('example-text').textContent = "Example: exophs/stellar";
+            } else {
+                btnUser.classList.add('bg-zinc-800', 'text-white');
+                btnRepo.classList.remove('bg-zinc-800', 'text-white');
+                document.getElementById('example-text').textContent = "Example: exophs";
+            }
+        }
+
+        async function check() {
+            const input = document.getElementById('input').value.trim();
+            const resultDiv = document.getElementById('result');
+            const errorDiv = document.getElementById('error');
+            
+            resultDiv.classList.add('hidden');
+            errorDiv.classList.add('hidden');
+
+            if (!input) {
+                showError("Please enter a GitHub username or repository");
+                return;
+            }
+
+            try {
+                let url;
+
+                if (currentMode === 'repo') {
+                    let owner, repo;
+                    if (input.includes('github.com')) {
+                        const match = input.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+                        if (match) { owner = match[1]; repo = match[2]; }
+                    } else {
+                        const parts = input.split('/');
+                        if (parts.length >= 2) { owner = parts[0]; repo = parts[1]; }
+                    }
+
+                    if (!owner || !repo) throw new Error("Invalid repository format. Use owner/repo");
+
+                    url = `https://api.github.com/repos/${owner}/${repo}`;
+                } else {
+                    const username = input.replace('https://github.com/', '').split('/')[0];
+                    url = `https://api.github.com/users/${username}`;
+                }
+
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    if (response.status === 404) throw new Error(currentMode === 'repo' ? "Repository not found" : "User not found");
+                    throw new Error(`Error ${response.status}`);
+                }
+
+                const data = await response.json();
+                window.lastData = data;
+
+                document.getElementById('avatar').innerHTML = `
+                    <img src="${data.avatar_url || data.owner?.avatar_url}" class="w-full h-full object-cover">
+                `;
+
+                const titleLink = document.getElementById('title-link');
+                if (currentMode === 'repo') {
+                    titleLink.textContent = `${data.owner.login}/${data.name}`;
+                    titleLink.href = data.html_url;
+                    document.getElementById('subtitle').textContent = data.description || "No description";
+                    document.getElementById('created-label').textContent = "Repo Created";
+                } else {
+                    titleLink.textContent = data.login;
+                    titleLink.href = data.html_url;
+                    document.getElementById('subtitle').textContent = data.bio || "No bio";
+                    document.getElementById('created-label').textContent = "Joined GitHub";
+                }
+
+                const created = new Date(data.created_at);
+                const updated = new Date(data.updated_at);
+
+                document.getElementById('created-date').textContent = created.toLocaleDateString('en-US', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+                document.getElementById('created-relative').textContent = `(${timeAgo(created)})`;
+
+                document.getElementById('updated-date').textContent = updated.toLocaleDateString('en-US', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+                document.getElementById('updated-relative').textContent = `(${timeAgo(updated)})`;
+
+                const extra = document.getElementById('extra-info');
+                if (currentMode === 'user') {
+                    extra.innerHTML = `
+                        <div class="flex gap-6 text-sm">
+                            <div><span class="font-semibold">${data.public_repos}</span> Repositories</div>
+                            <div><span class="font-semibold">${data.followers}</span> Followers</div>
+                            <div><span class="font-semibold">${data.following}</span> Following</div>
+                        </div>
+                    `;
+                } else {
+                    extra.innerHTML = '';
+                }
+
+                resultDiv.classList.remove('hidden');
+
+            } catch (err) {
+                showError(err.message);
+            }
+        }
+
+        function timeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + " years ago";
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + " months ago";
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + " days ago";
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + " hours ago";
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + " minutes ago";
+            return Math.floor(seconds) + " seconds ago";
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            document.getElementById('error-message').textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function copyToClipboard() {
+            if (!window.lastData) return;
+            const jsonStr = JSON.stringify(window.lastData, null, 2);
+            navigator.clipboard.writeText(jsonStr).then(() => {
+                const btn = document.querySelector('button[onclick="copyToClipboard()"]');
+                const original = btn.innerHTML;
+                btn.innerHTML = 'Copied!';
+                setTimeout(() => btn.innerHTML = original, 2000);
+            });
+        }
+
+        window.onload = () => {
+            setMode('repo');
+            document.getElementById('input').value = "exophs/stellar";
+        };
+    </script>
+</body>
+</html>
