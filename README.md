@@ -1,4 +1,5 @@
 # !! WEBSITE DOWN BECAUSE I CAN'T PAY FOR A DOMAIN LOL !!
+use https://exophs.vercel.app/ for now
 
 # My website
 
