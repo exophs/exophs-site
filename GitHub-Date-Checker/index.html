@@ -42,7 +42,7 @@
                 <input
                     type="text"
                     id="input"
-                    placeholder="exophs/stellar or exophs"
+                    placeholder="user/repo or just the user"
                     class="flex-1 bg-zinc-950 border border-zinc-700 focus:border-blue-500 rounded-xl px-5 py-4 text-lg outline-none transition-colors"
                     onkeypress="if(event.key === 'Enter') check()">
                 <button
@@ -52,7 +52,7 @@
                 </button>
             </div>
             <p id="example-text" class="text-xs text-zinc-500 mt-3 text-center">
-                Example: exophs/stellar
+                Example: user/repo
             </p>
         </div>
 
@@ -136,12 +136,12 @@
             const example = document.getElementById('example-text');
             if (currentPlatform === 'codeberg') {
                 example.textContent = currentMode === 'repo' 
-                    ? "Example: exophs/stellar (Codeberg)" 
-                    : "Example: exophs (Codeberg)";
+                    ? "Example: user/repo (Codeberg)" 
+                    : "Example: user (Codeberg)";
             } else {
                 example.textContent = currentMode === 'repo' 
-                    ? "Example: exophs/stellar" 
-                    : "Example: exophs";
+                    ? "Example: user/repo" 
+                    : "Example: user";
             }
         }
 
