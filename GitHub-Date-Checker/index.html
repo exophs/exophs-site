@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Date Checker</title>
+    <title>GitHub & Codeberg Date Checker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -13,10 +13,21 @@
 <body class="bg-zinc-950 text-white min-h-screen">
     <div class="max-w-2xl mx-auto py-12 px-6">
         <div class="text-center mb-10">
-            <h1 class="text-5xl font-bold tracking-tight mb-3">GitHub Date Checker</h1>
+            <h1 class="text-5xl font-bold tracking-tight mb-3">Forge Date Checker</h1>
             <p class="text-zinc-400 text-lg">Check repository or user creation & update dates</p>
         </div>
 
+        <!-- Platform Selector -->
+        <div class="flex justify-center mb-4">
+            <div class="bg-zinc-900 rounded-3xl p-1 flex">
+                <button onclick="setPlatform('github')" id="btn-github"
+                    class="px-6 py-2 rounded-3xl font-medium transition-all">GitHub</button>
+                <button onclick="setPlatform('codeberg')" id="btn-codeberg"
+                    class="px-6 py-2 rounded-3xl font-medium transition-all">Codeberg</button>
+            </div>
+        </div>
+
+        <!-- Repo/User Selector -->
         <div class="flex justify-center mb-6">
             <div class="bg-zinc-900 rounded-3xl p-1 flex">
                 <button onclick="setMode('repo')" id="btn-repo"
@@ -28,19 +39,21 @@
 
         <div class="bg-zinc-900 rounded-2xl p-8 border border-zinc-800 mb-8">
             <div class="flex gap-3">
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     id="input"
-                    placeholder="exophs/stellar  or  exophs"
+                    placeholder="exophs/stellar or exophs"
                     class="flex-1 bg-zinc-950 border border-zinc-700 focus:border-blue-500 rounded-xl px-5 py-4 text-lg outline-none transition-colors"
                     onkeypress="if(event.key === 'Enter') check()">
-                <button 
+                <button
                     onclick="check()"
                     class="bg-white text-black font-semibold px-8 rounded-xl hover:bg-zinc-200 transition-colors flex items-center gap-2">
                     Check
                 </button>
             </div>
-            <p id="example-text" class="text-xs text-zinc-500 mt-3 text-center">Example: exophs/stellar (repo) or exophs (user)</p>
+            <p id="example-text" class="text-xs text-zinc-500 mt-3 text-center">
+                Example: exophs/stellar (repo) or exophs (user)
+            </p>
         </div>
 
         <div id="result" class="hidden">
@@ -80,9 +93,9 @@
                 <div id="extra-info" class="mt-8 pt-6 border-t border-zinc-800 text-sm"></div>
 
                 <div class="mt-8 pt-6 border-t border-zinc-800 text-xs text-zinc-500 flex justify-between">
-                    <div>Data from GitHub API</div>
+                    <div id="api-source">Data from GitHub API</div>
                     <button onclick="copyToClipboard()" class="hover:text-white transition-colors flex items-center gap-1">
-                          Copy JSON
+                        Copy JSON
                     </button>
                 </div>
             </div>
@@ -93,26 +106,38 @@
         </div>
 
         <div class="text-center text-zinc-600 text-sm mt-12">
-            Supports both repositories and users • No data stored
+            Supports GitHub + Codeberg • No data stored
         </div>
     </div>
 
     <script>
         let currentMode = 'repo';
+        let currentPlatform = 'github';
 
         function setMode(mode) {
             currentMode = mode;
-            const btnRepo = document.getElementById('btn-repo');
-            const btnUser = document.getElementById('btn-user');
+            document.getElementById('btn-repo').classList.toggle('bg-zinc-800', mode === 'repo');
+            document.getElementById('btn-repo').classList.toggle('text-white', mode === 'repo');
+            document.getElementById('btn-user').classList.toggle('bg-zinc-800', mode === 'user');
+            document.getElementById('btn-user').classList.toggle('text-white', mode === 'user');
+        }
 
-            if (mode === 'repo') {
-                btnRepo.classList.add('bg-zinc-800', 'text-white');
-                btnUser.classList.remove('bg-zinc-800', 'text-white');
-                document.getElementById('example-text').textContent = "Example: exophs/stellar";
+        function setPlatform(platform) {
+            currentPlatform = platform;
+            document.getElementById('btn-github').classList.toggle('bg-zinc-800', platform === 'github');
+            document.getElementById('btn-github').classList.toggle('text-white', platform === 'github');
+            document.getElementById('btn-codeberg').classList.toggle('bg-zinc-800', platform === 'codeberg');
+            document.getElementById('btn-codeberg').classList.toggle('text-white', platform === 'codeberg');
+
+            const example = document.getElementById('example-text');
+            if (platform === 'codeberg') {
+                example.textContent = currentMode === 'repo' 
+                    ? "Example: exophs/stellar (Codeberg)" 
+                    : "Example: exophs (Codeberg)";
             } else {
-                btnUser.classList.add('bg-zinc-800', 'text-white');
-                btnRepo.classList.remove('bg-zinc-800', 'text-white');
-                document.getElementById('example-text').textContent = "Example: exophs";
+                example.textContent = currentMode === 'repo' 
+                    ? "Example: exophs/stellar" 
+                    : "Example: exophs";
             }
         }
 
@@ -120,22 +145,28 @@
             const input = document.getElementById('input').value.trim();
             const resultDiv = document.getElementById('result');
             const errorDiv = document.getElementById('error');
-            
+
             resultDiv.classList.add('hidden');
             errorDiv.classList.add('hidden');
 
             if (!input) {
-                showError("Please enter a GitHub username or repository");
+                showError("Please enter a username or repository");
                 return;
             }
 
             try {
                 let url;
+                const base = currentPlatform === 'github' 
+                    ? 'https://api.github.com' 
+                    : 'https://codeberg.org/api/v1';
 
                 if (currentMode === 'repo') {
                     let owner, repo;
                     if (input.includes('github.com')) {
                         const match = input.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+                        if (match) { owner = match[1]; repo = match[2]; }
+                    } else if (input.includes('codeberg.org')) {
+                        const match = input.match(/codeberg\.org\/([^\/]+)\/([^\/]+)/);
                         if (match) { owner = match[1]; repo = match[2]; }
                     } else {
                         const parts = input.split('/');
@@ -143,27 +174,30 @@
                     }
 
                     if (!owner || !repo) throw new Error("Invalid repository format. Use owner/repo");
-
-                    url = `https://api.github.com/repos/${owner}/${repo}`;
+                    url = `${base}/repos/${owner}/${repo}`;
                 } else {
-                    const username = input.replace('https://github.com/', '').split('/')[0];
-                    url = `https://api.github.com/users/${username}`;
+                    let username = input.replace(/https?:\/\/(github\.com|codeberg\.org)\//, '').split('/')[0];
+                    url = `${base}/users/${username}`;
                 }
 
                 const response = await fetch(url);
-                
                 if (!response.ok) {
-                    if (response.status === 404) throw new Error(currentMode === 'repo' ? "Repository not found" : "User not found");
-                    throw new Error(`Error ${response.status}`);
+                    if (response.status === 404) {
+                        throw new Error(currentMode === 'repo' ? "Repository not found" : "User not found");
+                    }
+                    throw new Error(`HTTP Error ${response.status}`);
                 }
 
                 const data = await response.json();
                 window.lastData = data;
 
-                document.getElementById('avatar').innerHTML = `
-                    <img src="${data.avatar_url || data.owner?.avatar_url}" class="w-full h-full object-cover">
-                `;
+                // Avatar
+                const avatarUrl = data.avatar_url || data.owner?.avatar_url;
+                document.getElementById('avatar').innerHTML = avatarUrl 
+                    ? `<img src="${avatarUrl}" class="w-full h-full object-cover">` 
+                    : `<div class="w-full h-full bg-zinc-700 flex items-center justify-center text-2xl">?</div>`;
 
+                // Title & Subtitle
                 const titleLink = document.getElementById('title-link');
                 if (currentMode === 'repo') {
                     titleLink.textContent = `${data.owner.login}/${data.name}`;
@@ -173,10 +207,11 @@
                 } else {
                     titleLink.textContent = data.login;
                     titleLink.href = data.html_url;
-                    document.getElementById('subtitle').textContent = data.bio || "No bio";
-                    document.getElementById('created-label').textContent = "Joined GitHub";
+                    document.getElementById('subtitle').textContent = data.bio || data.description || "No bio";
+                    document.getElementById('created-label').textContent = "Joined";
                 }
 
+                // Dates
                 const created = new Date(data.created_at);
                 const updated = new Date(data.updated_at);
 
@@ -190,21 +225,24 @@
                 });
                 document.getElementById('updated-relative').textContent = `(${timeAgo(updated)})`;
 
+                // Extra info (users only)
                 const extra = document.getElementById('extra-info');
                 if (currentMode === 'user') {
                     extra.innerHTML = `
                         <div class="flex gap-6 text-sm">
-                            <div><span class="font-semibold">${data.public_repos}</span> Repositories</div>
-                            <div><span class="font-semibold">${data.followers}</span> Followers</div>
-                            <div><span class="font-semibold">${data.following}</span> Following</div>
+                            <div><span class="font-semibold">${data.public_repos || data.public_repos_count || '—'}</span> Repositories</div>
+                            <div><span class="font-semibold">${data.followers || '—'}</span> Followers</div>
+                            <div><span class="font-semibold">${data.following || '—'}</span> Following</div>
                         </div>
                     `;
                 } else {
                     extra.innerHTML = '';
                 }
 
-                resultDiv.classList.remove('hidden');
+                document.getElementById('api-source').textContent = 
+                    `Data from ${currentPlatform === 'github' ? 'GitHub' : 'Codeberg'} API`;
 
+                resultDiv.classList.remove('hidden');
             } catch (err) {
                 showError(err.message);
             }
@@ -226,9 +264,8 @@
         }
 
         function showError(message) {
-            const errorDiv = document.getElementById('error');
             document.getElementById('error-message').textContent = message;
-            errorDiv.classList.remove('hidden');
+            document.getElementById('error').classList.remove('hidden');
         }
 
         function copyToClipboard() {
@@ -237,12 +274,14 @@
             navigator.clipboard.writeText(jsonStr).then(() => {
                 const btn = document.querySelector('button[onclick="copyToClipboard()"]');
                 const original = btn.innerHTML;
-                btn.innerHTML = 'Copied!';
+                btn.innerHTML = '✅ Copied!';
                 setTimeout(() => btn.innerHTML = original, 2000);
             });
         }
 
+        // Initialize
         window.onload = () => {
+            setPlatform('github');
             setMode('repo');
             document.getElementById('input').value = "exophs/stellar";
         };
