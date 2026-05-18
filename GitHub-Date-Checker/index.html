@@ -42,7 +42,7 @@
                 <input
                     type="text"
                     id="input"
-                    placeholder="user/repo or just user"
+                    placeholder="exophs/stellar or exophs"
                     class="flex-1 bg-zinc-950 border border-zinc-700 focus:border-blue-500 rounded-xl px-5 py-4 text-lg outline-none transition-colors"
                     onkeypress="if(event.key === 'Enter') check()">
                 <button
@@ -52,7 +52,7 @@
                 </button>
             </div>
             <p id="example-text" class="text-xs text-zinc-500 mt-3 text-center">
-                Example: user/repo
+                Example: exophs/stellar
             </p>
         </div>
 
@@ -120,6 +120,7 @@
             document.getElementById('btn-repo').classList.toggle('text-white', mode === 'repo');
             document.getElementById('btn-user').classList.toggle('bg-zinc-800', mode === 'user');
             document.getElementById('btn-user').classList.toggle('text-white', mode === 'user');
+            updateExampleText();
         }
 
         function setPlatform(platform) {
@@ -128,16 +129,19 @@
             document.getElementById('btn-github').classList.toggle('text-white', platform === 'github');
             document.getElementById('btn-codeberg').classList.toggle('bg-zinc-800', platform === 'codeberg');
             document.getElementById('btn-codeberg').classList.toggle('text-white', platform === 'codeberg');
+            updateExampleText();
+        }
 
+        function updateExampleText() {
             const example = document.getElementById('example-text');
-            if (platform === 'codeberg') {
+            if (currentPlatform === 'codeberg') {
                 example.textContent = currentMode === 'repo' 
-                    ? "Example: user/repo (Codeberg)" 
-                    : "Example: user (Codeberg)";
+                    ? "Example: exophs/stellar (Codeberg)" 
+                    : "Example: exophs (Codeberg)";
             } else {
                 example.textContent = currentMode === 'repo' 
-                    ? "Example: user/repo" 
-                    : "Example: user";
+                    ? "Example: exophs/stellar" 
+                    : "Example: exophs";
             }
         }
 
@@ -170,7 +174,10 @@
                         if (match) { owner = match[1]; repo = match[2]; }
                     } else {
                         const parts = input.split('/');
-                        if (parts.length >= 2) { owner = parts[0]; repo = parts[1]; }
+                        if (parts.length >= 2) { 
+                            owner = parts[0]; 
+                            repo = parts[1]; 
+                        }
                     }
 
                     if (!owner || !repo) throw new Error("Invalid repository format. Use owner/repo");
@@ -225,7 +232,7 @@
                 });
                 document.getElementById('updated-relative').textContent = `(${timeAgo(updated)})`;
 
-                // Extra info (users only)
+                // Extra info for users
                 const extra = document.getElementById('extra-info');
                 if (currentMode === 'user') {
                     extra.innerHTML = `
