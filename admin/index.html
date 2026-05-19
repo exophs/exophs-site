@@ -3,181 +3,493 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>admin // exophs</title>
     <style>
-        * { box-sizing: border-box; }
+        :root {
+            --crust:     #11111b;
+            --mantle:    #181825;
+            --base:      #1e1e2e;
+            --surface0:  #313244;
+            --surface1:  #45475a;
+            --surface2:  #585b70;
+            --overlay0:  #6c7086;
+            --overlay1:  #7f849c;
+            --overlay2:  #9399b2;
+            --subtext0:  #a6adc8;
+            --subtext1:  #bac2de;
+            --text:      #cdd6f4;
+            --lavender:  #b4befe;
+            --blue:      #89b4fa;
+            --sapphire:  #74c7ec;
+            --sky:       #89dceb;
+            --teal:      #94e2d5;
+            --green:     #a6e3a1;
+            --yellow:    #f9e2af;
+            --peach:     #fab387;
+            --maroon:    #eba0ac;
+            --red:       #f38ba8;
+            --mauve:     #cba6f7;
+            --pink:      #f5c2e7;
+            --flamingo:  #f2cdcd;
+            --rosewater: #f5e0dc;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: Arial, sans-serif;
-            background: #1a1a2e;
-            margin: 0;
+            font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "DejaVu Sans Mono", "Roboto Mono", Consolas, Monaco, "Courier New", monospace;
+            background: var(--base);
+            color: var(--text);
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.03) 2px,
+                rgba(0,0,0,0.03) 4px
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 999;
+            animation: scanlines 8s linear infinite;
+        }
+        @keyframes scanlines {
+            from { background-position: 0 0; }
+            to { background-position: 0 100px; }
+        }
+
+        .corner {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .corner-tl { top: 20px; left: 20px; border-top: 1px solid rgba(203,166,247,0.2); border-left: 1px solid rgba(203,166,247,0.2); }
+        .corner-br { bottom: 20px; right: 20px; border-bottom: 1px solid rgba(203,166,247,0.2); border-right: 1px solid rgba(203,166,247,0.2); }
+
+        #login-section {
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            padding: 40px 16px;
-        }
-        .container {
-            width: min(100%, 640px);
-        }
-        h1 {
-            color: #fff;
-            font-size: 22px;
-            margin-bottom: 24px;
-            font-family: monospace;
-        }
-        .card {
-            background: #16213e;
-            border: 1px solid #0f3460;
-            border-radius: 10px;
+            align-items: center;
+            min-height: 100vh;
             padding: 24px;
-            margin-bottom: 20px;
+            animation: fadeIn 0.6s ease forwards;
         }
-        .card h2 {
-            color: #e2e2e2;
-            font-size: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 0 0 16px;
-            font-family: monospace;
-        }
-        input[type="text"], input[type="email"], input[type="password"] {
-            width: 100%;
-            padding: 10px 12px;
-            background: #0f3460;
-            border: 1px solid #1a4a80;
-            border-radius: 6px;
-            color: #fff;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        input::placeholder { color: #888; }
-        button {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            font-family: monospace;
-        }
-        .btn-primary { background: #4CAF50; color: #fff; }
-        .btn-primary:hover { background: #45a049; }
-        .btn-danger { background: #e55; color: #fff; }
-        .btn-danger:hover { background: #c33; }
-        .btn-secondary { background: #0f3460; color: #ccc; }
-        .btn-secondary:hover { background: #1a4a80; }
-        .error { color: #ff6b6b; font-size: 13px; margin-top: 6px; }
-        #login-section { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
-        #login-card { width: min(100%, 380px); }
-        #admin-section { display: none; }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        .stat-box {
-            background: #0f3460;
-            border-radius: 8px;
-            padding: 16px;
+
+        .login-box {
+            width: min(100%, 360px);
             text-align: center;
         }
-        .stat-box .num {
-            font-size: 28px;
-            font-weight: bold;
-            color: #4CAF50;
-            font-family: monospace;
+
+        .login-eyebrow {
+            font-size: 10px;
+            letter-spacing: 0.35em;
+            color: var(--mauve);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.6s 0.1s forwards;
         }
-        .stat-box .label {
-            font-size: 12px;
-            color: #aaa;
+
+        .login-title {
+            font-size: clamp(32px, 8vw, 52px);
+            font-weight: bold;
+            color: var(--text);
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            opacity: 0;
+            animation: fadeUp 0.6s 0.2s forwards;
+            text-shadow: 0 0 80px rgba(203,166,247,0.12);
+        }
+
+        .login-sub {
+            font-size: 11px;
+            color: var(--overlay0);
+            letter-spacing: 0.15em;
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: fadeUp 0.6s 0.3s forwards;
+        }
+
+        .login-fields {
+            opacity: 0;
+            animation: fadeUp 0.6s 0.4s forwards;
+        }
+
+        .input-wrap {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(49,50,68,0.6);
+            border: 1px solid rgba(180,190,254,0.1);
+            border-radius: 4px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13px;
+            letter-spacing: 0.05em;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-wrap input:focus {
+            border-color: rgba(203,166,247,0.4);
+        }
+
+        .input-wrap input::placeholder { color: var(--overlay0); }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
             margin-top: 4px;
         }
-        .announcement-list { margin-top: 14px; }
-        .announcement-item {
+
+        button {
+            font-family: inherit;
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            padding: 11px 18px;
+            transition: all 0.2s;
+        }
+
+        .btn-main {
+            flex: 1;
+            background: rgba(203,166,247,0.15);
+            color: var(--mauve);
+            border: 1px solid rgba(203,166,247,0.3);
+        }
+        .btn-main:hover {
+            background: rgba(203,166,247,0.25);
+            border-color: rgba(203,166,247,0.5);
+        }
+
+        .btn-ghost {
+            background: rgba(49,50,68,0.6);
+            color: var(--overlay1);
+            border: 1px solid rgba(180,190,254,0.1);
+        }
+        .btn-ghost:hover {
+            color: var(--text);
+            border-color: rgba(180,190,254,0.25);
+        }
+
+        .btn-red {
+            background: rgba(243,139,168,0.12);
+            color: var(--red);
+            border: 1px solid rgba(243,139,168,0.25);
+        }
+        .btn-red:hover {
+            background: rgba(243,139,168,0.22);
+        }
+
+        .btn-green {
+            background: rgba(166,227,161,0.12);
+            color: var(--green);
+            border: 1px solid rgba(166,227,161,0.25);
+        }
+        .btn-green:hover {
+            background: rgba(166,227,161,0.22);
+        }
+
+        .error-msg {
+            font-size: 12px;
+            color: var(--red);
+            letter-spacing: 0.05em;
+            margin-top: 10px;
+            min-height: 18px;
+        }
+
+        #admin-section {
+            display: none;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .admin-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #0f3460;
-            border-radius: 6px;
-            padding: 10px 14px;
-            margin-bottom: 8px;
+            margin-bottom: 36px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(180,190,254,0.08);
+        }
+
+        .admin-title {
             font-size: 13px;
-            color: #ddd;
+            color: var(--overlay1);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
         }
-        .announcement-item .msg { flex: 1; margin-right: 10px; word-break: break-word; }
-        .badge {
-            font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 20px;
-            margin-right: 8px;
+
+        .admin-title span { color: var(--mauve); }
+
+        .card {
+            background: rgba(24,24,37,0.6);
+            border: 1px solid rgba(180,190,254,0.08);
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(8px);
         }
-        .badge-active { background: #1a4a1a; color: #4CAF50; }
-        .badge-inactive { background: #3a1a1a; color: #e55; }
-        .views-list { margin-top: 12px; }
+
+        .card-label {
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            color: var(--mauve);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(203,166,247,0.15);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .stat-box {
+            background: rgba(49,50,68,0.4);
+            border: 1px solid rgba(180,190,254,0.06);
+            border-radius: 4px;
+            padding: 16px 12px;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 30px;
+            font-weight: bold;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .stat-num.green { color: var(--green); }
+        .stat-num.blue  { color: var(--blue); }
+        .stat-num.mauve { color: var(--mauve); }
+
+        .stat-label {
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            color: var(--overlay0);
+            text-transform: uppercase;
+        }
+
+        .views-list { margin-top: 4px; }
+
         .views-row {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #0f3460;
-            font-size: 13px;
-            color: #ccc;
-            font-family: monospace;
-        }
-        .views-row .path { color: #7eb8f7; }
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(180,190,254,0.05);
+            font-size: 12px;
+        }
+
+        .views-row:last-child { border-bottom: none; }
+
+        .views-path { color: var(--blue); letter-spacing: 0.05em; }
+
+        .views-count {
+            font-size: 11px;
+            color: var(--overlay1);
+            background: rgba(49,50,68,0.6);
+            padding: 2px 10px;
+            border-radius: 99px;
+            border: 1px solid rgba(180,190,254,0.08);
+        }
+
+        .views-empty {
+            font-size: 12px;
+            color: var(--overlay0);
+            letter-spacing: 0.1em;
+            padding: 8px 0;
+        }
+
+        .announce-input-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .announce-input-row input {
+            flex: 1;
+            padding: 11px 14px;
+            background: rgba(49,50,68,0.6);
+            border: 1px solid rgba(180,190,254,0.1);
+            border-radius: 4px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .announce-input-row input:focus {
+            border-color: rgba(203,166,247,0.4);
+        }
+
+        .announce-input-row input::placeholder { color: var(--overlay0); }
+
+        .announcement-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: rgba(49,50,68,0.3);
+            border: 1px solid rgba(180,190,254,0.06);
+            border-radius: 4px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .badge {
+            font-size: 9px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 99px;
+            flex-shrink: 0;
+        }
+
+        .badge-live {
+            background: rgba(166,227,161,0.12);
+            color: var(--green);
+            border: 1px solid rgba(166,227,161,0.25);
+        }
+
+        .badge-off {
+            background: rgba(243,139,168,0.1);
+            color: var(--maroon);
+            border: 1px solid rgba(243,139,168,0.2);
+        }
+
+        .announce-msg {
+            flex: 1;
+            color: var(--subtext1);
+            word-break: break-word;
+            letter-spacing: 0.03em;
+        }
+
+        .announce-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .announce-actions button {
+            padding: 5px 10px;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+        }
+
+        .no-announce {
+            font-size: 12px;
+            color: var(--overlay0);
+            letter-spacing: 0.1em;
+            padding: 4px 0;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+            .stat-num { font-size: 22px; }
+            .announce-input-row { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
+<div class="corner corner-tl"></div>
+<div class="corner corner-br"></div>
+
 <div id="login-section">
-    <div class="card" id="login-card">
-        <h2 style="text-align:center;color:#e2e2e2;font-family:monospace;letter-spacing:1px;">ADMIN LOGIN</h2>
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-        <div style="display:flex;gap:8px;">
-            <button class="btn-primary" id="login-button" style="flex:1;">Login</button>
-            <button class="btn-secondary" id="toggle-password">Show</button>
+    <div class="login-box">
+        <p class="login-eyebrow">exophs.vercel.app</p>
+        <h1 class="login-title">Admin</h1>
+        <p class="login-sub">// restricted access &nbsp;·&nbsp; authorized only</p>
+        <div class="login-fields">
+            <div class="input-wrap">
+                <input type="email" id="email" placeholder="email">
+            </div>
+            <div class="input-wrap">
+                <input type="password" id="password" placeholder="password">
+            </div>
+            <div class="btn-row">
+                <button class="btn-main" id="login-button">login</button>
+                <button class="btn-ghost" id="toggle-password">show</button>
+            </div>
+            <p class="error-msg" id="error-message"></p>
         </div>
-        <p class="error" id="error-message"></p>
     </div>
 </div>
 
-<div class="container" id="admin-section">
-    <div class="top-bar">
-        <h1>// admin dashboard</h1>
-        <button class="btn-danger" id="logout-button">Logout</button>
+<div id="admin-section">
+    <div class="admin-header">
+        <p class="admin-title"><span>//</span> admin dashboard</p>
+        <button class="btn-red" id="logout-button">logout</button>
     </div>
 
     <div class="card">
-        <h2>Site Analytics</h2>
+        <p class="card-label">site analytics</p>
         <div class="stats-grid">
             <div class="stat-box">
-                <div class="num" id="stat-total">—</div>
-                <div class="label">Total Views</div>
+                <div class="stat-num mauve" id="stat-total">—</div>
+                <div class="stat-label">total</div>
             </div>
             <div class="stat-box">
-                <div class="num" id="stat-today">—</div>
-                <div class="label">Today</div>
+                <div class="stat-num green" id="stat-today">—</div>
+                <div class="stat-label">today</div>
             </div>
             <div class="stat-box">
-                <div class="num" id="stat-week">—</div>
-                <div class="label">This Week</div>
+                <div class="stat-num blue" id="stat-week">—</div>
+                <div class="stat-label">this week</div>
             </div>
         </div>
-        <h2 style="margin-top:16px;">Top Pages</h2>
+        <p class="card-label">top pages</p>
         <div class="views-list" id="top-pages"></div>
     </div>
 
     <div class="card">
-        <h2>Announcement Banner</h2>
-        <input type="text" id="announcement-input" placeholder="Write an announcement...">
-        <button class="btn-primary" id="post-announcement">Post Announcement</button>
-        <div class="announcement-list" id="announcement-list"></div>
+        <p class="card-label">announcement banner</p>
+        <div class="announce-input-row">
+            <input type="text" id="announcement-input" placeholder="write an announcement...">
+            <button class="btn-green" id="post-announcement">post</button>
+        </div>
+        <div id="announcement-list"></div>
     </div>
 </div>
 
@@ -196,9 +508,7 @@
 
     async function checkSession() {
         const { data: { session } } = await sb.auth.getSession();
-        if (session && session.user.email === ADMIN_EMAIL) {
-            showAdmin();
-        }
+        if (session && session.user.email === ADMIN_EMAIL) showAdmin();
     }
 
     function showAdmin() {
@@ -219,8 +529,8 @@
         const password = document.getElementById('password').value;
         errorMessage.textContent = '';
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
-        if (error || !data.user) { errorMessage.textContent = 'Invalid credentials.'; return; }
-        if (data.user.email !== ADMIN_EMAIL) { await sb.auth.signOut(); errorMessage.textContent = 'Access denied.'; return; }
+        if (error || !data.user) { errorMessage.textContent = 'invalid credentials.'; return; }
+        if (data.user.email !== ADMIN_EMAIL) { await sb.auth.signOut(); errorMessage.textContent = 'access denied.'; return; }
         showAdmin();
     });
 
@@ -233,7 +543,11 @@
         const pw = document.getElementById('password');
         const btn = document.getElementById('toggle-password');
         pw.type = pw.type === 'password' ? 'text' : 'password';
-        btn.textContent = pw.type === 'password' ? 'Show' : 'Hide';
+        btn.textContent = pw.type === 'password' ? 'show' : 'hide';
+    });
+
+    document.getElementById('password').addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('login-button').click();
     });
 
     async function loadAnalytics() {
@@ -253,22 +567,32 @@
         const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 8);
 
         const container = document.getElementById('top-pages');
+        if (sorted.length === 0) {
+            container.innerHTML = '<p class="views-empty">no data yet.</p>';
+            return;
+        }
         container.innerHTML = sorted.map(([path, count]) =>
-            `<div class="views-row"><span class="path">${path}</span><span>${count} views</span></div>`
+            `<div class="views-row">
+                <span class="views-path">${path}</span>
+                <span class="views-count">${count} views</span>
+            </div>`
         ).join('');
     }
 
     async function loadAnnouncements() {
         const { data } = await sb.from('announcements').select('*').order('created_at', { ascending: false }).limit(10);
         const container = document.getElementById('announcement-list');
-        if (!data || data.length === 0) { container.innerHTML = '<p style="color:#666;font-size:13px;">No announcements yet.</p>'; return; }
+        if (!data || data.length === 0) {
+            container.innerHTML = '<p class="no-announce">no announcements yet.</p>';
+            return;
+        }
         container.innerHTML = data.map(a => `
             <div class="announcement-item">
-                <span class="badge ${a.active ? 'badge-active' : 'badge-inactive'}">${a.active ? 'live' : 'off'}</span>
-                <span class="msg">${a.message}</span>
-                <div style="display:flex;gap:6px;flex-shrink:0;">
-                    <button class="btn-secondary" onclick="toggleAnnouncement('${a.id}', ${a.active})" style="padding:5px 10px;font-size:12px;">${a.active ? 'Deactivate' : 'Activate'}</button>
-                    <button class="btn-danger" onclick="deleteAnnouncement('${a.id}')" style="padding:5px 10px;font-size:12px;">Delete</button>
+                <span class="badge ${a.active ? 'badge-live' : 'badge-off'}">${a.active ? 'live' : 'off'}</span>
+                <span class="announce-msg">${a.message}</span>
+                <div class="announce-actions">
+                    <button class="btn-ghost" onclick="toggleAnnouncement('${a.id}', ${a.active})">${a.active ? 'deactivate' : 'activate'}</button>
+                    <button class="btn-red" onclick="deleteAnnouncement('${a.id}')">delete</button>
                 </div>
             </div>
         `).join('');
@@ -280,6 +604,10 @@
         await sb.from('announcements').insert({ message: msg, active: true });
         document.getElementById('announcement-input').value = '';
         loadAnnouncements();
+    });
+
+    document.getElementById('announcement-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('post-announcement').click();
     });
 
     async function toggleAnnouncement(id, current) {
