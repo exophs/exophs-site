@@ -916,53 +916,42 @@ if (!sessionStorage.getItem('tracked')) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   });
 
-  async function sendMessage() {
-    const msg = msgInput.value.trim();
-    const nick = nickInput.value.trim().slice(0, 24) || 'anonymous';
-    if (!msg) { status.textContent = 'message is empty.'; status.className = 'error'; return; }
-    if (msg.length > 200) { status.textContent = 'too long (max 200 chars).'; status.className = 'error'; return; }
-    if (isSpam(msg)) { status.textContent = 'message looks like spam.'; status.className = 'error'; return; }
-    if (Date.now() < cooldownEnd) { updateCooldownUI(); return; }
+async function sendMessage() {
+  const msg = msgInput.value.trim();
+  const nick = nickInput.value.trim().slice(0, 24) || 'anonymous';
+  if (!msg) { status.textContent = 'message is empty.'; status.className = 'error'; return; }
 
-    sendBtn.disabled = true;
-    status.textContent = 'sending...';
-    status.className = '';
+  sendBtn.disabled = true;
+  status.textContent = 'sending...';
+  status.className = '';
 
-    const { error } = await _sb.from('guest_wall').insert({
-      nickname: nick === 'anonymous' ? null : nick,
-      message: msg,
-      source: 'web'
-    });
+  const res = await fetch('/api/guestwall', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: msg, nickname: nick })
+  });
 
-    if (error) {
-      status.textContent = 'failed to send. try again.';
-      status.className = 'error';
-      sendBtn.disabled = false;
-      return;
-    }
+  const data = await res.json();
 
-    await fetch(WEBHOOK, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        username: 'Guest Wall',
-        embeds: [{
-          description: msg,
-          color: 0xcba6f7,
-          author: { name: nick },
-          footer: { text: 'exophs.vercel.app · guest wall' },
-          timestamp: new Date().toISOString()
-        }]
-      })
-    }).catch(() => {});
-
-    msgInput.value = '';
-    status.textContent = 'message sent!';
-    status.className = 'ok';
-    setCooldown();
-    await loadMessages();
-    setTimeout(() => { if (status.className === 'ok') { status.textContent = ''; status.className = ''; } }, 2000);
+  if (res.status === 429) {
+    startCooldownTimer(data.remaining * 1000);
+    return;
   }
+
+  if (!res.ok) {
+    status.textContent = data.error || 'failed to send.';
+    status.className = 'error';
+    sendBtn.disabled = false;
+    return;
+  }
+
+  msgInput.value = '';
+  status.textContent = 'message sent!';
+  status.className = 'ok';
+  startCooldownTimer(COOLDOWN_MS);
+  await loadMessages();
+  setTimeout(() => { if (status.className === 'ok') { status.textContent = ''; status.className = ''; } }, 2000);
+}
 
   _sb
     .channel('guest_wall_realtime')
