@@ -78,6 +78,54 @@
       z-index: 0;
       pointer-events: none;
     }
+
+    #announcement-banner {
+      position: fixed;
+      top: 60px;
+      left: 0; right: 0;
+      z-index: 90;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 10px 48px 10px 20px;
+      background: rgba(203,166,247,0.08);
+      border-bottom: 1px solid rgba(203,166,247,0.2);
+      backdrop-filter: blur(12px);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      color: var(--subtext1);
+      animation: slideDown 0.4s ease forwards;
+    }
+    #announcement-banner.visible { display: flex; }
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    #announcement-banner::before {
+      content: '//';
+      color: var(--mauve);
+      opacity: 0.7;
+      flex-shrink: 0;
+      font-size: 11px;
+    }
+    #announcement-text { flex: 1; text-align: center; }
+    #announcement-close {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--overlay1);
+      font-size: 16px;
+      cursor: pointer;
+      padding: 4px 6px;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    #announcement-close:hover { color: var(--mauve); }
+
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -432,6 +480,12 @@
 <div id="particles-js"></div>
 <div class="corner corner-tl"></div>
 <div class="corner corner-br"></div>
+
+<div id="announcement-banner">
+  <span id="announcement-text"></span>
+  <button id="announcement-close" aria-label="Dismiss">×</button>
+</div>
+
 <nav id="main-nav">
   <a href="https://exophs.is-a.dev/" class="nav-logo">
     <span>.</span>exophs
@@ -506,6 +560,38 @@
   <p>© 2026 <a href="https://exophs.is-a.dev">exophs</a></p>
   <p id="footerTime"></p>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const _sb = supabase.createClient(
+  'https://vhyboshqppbgzarylmuv.supabase.co',
+  'YOUR_ANON_KEY_HERE'
+);
+
+_sb.from('page_views').insert({ path: window.location.pathname }).then(() => {});
+
+(async () => {
+  const { data } = await _sb
+    .from('announcements')
+    .select('message')
+    .eq('active', true)
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  if (data && data.length > 0) {
+    const banner = document.getElementById('announcement-banner');
+    document.getElementById('announcement-text').textContent = data[0].message;
+    banner.classList.add('visible');
+    document.getElementById('announcement-close').addEventListener('click', () => {
+      banner.style.animation = 'none';
+      banner.style.opacity = '0';
+      banner.style.transform = 'translateY(-100%)';
+      banner.style.transition = 'all 0.3s ease';
+      setTimeout(() => banner.classList.remove('visible'), 300);
+    });
+  }
+})();
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof particlesJS !== 'undefined') {
