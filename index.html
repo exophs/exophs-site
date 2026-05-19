@@ -465,10 +465,197 @@
       to { opacity: 1; transform: translateY(0); }
     }
     .flip { animation: numFlip 0.2s ease forwards; }
+    /* ── guest wall ── */
+    #guest-wall {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 50;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    #gw-toggle {
+      align-self: flex-end;
+      background: rgba(24,24,37,0.85);
+      border: 1px solid rgba(203,166,247,0.2);
+      border-radius: 4px;
+      padding: 8px 14px;
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--mauve);
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    #gw-toggle:hover {
+      background: rgba(203,166,247,0.1);
+      border-color: rgba(203,166,247,0.4);
+    }
+    #gw-panel {
+      background: rgba(17,17,27,0.92);
+      border: 1px solid rgba(180,190,254,0.1);
+      border-radius: 6px;
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      margin-bottom: 8px;
+      max-height: 420px;
+      animation: gwSlideUp 0.25s ease forwards;
+    }
+    @keyframes gwSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    #gw-panel.open { display: flex; }
+    #gw-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(180,190,254,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    #gw-header-left {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--mauve);
+    }
+    #gw-header-left span { color: var(--overlay0); margin-right: 6px; }
+    #gw-count {
+      font-size: 10px;
+      color: var(--overlay0);
+      letter-spacing: 0.1em;
+    }
+    #gw-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--surface1) transparent;
+    }
+    #gw-messages::-webkit-scrollbar { width: 3px; }
+    #gw-messages::-webkit-scrollbar-track { background: transparent; }
+    #gw-messages::-webkit-scrollbar-thumb { background: var(--surface1); border-radius: 2px; }
+    .gw-msg {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      animation: fadeUp 0.3s ease forwards;
+    }
+    .gw-msg-from-discord .gw-bubble {
+      background: rgba(88,91,112,0.25);
+      border-color: rgba(88,91,112,0.3);
+      border-radius: 4px 12px 12px 4px;
+    }
+    .gw-nick {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: var(--overlay1);
+      padding: 0 4px;
+    }
+    .gw-nick.is-host { color: var(--mauve); }
+    .gw-bubble {
+      background: rgba(49,50,68,0.5);
+      border: 1px solid rgba(180,190,254,0.08);
+      border-radius: 4px 12px 12px 12px;
+      padding: 7px 10px;
+      font-size: 12px;
+      color: var(--subtext1);
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+      word-break: break-word;
+    }
+    .gw-time {
+      font-size: 8px;
+      color: var(--overlay0);
+      padding: 0 4px;
+      letter-spacing: 0.1em;
+    }
+    #gw-empty {
+      font-size: 11px;
+      color: var(--overlay0);
+      letter-spacing: 0.1em;
+      text-align: center;
+      padding: 20px 0;
+    }
+    #gw-footer {
+      border-top: 1px solid rgba(180,190,254,0.08);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    #gw-nick-input {
+      width: 100%;
+      background: rgba(49,50,68,0.4);
+      border: 1px solid rgba(180,190,254,0.08);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-family: inherit;
+      font-size: 11px;
+      color: var(--text);
+      outline: none;
+      letter-spacing: 0.05em;
+      transition: border-color 0.2s;
+    }
+    #gw-nick-input:focus { border-color: rgba(203,166,247,0.3); }
+    #gw-nick-input::placeholder { color: var(--overlay0); }
+    #gw-input-row { display: flex; gap: 6px; }
+    #gw-msg-input {
+      flex: 1;
+      background: rgba(49,50,68,0.4);
+      border: 1px solid rgba(180,190,254,0.08);
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-family: inherit;
+      font-size: 12px;
+      color: var(--text);
+      outline: none;
+      letter-spacing: 0.03em;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    #gw-msg-input:focus { border-color: rgba(203,166,247,0.3); }
+    #gw-msg-input::placeholder { color: var(--overlay0); }
+    #gw-send {
+      background: rgba(203,166,247,0.12);
+      border: 1px solid rgba(203,166,247,0.25);
+      border-radius: 4px;
+      color: var(--mauve);
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      padding: 8px 12px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      align-self: flex-end;
+    }
+    #gw-send:hover:not(:disabled) {
+      background: rgba(203,166,247,0.22);
+      border-color: rgba(203,166,247,0.45);
+    }
+    #gw-send:disabled { opacity: 0.4; cursor: not-allowed; }
+    #gw-status { font-size: 10px; letter-spacing: 0.08em; min-height: 14px; padding: 0 2px; }
+    #gw-status.error { color: var(--red); }
+    #gw-status.ok    { color: var(--green); }
+    #gw-status.warn  { color: var(--yellow); }
+
     @media (max-width: 480px) {
       .typewriter-card { min-width: unset; width: 100%; }
       .countdown-num { min-width: 56px; font-size: 28px; }
       footer { padding: 0 16px 12px; }
+      #guest-wall { width: calc(100vw - 24px); right: 12px; }
     }
   </style>
   <script>
@@ -558,8 +745,29 @@
 </div>
 <footer>
   <p>© 2026 <a href="https://exophs.is-a.dev">exophs</a></p>
-  <p id="footerTime"></p>
 </footer>
+
+<!-- guest wall -->
+<div id="guest-wall">
+  <div id="gw-panel">
+    <div id="gw-header">
+      <span id="gw-header-left"><span>//</span>guest wall</span>
+      <span id="gw-count"></span>
+    </div>
+    <div id="gw-messages">
+      <div id="gw-empty">no messages yet. say something!</div>
+    </div>
+    <div id="gw-footer">
+      <input id="gw-nick-input" type="text" placeholder="nickname (optional)" maxlength="24" autocomplete="off">
+      <div id="gw-input-row">
+        <textarea id="gw-msg-input" placeholder="leave a message..." maxlength="200" rows="2"></textarea>
+        <button id="gw-send">send</button>
+      </div>
+      <div id="gw-status"></div>
+    </div>
+  </div>
+  <button id="gw-toggle">// guest wall</button>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -567,6 +775,9 @@ const _sb = supabase.createClient(
   'https://vhyboshqppbgzarylmuv.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoeWJvc2hxcHBiZ3phcnlsbXV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNTUzMzksImV4cCI6MjA5NDczMTMzOX0.ROc6E_HsMZOuRQB1C9Fj37QWA8PddcZwXxcrgv_kP0Q'
 );
+
+const WEBHOOK = 'https://discord.com/api/webhooks/1506341555303223398/kzxoxhuE5GRFklOh0a-9oSvoPaX0zK7YmQgZ7rbo8nrAxK23W8F1nnWcP308xH69aJC0';
+const COOLDOWN_MS = 30000;
 
 if (!sessionStorage.getItem('tracked')) {
   _sb.from('page_views').insert({ path: window.location.pathname }).then(() => {});
@@ -580,19 +791,189 @@ if (!sessionStorage.getItem('tracked')) {
     .eq('active', true)
     .order('created_at', { ascending: false })
     .limit(1);
-
   if (data && data.length > 0) {
     const banner = document.getElementById('announcement-banner');
     document.getElementById('announcement-text').textContent = data[0].message;
     banner.classList.add('visible');
     document.getElementById('announcement-close').addEventListener('click', () => {
-      banner.style.animation = 'none';
+      banner.style.transition = 'all 0.3s ease';
       banner.style.opacity = '0';
       banner.style.transform = 'translateY(-100%)';
-      banner.style.transition = 'all 0.3s ease';
       setTimeout(() => banner.classList.remove('visible'), 300);
     });
   }
+})();
+
+(function() {
+  const panel     = document.getElementById('gw-panel');
+  const toggle    = document.getElementById('gw-toggle');
+  const msgBox    = document.getElementById('gw-messages');
+  const emptyMsg  = document.getElementById('gw-empty');
+  const nickInput = document.getElementById('gw-nick-input');
+  const msgInput  = document.getElementById('gw-msg-input');
+  const sendBtn   = document.getElementById('gw-send');
+  const status    = document.getElementById('gw-status');
+  const countEl   = document.getElementById('gw-count');
+
+  let open = false;
+  let messages = [];
+  let cooldownEnd = parseInt(localStorage.getItem('gw_cooldown') || '0');
+
+  toggle.addEventListener('click', () => {
+    open = !open;
+    panel.classList.toggle('open', open);
+    toggle.textContent = open ? '// close' : '// guest wall';
+    if (open) { loadMessages(); scrollBottom(); }
+  });
+
+  function timeAgo(iso) {
+    const diff = Date.now() - new Date(iso).getTime();
+    const m = Math.floor(diff / 60000);
+    const h = Math.floor(diff / 3600000);
+    const d = Math.floor(diff / 86400000);
+    if (diff < 60000) return 'just now';
+    if (m < 60) return m + 'm ago';
+    if (h < 24) return h + 'h ago';
+    return d + 'd ago';
+  }
+
+  function sanitize(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function renderMessages() {
+    if (messages.length === 0) {
+      emptyMsg.style.display = 'block';
+      countEl.textContent = '';
+      return;
+    }
+    emptyMsg.style.display = 'none';
+    countEl.textContent = messages.length + ' message' + (messages.length !== 1 ? 's' : '');
+    msgBox.innerHTML = '';
+    msgBox.appendChild(emptyMsg);
+    messages.forEach(m => {
+      const wrap = document.createElement('div');
+      const isHost = m.source === 'discord';
+      wrap.className = 'gw-msg' + (isHost ? ' gw-msg-from-discord' : '');
+      const nick = m.nickname || 'anonymous';
+      wrap.innerHTML = `
+        <div class="gw-nick ${isHost ? 'is-host' : ''}">${sanitize(nick)}${isHost ? ' · host' : ''}</div>
+        <div class="gw-bubble">${sanitize(m.message)}</div>
+        <div class="gw-time">${timeAgo(m.created_at)}</div>
+      `;
+      msgBox.appendChild(wrap);
+    });
+    scrollBottom();
+  }
+
+  function scrollBottom() {
+    requestAnimationFrame(() => { msgBox.scrollTop = msgBox.scrollHeight; });
+  }
+
+  async function loadMessages() {
+    const { data } = await _sb
+      .from('guest_wall')
+      .select('*')
+      .order('created_at', { ascending: true })
+      .limit(50);
+    if (data) { messages = data; renderMessages(); }
+  }
+
+  function setCooldown() {
+    cooldownEnd = Date.now() + COOLDOWN_MS;
+    localStorage.setItem('gw_cooldown', cooldownEnd.toString());
+    updateCooldownUI();
+  }
+
+  function updateCooldownUI() {
+    const remaining = cooldownEnd - Date.now();
+    if (remaining > 0) {
+      sendBtn.disabled = true;
+      status.textContent = 'cooldown: ' + Math.ceil(remaining / 1000) + 's';
+      status.className = 'warn';
+      setTimeout(updateCooldownUI, 1000);
+    } else {
+      sendBtn.disabled = false;
+      status.textContent = '';
+      status.className = '';
+    }
+  }
+
+  function isSpam(text) {
+    if (text.length < 2) return true;
+    if (/(.)\1{6,}/.test(text)) return true;
+    if (text.split(' ').length === 1 && text.length > 40) return true;
+    const words = text.toLowerCase().split(/\s+/);
+    const unique = new Set(words);
+    if (words.length > 4 && unique.size / words.length < 0.3) return true;
+    return false;
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  msgInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+
+  async function sendMessage() {
+    const msg = msgInput.value.trim();
+    const nick = nickInput.value.trim().slice(0, 24) || 'anonymous';
+    if (!msg) { status.textContent = 'message is empty.'; status.className = 'error'; return; }
+    if (msg.length > 200) { status.textContent = 'too long (max 200 chars).'; status.className = 'error'; return; }
+    if (isSpam(msg)) { status.textContent = 'message looks like spam.'; status.className = 'error'; return; }
+    if (Date.now() < cooldownEnd) { updateCooldownUI(); return; }
+
+    sendBtn.disabled = true;
+    status.textContent = 'sending...';
+    status.className = '';
+
+    const { error } = await _sb.from('guest_wall').insert({
+      nickname: nick === 'anonymous' ? null : nick,
+      message: msg,
+      source: 'web'
+    });
+
+    if (error) {
+      status.textContent = 'failed to send. try again.';
+      status.className = 'error';
+      sendBtn.disabled = false;
+      return;
+    }
+
+    await fetch(WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: 'Guest Wall',
+        embeds: [{
+          description: msg,
+          color: 0xcba6f7,
+          author: { name: nick },
+          footer: { text: 'exophs.vercel.app · guest wall' },
+          timestamp: new Date().toISOString()
+        }]
+      })
+    }).catch(() => {});
+
+    msgInput.value = '';
+    status.textContent = 'message sent!';
+    status.className = 'ok';
+    setCooldown();
+    await loadMessages();
+    setTimeout(() => { if (status.className === 'ok') { status.textContent = ''; status.className = ''; } }, 2000);
+  }
+
+  _sb
+    .channel('guest_wall_realtime')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'guest_wall' }, payload => {
+      messages.push(payload.new);
+      if (open) renderMessages();
+    })
+    .subscribe();
+
+  if (Date.now() < cooldownEnd) updateCooldownUI();
+  loadMessages();
 })();
 </script>
 <script>
@@ -739,13 +1120,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   updateCountdown();
   setInterval(updateCountdown, 1000);
-
-  function updateClock() {
-    document.getElementById('footerTime').textContent =
-      new Date().toLocaleTimeString('en-US', { hour12: false });
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
 });
 </script>
 </body>
