@@ -5,181 +5,182 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <style>
+        * { box-sizing: border-box; }
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             background-color: #E5E5E5;
             margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
         }
         .container {
-            width: 20%;
-            max-width: 600px;
-            padding: 20px;
-            background-color: #FFFFFF;
-            border: 1px solid #CCCCCC;
+            width: min(90%, 420px);
+            padding: 24px;
+            background-color: #fff;
+            border: 1px solid #ccc;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: width 0.5s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .login-container, .admin-content {
-            text-align: center;
-        }
-        .login-container {
-            display: block;
-        }
-        .admin-content {
-            display: none;
-        }
-        .login-container h2, .admin-content h2 {
-            margin-bottom: 20px;
-            font-size: 24px;
-            color: #333333;
-        }
-        .login-container input, .admin-content input, .admin-content button {
-            width: calc(100% - 22px);
+        h2 { margin-bottom: 20px; font-size: 22px; color: #333; text-align: center; }
+        input {
+            width: 100%;
             padding: 10px;
             margin-bottom: 10px;
-            border: 1px solid #CCCCCC;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 16px;
+            font-size: 15px;
         }
-        .login-container button, .admin-content button {
-            background-color: #4CAF50;
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 8px;
             border: none;
-            color: white;
+            border-radius: 5px;
+            font-size: 15px;
             cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
         }
-        .login-container button:hover, .admin-content button:hover {
-            background-color: #45a049;
-        }
-        .error-message {
-            color: #FF0000;
-            margin-top: 10px;
-        }
-        .bordered {
-            border: 2px solid #333333;
-        }
-        .hidden {
+        button:hover { background-color: #45a049; }
+        #logout-button { background-color: #e55; }
+        #logout-button:hover { background-color: #c33; }
+        #toggle-password { background-color: #888; }
+        #toggle-password:hover { background-color: #666; }
+        .error { color: red; font-size: 14px; margin-top: 4px; text-align: center; }
+        .hidden { display: none; }
+        #admin-content { display: none; }
+        .datetime-display {
+            background: #f5f5f5;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 8px;
             display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="login-container">
-            <h2>Admin Login</h2>
-            <form id="login-form">
-                <input type="text" id="username" placeholder="Username" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <button type="button" id="toggle-password">Show Password</button>
-                <button type="submit">Login</button>
-                <p class="error-message" id="error-message"></p>
-            </form>
-        </div>
-
-        <div class="admin-content" id="admin-content">
-            <button id="logout-button">Logout</button>
-            <div class="admin-controls">
-                <button id="change-bg-color">Change Background Color</button>
-                <button id="toggle-dark-mode">Toggle Dark Mode</button>
-                <button id="reset-bg-color">Reset Background Color</button>
-                <button id="show-date-time">Show Date & Time</button>
-            </div>
-        </div>
+<div class="container">
+    <div id="login-section">
+        <h2>Admin Login</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button type="button" id="toggle-password">Show Password</button>
+        <button type="button" id="login-button">Login</button>
+        <p class="error" id="error-message"></p>
     </div>
 
-    <script type="text/javascript">
-        document.getElementById('admin-content').style.display = 'none';
+    <div id="admin-content">
+        <h2>Admin Dashboard</h2>
+        <button id="logout-button">Logout</button>
+        <button id="change-bg-color">Change Background Color</button>
+        <button id="toggle-dark-mode">Toggle Dark Mode</button>
+        <button id="reset-bg-color">Reset Background Color</button>
+        <button id="show-date-time">Show Date & Time</button>
+        <div class="datetime-display" id="datetime-display"></div>
+    </div>
+</div>
 
-        const loginForm = document.getElementById('login-form');
-        const errorMessage = document.getElementById('error-message');
-        const adminContent = document.getElementById('admin-content');
-        const container = document.querySelector('.container');
-        const changeBgColorButton = document.getElementById('change-bg-color');
-        const toggleDarkModeButton = document.getElementById('toggle-dark-mode');
-        const resetBgColorButton = document.getElementById('reset-bg-color');
-        const showDateTimeButton = document.getElementById('show-date-time');
-        const togglePasswordButton = document.getElementById('toggle-password');
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const SUPABASE_URL = 'https://vhyboshqppbgzarylmuv.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoeWJvc2hxcHBiZ3phcnlsbXV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNTUzMzksImV4cCI6MjA5NDczMTMzOX0.ROc6E_HsMZOuRQB1C9Fj37QWA8PddcZwXxcrgv_kP0Q';
+    const ADMIN_EMAIL = 'bezeski@gmail.com';
 
-        const encodedSecret = 'cmF5';
-        const encodedSecret2 = 'MTAxNjIwMDc=';
+    const { createClient } = supabase;
+    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        function decodeBase64(str) {
-            return atob(str);
+    const loginSection = document.getElementById('login-section');
+    const adminContent = document.getElementById('admin-content');
+    const errorMessage = document.getElementById('error-message');
+
+    async function checkSession() {
+        const { data: { session } } = await sb.auth.getSession();
+        if (session && session.user.email === ADMIN_EMAIL) {
+            showAdmin();
         }
+    }
 
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+    function showAdmin() {
+        loginSection.style.display = 'none';
+        adminContent.style.display = 'block';
+    }
 
-            if (username === decodeBase64(encodedSecret) && password === decodeBase64(encodedSecret2)) {
-                adminContent.style.display = 'block';
-                loginForm.style.display = 'none';
-                container.style.width = '50%';
-            } else {
-                errorMessage.textContent = 'Invalid username or password.';
-            }
-        });
+    function showLogin() {
+        loginSection.style.display = 'block';
+        adminContent.style.display = 'none';
+        errorMessage.textContent = '';
+    }
 
-        document.getElementById('logout-button').addEventListener('click', function() {
-            adminContent.style.display = 'none';
-            loginForm.style.display = 'block';
-            container.style.width = '20%';
-        });
+    document.getElementById('login-button').addEventListener('click', async () => {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        errorMessage.textContent = '';
 
-        changeBgColorButton.addEventListener('click', function() {
-            const newColor = prompt('Enter a HEX color code (e.g., #FF5733):');
-            if (newColor) {
-                const isValidHex = /^#[0-9A-Fa-f]{6}$/.test(newColor);
-                if (isValidHex) {
-                    document.querySelector('.container').style.backgroundColor = newColor;
-                } else {
-                    alert('Invalid HEX color code. Please enter a valid code.');
-                }
-            }
-        });
+        const { data, error } = await sb.auth.signInWithPassword({ email, password });
 
-        let isDarkMode = false;
-        toggleDarkModeButton.addEventListener('click', function() {
-            if (isDarkMode) {
-                document.body.style.backgroundColor = '#E5E5E5';
-                document.querySelector('.container').style.backgroundColor = '#FFFFFF';
-                document.querySelector('.container').style.color = '#333333';
-                isDarkMode = false;
-            } else {
-                document.body.style.backgroundColor = '#333333';
-                document.querySelector('.container').style.backgroundColor = '#555555';
-                document.querySelector('.container').style.color = '#FFFFFF';
-                isDarkMode = true;
-            }
-        });
+        if (error || !data.user) {
+            errorMessage.textContent = 'Invalid credentials.';
+            return;
+        }
+        if (data.user.email !== ADMIN_EMAIL) {
+            await sb.auth.signOut();
+            errorMessage.textContent = 'Access denied.';
+            return;
+        }
+        showAdmin();
+    });
 
-        resetBgColorButton.addEventListener('click', function() {
-            document.querySelector('.container').style.backgroundColor = '#FFFFFF';
-        });
+    document.getElementById('logout-button').addEventListener('click', async () => {
+        await sb.auth.signOut();
+        showLogin();
+    });
 
-        showDateTimeButton.addEventListener('click', function() {
-            const now = new Date();
-            const dateTimeString = now.toLocaleString();
-            alert(`Current Date & Time: ${dateTimeString}`);
-        });
+    document.getElementById('toggle-password').addEventListener('click', () => {
+        const pw = document.getElementById('password');
+        const btn = document.getElementById('toggle-password');
+        if (pw.type === 'password') {
+            pw.type = 'text';
+            btn.textContent = 'Hide Password';
+        } else {
+            pw.type = 'password';
+            btn.textContent = 'Show Password';
+        }
+    });
 
-        togglePasswordButton.addEventListener('click', function() {
-            const passwordInput = document.getElementById('password');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                togglePasswordButton.textContent = 'Hide Password';
-            } else {
-                passwordInput.type = 'password';
-                togglePasswordButton.textContent = 'Show Password';
-            }
-        });
-    </script>
+    let isDark = false;
+    document.getElementById('toggle-dark-mode').addEventListener('click', () => {
+        isDark = !isDark;
+        document.body.style.backgroundColor = isDark ? '#222' : '#E5E5E5';
+        document.querySelector('.container').style.backgroundColor = isDark ? '#444' : '#fff';
+        document.querySelector('.container').style.color = isDark ? '#fff' : '#333';
+    });
+
+    document.getElementById('change-bg-color').addEventListener('click', () => {
+        const color = prompt('Enter a HEX color (e.g. #FF5733):');
+        if (!color) return;
+        if (/^#[0-9A-Fa-f]{6}$/.test(color)) {
+            document.querySelector('.container').style.backgroundColor = color;
+        } else {
+            alert('Invalid HEX color.');
+        }
+    });
+
+    document.getElementById('reset-bg-color').addEventListener('click', () => {
+        document.querySelector('.container').style.backgroundColor = isDark ? '#444' : '#fff';
+        document.body.style.backgroundColor = isDark ? '#222' : '#E5E5E5';
+    });
+
+    document.getElementById('show-date-time').addEventListener('click', () => {
+        const display = document.getElementById('datetime-display');
+        display.style.display = display.style.display === 'none' ? 'block' : 'none';
+        display.textContent = new Date().toLocaleString();
+    });
+
+    checkSession();
+</script>
 </body>
 </html>
