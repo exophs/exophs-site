@@ -565,7 +565,7 @@
 <script>
 const _sb = supabase.createClient(
   'https://vhyboshqppbgzarylmuv.supabase.co',
-  'YOUR_ANON_KEY_HERE'
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoeWJvc2hxcHBiZ3phcnlsbXV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNTUzMzksImV4cCI6MjA5NDczMTMzOX0.ROc6E_HsMZOuRQB1C9Fj37QWA8PddcZwXxcrgv_kP0Q'
 );
 
 _sb.from('page_views').insert({ path: window.location.pathname }).then(() => {});
