@@ -389,6 +389,18 @@
             border: 1px solid rgba(243,139,168,0.2);
         }
 
+        .badge-host {
+            background: rgba(203,166,247,0.12);
+            color: var(--mauve);
+            border: 1px solid rgba(203,166,247,0.25);
+        }
+
+        .badge-guest {
+            background: rgba(49,50,68,0.6);
+            color: var(--overlay1);
+            border: 1px solid rgba(180,190,254,0.1);
+        }
+
         .announce-msg {
             flex: 1;
             color: var(--subtext1);
@@ -413,6 +425,19 @@
             color: var(--overlay0);
             letter-spacing: 0.1em;
             padding: 4px 0;
+        }
+
+        .gw-nick {
+            color: var(--overlay1);
+            margin-right: 6px;
+        }
+
+        .gw-time {
+            display: block;
+            font-size: 10px;
+            color: var(--overlay0);
+            margin-top: 3px;
+            letter-spacing: 0.08em;
         }
 
         @keyframes fadeUp {
@@ -491,6 +516,11 @@
         </div>
         <div id="announcement-list"></div>
     </div>
+
+    <div class="card">
+        <p class="card-label">guest wall messages</p>
+        <div id="gw-list"></div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -516,6 +546,7 @@
         adminSection.style.display = 'block';
         loadAnalytics();
         loadAnnouncements();
+        loadGuestWall();
     }
 
     function showLogin() {
@@ -621,42 +652,40 @@
     }
 
     async function loadGuestWall() {
-  const { data } = await sb
-    .from('guest_wall')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(50);
+        const { data } = await sb
+            .from('guest_wall')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(50);
 
-  const container = document.getElementById('gw-list');
-  if (!data || data.length === 0) {
-    container.innerHTML = '<p class="no-announce">no messages yet.</p>';
-    return;
-  }
+        const container = document.getElementById('gw-list');
+        if (!data || data.length === 0) {
+            container.innerHTML = '<p class="no-announce">no messages yet.</p>';
+            return;
+        }
 
-  container.innerHTML = data.map(m => {
-    const nick = m.nickname || 'anonymous';
-    const isHost = m.source === 'discord';
-    const time = new Date(m.created_at).toLocaleString();
-    return `
-      <div class="announcement-item">
-        <span class="badge ${isHost ? 'badge-live' : 'badge-off'}">${isHost ? 'host' : 'guest'}</span>
-        <span class="announce-msg">
-          <span style="color:var(--overlay1);margin-right:6px;">${nick}</span>
-          ${m.message}
-          <span style="display:block;font-size:10px;color:var(--overlay0);margin-top:3px;letter-spacing:0.08em;">${time}</span>
-        </span>
-        <div class="announce-actions">
-          <button class="btn-red" onclick="deleteGuestMsg('${m.id}')" style="padding:5px 10px;font-size:10px;">delete</button>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
+        container.innerHTML = data.map(m => {
+            const nick = m.nickname || 'anonymous';
+            const isHost = m.source === 'discord';
+            const time = new Date(m.created_at).toLocaleString();
+            return `
+                <div class="announcement-item">
+                    <span class="badge ${isHost ? 'badge-host' : 'badge-guest'}">${isHost ? 'host' : 'guest'}</span>
+                    <span class="announce-msg">
+                        <span class="gw-nick">${nick}</span>${m.message}<span class="gw-time">${time}</span>
+                    </span>
+                    <div class="announce-actions">
+                        <button class="btn-red" onclick="deleteGuestMsg('${m.id}')">delete</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
 
-async function deleteGuestMsg(id) {
-  await sb.from('guest_wall').delete().eq('id', id);
-  loadGuestWall();
-}
+    async function deleteGuestMsg(id) {
+        await sb.from('guest_wall').delete().eq('id', id);
+        loadGuestWall();
+    }
 
     checkSession();
 </script>
