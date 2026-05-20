@@ -925,7 +925,7 @@ async function sendMessage() {
   status.textContent = 'sending...';
   status.className = '';
 
-  const res = await fetch('/api/guestwall', {
+  const res = await fetch('https://raw.githubusercontent.com/exophs/exophs-site/refs/heads/main/api/guestwall.js', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ message: msg, nickname: nick })
