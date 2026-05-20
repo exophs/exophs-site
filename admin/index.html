@@ -675,16 +675,20 @@
                         <span class="gw-nick">${nick}</span>${m.message}<span class="gw-time">${time}</span>
                     </span>
                     <div class="announce-actions">
-                        <button class="btn-red" onclick="deleteGuestMsg('${m.id}')">delete</button>
+                        <button class="btn-red" onclick="deleteGuestMsg('${m.id}', this)">delete</button>
                     </div>
                 </div>
             `;
         }).join('');
     }
 
-    async function deleteGuestMsg(id) {
+    async function deleteGuestMsg(id, btn) {
+        btn.disabled = true;
+        btn.textContent = '...';
         await sb.from('guest_wall').delete().eq('id', id);
-        loadGuestWall();
+        btn.closest('.announcement-item').remove();
+        const remaining = document.querySelectorAll('#gw-list .announcement-item').length;
+        if (remaining === 0) document.getElementById('gw-list').innerHTML = '<p class="no-announce">no messages yet.</p>';
     }
 
     checkSession();
