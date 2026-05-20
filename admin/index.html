@@ -620,6 +620,44 @@
         loadAnnouncements();
     }
 
+    async function loadGuestWall() {
+  const { data } = await sb
+    .from('guest_wall')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(50);
+
+  const container = document.getElementById('gw-list');
+  if (!data || data.length === 0) {
+    container.innerHTML = '<p class="no-announce">no messages yet.</p>';
+    return;
+  }
+
+  container.innerHTML = data.map(m => {
+    const nick = m.nickname || 'anonymous';
+    const isHost = m.source === 'discord';
+    const time = new Date(m.created_at).toLocaleString();
+    return `
+      <div class="announcement-item">
+        <span class="badge ${isHost ? 'badge-live' : 'badge-off'}">${isHost ? 'host' : 'guest'}</span>
+        <span class="announce-msg">
+          <span style="color:var(--overlay1);margin-right:6px;">${nick}</span>
+          ${m.message}
+          <span style="display:block;font-size:10px;color:var(--overlay0);margin-top:3px;letter-spacing:0.08em;">${time}</span>
+        </span>
+        <div class="announce-actions">
+          <button class="btn-red" onclick="deleteGuestMsg('${m.id}')" style="padding:5px 10px;font-size:10px;">delete</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function deleteGuestMsg(id) {
+  await sb.from('guest_wall').delete().eq('id', id);
+  loadGuestWall();
+}
+
     checkSession();
 </script>
 </body>
