@@ -247,17 +247,6 @@
       max-width: 700px;
       width: 100%;
     }
-    .dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      flex-shrink: 0;
-      animation: pulse 2.5s ease infinite;
-    }
-    @keyframes pulse {
-      0%,100% { box-shadow: 0 0 0 0 rgba(166,227,161,0.4); }
-      50% { box-shadow: 0 0 0 5px rgba(166,227,161,0); }
-    }
     .eyebrow {
       font-size: 11px;
       letter-spacing: 0.35em;
@@ -465,7 +454,8 @@
       to { opacity: 1; transform: translateY(0); }
     }
     .flip { animation: numFlip 0.2s ease forwards; }
-    /* ── guest wall ── */
+
+    /* Guest Wall Styles */
     #guest-wall {
       position: fixed;
       bottom: 20px;
@@ -658,10 +648,6 @@
       #guest-wall { width: calc(100vw - 24px); right: 12px; }
     }
   </style>
-  <script>
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-  </script>
-  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <div id="particles-js"></div>
@@ -700,6 +686,7 @@
     <div class="menu-item"><span class="num">05</span> Terminal V2</div>
   </a>
 </div>
+
 <main>
   <div class="hero">
     <p class="eyebrow">Welcome to my website, have a look around</p>
@@ -740,14 +727,16 @@
     </div>
   </div>
 </main>
+
 <div class="hint" id="hintMessage">
   <p>find the hidden secret — hint: the title</p>
 </div>
+
 <footer>
   <p>© 2026 <a href="https://exophs.is-a.dev">exophs</a></p>
 </footer>
 
-<!-- guest wall -->
+<!-- Guest Wall -->
 <div id="guest-wall">
   <div id="gw-panel">
     <div id="gw-header">
@@ -776,7 +765,6 @@ const _sb = supabase.createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoeWJvc2hxcHBiZ3phcnlsbXV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNTUzMzksImV4cCI6MjA5NDczMTMzOX0.ROc6E_HsMZOuRQB1C9Fj37QWA8PddcZwXxcrgv_kP0Q'
 );
 
-const WEBHOOK = 'https://discord.com/api/webhooks/1506341555303223398/kzxoxhuE5GRFklOh0a-9oSvoPaX0zK7YmQgZ7rbo8nrAxK23W8F1nnWcP308xH69aJC0';
 const COOLDOWN_MS = 30000;
 
 if (!sessionStorage.getItem('tracked')) {
@@ -919,6 +907,7 @@ if (!sessionStorage.getItem('tracked')) {
   async function sendMessage() {
     const msg = msgInput.value.trim();
     const nick = nickInput.value.trim().slice(0, 24) || 'anonymous';
+
     if (!msg) { status.textContent = 'message is empty.'; status.className = 'error'; return; }
     if (msg.length > 200) { status.textContent = 'too long (max 200 chars).'; status.className = 'error'; return; }
     if (isSpam(msg)) { status.textContent = 'message looks like spam.'; status.className = 'error'; return; }
@@ -928,6 +917,7 @@ if (!sessionStorage.getItem('tracked')) {
     status.textContent = 'sending...';
     status.className = '';
 
+    // Insert into Supabase
     const { error } = await _sb.from('guest_wall').insert({
       nickname: nick === 'anonymous' ? null : nick,
       message: msg,
@@ -935,33 +925,47 @@ if (!sessionStorage.getItem('tracked')) {
     });
 
     if (error) {
-      status.textContent = 'failed to send. try again.';
+      status.textContent = 'failed to save message.';
       status.className = 'error';
       sendBtn.disabled = false;
       return;
     }
 
-    await fetch(WEBHOOK, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        username: 'Guest Wall',
-        embeds: [{
-          description: msg,
-          color: 0xcba6f7,
-          author: { name: nick },
-          footer: { text: 'exophs.vercel.app · guest wall' },
-          timestamp: new Date().toISOString()
-        }]
-      })
-    }).catch(() => {});
+    // Send to Discord via our secure API route
+    try {
+      const response = await fetch('/api/send-guestwall', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: 'Guest Wall',
+          embeds: [{
+            description: msg,
+            color: 0xcba6f7,
+            author: { name: nick },
+            footer: { text: 'exophs.vercel.app · guest wall' },
+            timestamp: new Date().toISOString()
+          }]
+        })
+      });
+
+      if (!response.ok) throw new Error('Discord request failed');
+    } catch (err) {
+      console.error('Discord webhook failed:', err);
+      // Don't show error to user since message is already saved
+    }
 
     msgInput.value = '';
     status.textContent = 'message sent!';
     status.className = 'ok';
     setCooldown();
     await loadMessages();
-    setTimeout(() => { if (status.className === 'ok') { status.textContent = ''; status.className = ''; } }, 2000);
+
+    setTimeout(() => {
+      if (status.className === 'ok') {
+        status.textContent = '';
+        status.className = '';
+      }
+    }, 2000);
   }
 
   _sb
@@ -976,6 +980,7 @@ if (!sessionStorage.getItem('tracked')) {
   loadMessages();
 })();
 </script>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof particlesJS !== 'undefined') {
