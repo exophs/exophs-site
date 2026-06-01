@@ -492,12 +492,18 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    const SUPABASE_URL = 'https://vhyboshqppbgzarylmuv.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoeWJvc2hxcHBiZ3phcnlsbXV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNTUzMzksImV4cCI6MjA5NDczMTMzOX0.ROc6E_HsMZOuRQB1C9Fj37QWA8PddcZwXxcrgv_kP0Q';
-    const ADMIN_EMAIL = 'bezeski@gmail.com';
+    let sb;
+    let ADMIN_EMAIL;
 
-    const { createClient } = supabase;
-    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    async function init() {
+        const config = await fetch('/api/admin-data').then(r => r.json());
+        ADMIN_EMAIL = config.email;
+        const { createClient } = supabase;
+        sb = createClient(config.url, config.key);
+        checkSession();
+    }
+
+    init();
 
     const loginSection = document.getElementById('login-section');
     const adminSection = document.getElementById('admin-section');
