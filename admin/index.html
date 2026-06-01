@@ -89,36 +89,6 @@
             text-align: center;
         }
 
-        .login-eyebrow {
-            font-size: 10px;
-            letter-spacing: 0.35em;
-            color: var(--mauve);
-            text-transform: uppercase;
-            margin-bottom: 16px;
-            opacity: 0;
-            animation: fadeUp 0.6s 0.1s forwards;
-        }
-
-        .login-title {
-            font-size: clamp(32px, 8vw, 52px);
-            font-weight: bold;
-            color: var(--text);
-            letter-spacing: -0.02em;
-            margin-bottom: 8px;
-            opacity: 0;
-            animation: fadeUp 0.6s 0.2s forwards;
-            text-shadow: 0 0 80px rgba(203,166,247,0.12);
-        }
-
-        .login-sub {
-            font-size: 11px;
-            color: var(--overlay0);
-            letter-spacing: 0.15em;
-            margin-bottom: 32px;
-            opacity: 0;
-            animation: fadeUp 0.6s 0.3s forwards;
-        }
-
         .login-fields {
             opacity: 0;
             animation: fadeUp 0.6s 0.4s forwards;
@@ -463,9 +433,6 @@
 
 <div id="login-section">
     <div class="login-box">
-        <p class="login-eyebrow">exophs.vercel.app</p>
-        <h1 class="login-title">Admin</h1>
-        <p class="login-sub">// restricted access &nbsp;·&nbsp; authorized only</p>
         <div class="login-fields">
             <div class="input-wrap">
                 <input type="email" id="email" placeholder="email">
