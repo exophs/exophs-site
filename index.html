@@ -1,783 +1,1131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>admin // exophs</title>
-    <style>
-        :root {
-            --crust:     #11111b;
-            --mantle:    #181825;
-            --base:      #1e1e2e;
-            --surface0:  #313244;
-            --surface1:  #45475a;
-            --surface2:  #585b70;
-            --overlay0:  #6c7086;
-            --overlay1:  #7f849c;
-            --overlay2:  #9399b2;
-            --subtext0:  #a6adc8;
-            --subtext1:  #bac2de;
-            --text:      #cdd6f4;
-            --lavender:  #b4befe;
-            --blue:      #89b4fa;
-            --sapphire:  #74c7ec;
-            --sky:       #89dceb;
-            --teal:      #94e2d5;
-            --green:     #a6e3a1;
-            --yellow:    #f9e2af;
-            --peach:     #fab387;
-            --maroon:    #eba0ac;
-            --red:       #f38ba8;
-            --mauve:     #cba6f7;
-            --pink:      #f5c2e7;
-            --flamingo:  #f2cdcd;
-            --rosewater: #f5e0dc;
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Welcome to Ray's site! Explore my projects, enjoy the countdown to my birthday, and find hidden secrets!">
+  <meta name="keywords" content="Ray, exophs, projects, countdown, secrets, personal website">
+  <link rel="icon" href="https://raw.githubusercontent.com/exophs/favicon/main/favicon_io/favicon.ico">
+  <title>ray's site</title>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <meta property="og:title" content="Hey Chat">
+  <meta property="og:description" content="My website">
+  <meta property="og:image" content="https://ray.confusing.wtf/u/48xEZ1.jpg">
+  <meta property="og:url" content="http://exophs.space">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://exophs.vercel.app">
+  <style>
+    :root {
+      --crust:      #11111b;
+      --mantle:     #181825;
+      --base:       #1e1e2e;
+      --surface0:   #313244;
+      --surface1:   #45475a;
+      --surface2:   #585b70;
+      --overlay0:   #6c7086;
+      --overlay1:   #7f849c;
+      --overlay2:   #9399b2;
+      --subtext0:   #a6adc8;
+      --subtext1:   #bac2de;
+      --text:       #cdd6f4;
+      --lavender:   #b4befe;
+      --blue:       #89b4fa;
+      --sapphire:   #74c7ec;
+      --sky:        #89dceb;
+      --teal:       #94e2d5;
+      --green:      #a6e3a1;
+      --yellow:     #f9e2af;
+      --peach:      #fab387;
+      --maroon:     #eba0ac;
+      --red:        #f38ba8;
+      --mauve:      #cba6f7;
+      --pink:       #f5c2e7;
+      --flamingo:   #f2cdcd;
+      --rosewater:  #f5e0dc;
+    }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "DejaVu Sans Mono", "Roboto Mono", Consolas, Monaco, "Courier New", monospace;
+      background: var(--base);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 999;
+      animation: scanlines 8s linear infinite;
+    }
+    @keyframes scanlines {
+      from { background-position: 0 0; }
+      to { background-position: 0 100px; }
+    }
+    #particles-js {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-        body {
-            font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "DejaVu Sans Mono", "Roboto Mono", Consolas, Monaco, "Courier New", monospace;
-            background: var(--base);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+    #announcement-banner {
+      position: fixed;
+      top: 60px;
+      left: 0; right: 0;
+      z-index: 90;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 10px 48px 10px 20px;
+      background: rgba(203,166,247,0.08);
+      border-bottom: 1px solid rgba(203,166,247,0.2);
+      backdrop-filter: blur(12px);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      color: var(--subtext1);
+      animation: slideDown 0.4s ease forwards;
+    }
+    #announcement-banner.visible { display: flex; }
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    #announcement-banner::before {
+      content: '//';
+      color: var(--mauve);
+      opacity: 0.7;
+      flex-shrink: 0;
+      font-size: 11px;
+    }
+    #announcement-text { flex: 1; text-align: center; }
+    #announcement-close {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--overlay1);
+      font-size: 16px;
+      cursor: pointer;
+      padding: 4px 6px;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    #announcement-close:hover { color: var(--mauve); }
 
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0,0,0,0.03) 2px,
-                rgba(0,0,0,0.03) 4px
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 999;
-            animation: scanlines 8s linear infinite;
-        }
-        @keyframes scanlines {
-            from { background-position: 0 0; }
-            to { background-position: 0 100px; }
-        }
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(30,30,46,0.7);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(180,190,254,0.1);
+      transition: transform 0.4s ease;
+    }
+    nav.hide { transform: translateY(-100%); }
+    .nav-logo {
+      font-weight: bold;
+      font-size: 14px;
+      color: var(--mauve);
+      letter-spacing: 0.15em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--overlay0); }
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+    }
+    .hamburger div {
+      width: 22px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+    .hamburger.open div:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open div:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open div:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .slide-menu {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      width: 100%;
+      height: auto;
+      background: rgba(24,24,37,0.97);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(180,190,254,0.1);
+      z-index: 150;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0 40px;
+      padding: 80px 40px 40px;
+      transform: translateY(-110%);
+      transition: transform 0.5s cubic-bezier(0.77,0,0.175,1);
+    }
+    .slide-menu.open { transform: translateY(0); }
+    .slide-menu a {
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0;
+      width: min(200px, 85vw);
+    }
+    .menu-item {
+      font-size: 13px;
+      color: var(--overlay1);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(180,190,254,0.08);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      width: 100%;
+      text-align: left;
+    }
+    .menu-item:hover { color: var(--mauve); border-bottom-color: var(--mauve); }
+    .menu-item .num { font-size: 10px; color: var(--mauve); opacity: 0.6; min-width: 20px; }
+    .menu-warn {
+      font-size: 9px;
+      color: var(--red);
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+      display: block;
+      margin-left: 32px;
+    }
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 140;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+    }
+    .menu-overlay.open { opacity: 1; pointer-events: all; }
+    main {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px 60px;
+    }
+    .hero {
+      text-align: center;
+      max-width: 700px;
+      width: 100%;
+    }
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      color: var(--mauve);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-name {
+      font-weight: bold;
+      font-size: clamp(52px, 10vw, 96px);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+      text-shadow: 0 0 80px rgba(203,166,247,0.12);
+      cursor: pointer;
+      display: inline-block;
+      transition: text-shadow 0.3s ease;
+    }
+    .hero-name:hover {
+      text-shadow: 0 0 40px rgba(203,166,247,0.35), 0 0 80px rgba(203,166,247,0.15);
+    }
+    .hero-sub {
+      font-size: 13px;
+      color: var(--overlay0);
+      letter-spacing: 0.15em;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+    .typewriter-wrap {
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+    .typewriter-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      background: rgba(49,50,68,0.6);
+      border: 1px solid rgba(180,190,254,0.1);
+      border-radius: 4px;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      min-height: 44px;
+      min-width: 300px;
+      justify-content: flex-start;
+    }
+    .typewriter-prompt {
+      color: var(--mauve);
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+    #typewriter { color: var(--text); white-space: nowrap; }
+    .cursor-blink {
+      display: inline-block;
+      width: 2px;
+      height: 13px;
+      background: var(--mauve);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .countdown-wrap {
+      opacity: 0;
+      animation: fadeUp 0.8s 1.0s forwards;
+    }
+    .countdown-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--overlay0);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .countdown-grid {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .countdown-num {
+      font-weight: bold;
+      font-size: clamp(28px, 5vw, 44px);
+      line-height: 1;
+      color: var(--text);
+      min-width: 70px;
+      text-align: center;
+      padding: 14px 10px 10px;
+      background: rgba(49,50,68,0.6);
+      border: 1px solid rgba(180,190,254,0.1);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    .countdown-unit:nth-child(2) .countdown-num { border-color: rgba(148,226,213,0.25); }
+    .countdown-unit:nth-child(3) .countdown-num { border-color: rgba(243,139,168,0.2); }
+    .countdown-unit:nth-child(4) .countdown-num { border-color: rgba(249,226,175,0.2); }
+    .countdown-num::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(203,166,247,0.04) 0%, transparent 100%);
+    }
+    .countdown-lbl {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      color: var(--overlay0);
+      text-transform: uppercase;
+    }
+    #secret-message {
+      margin-top: 40px;
+      opacity: 0;
+      animation: fadeIn 0.6s forwards;
+    }
+    #secret-message a {
+      font-size: 11px;
+      color: var(--yellow);
+      text-decoration: none;
+      letter-spacing: 0.2em;
+      border: 1px dashed rgba(249,226,175,0.4);
+      padding: 8px 16px;
+      display: inline-block;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    #secret-message a:hover {
+      background: rgba(249,226,175,0.08);
+      border-color: var(--yellow);
+    }
+    .corner {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .corner-tl { top: 70px; left: 20px; border-top: 1px solid rgba(203,166,247,0.2); border-left: 1px solid rgba(203,166,247,0.2); }
+    .corner-br { bottom: 40px; right: 20px; border-bottom: 1px solid rgba(203,166,247,0.2); border-right: 1px solid rgba(203,166,247,0.2); }
+    .hint {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      opacity: 0;
+      animation: fadeIn 1s 2s forwards;
+    }
+    .hint p {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--overlay0);
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 1px solid rgba(180,190,254,0.1);
+      border-radius: 99px;
+      background: rgba(24,24,37,0.8);
+      backdrop-filter: blur(8px);
+      white-space: nowrap;
+    }
+    footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 32px 16px;
+      pointer-events: none;
+    }
+    footer p {
+      font-size: 10px;
+      color: var(--overlay0);
+      letter-spacing: 0.1em;
+      pointer-events: all;
+    }
+    footer a { color: var(--overlay0); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--mauve); }
+    .birthday-msg {
+      font-weight: bold;
+      font-size: clamp(16px, 3vw, 24px);
+      color: var(--yellow);
+      letter-spacing: 0.15em;
+      text-align: center;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes numFlip {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .flip { animation: numFlip 0.2s ease forwards; }
 
-        .corner {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            pointer-events: none;
-            z-index: 2;
-        }
-        .corner-tl { top: 20px; left: 20px; border-top: 1px solid rgba(203,166,247,0.2); border-left: 1px solid rgba(203,166,247,0.2); }
-        .corner-br { bottom: 20px; right: 20px; border-bottom: 1px solid rgba(203,166,247,0.2); border-right: 1px solid rgba(203,166,247,0.2); }
+    /* Guest Wall Styles */
+    #guest-wall {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 50;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    #gw-toggle {
+      align-self: flex-end;
+      background: rgba(24,24,37,0.85);
+      border: 1px solid rgba(203,166,247,0.2);
+      border-radius: 4px;
+      padding: 8px 14px;
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--mauve);
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    #gw-toggle:hover {
+      background: rgba(203,166,247,0.1);
+      border-color: rgba(203,166,247,0.4);
+    }
+    #gw-panel {
+      background: rgba(17,17,27,0.92);
+      border: 1px solid rgba(180,190,254,0.1);
+      border-radius: 6px;
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      margin-bottom: 8px;
+      max-height: 420px;
+      animation: gwSlideUp 0.25s ease forwards;
+    }
+    @keyframes gwSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    #gw-panel.open { display: flex; }
+    #gw-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(180,190,254,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    #gw-header-left {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--mauve);
+    }
+    #gw-header-left span { color: var(--overlay0); margin-right: 6px; }
+    #gw-count {
+      font-size: 10px;
+      color: var(--overlay0);
+      letter-spacing: 0.1em;
+    }
+    #gw-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--surface1) transparent;
+    }
+    #gw-messages::-webkit-scrollbar { width: 3px; }
+    #gw-messages::-webkit-scrollbar-track { background: transparent; }
+    #gw-messages::-webkit-scrollbar-thumb { background: var(--surface1); border-radius: 2px; }
+    .gw-msg {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      animation: fadeUp 0.3s ease forwards;
+    }
+    .gw-msg-from-discord .gw-bubble {
+      background: rgba(88,91,112,0.25);
+      border-color: rgba(88,91,112,0.3);
+      border-radius: 4px 12px 12px 4px;
+    }
+    .gw-nick {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: var(--overlay1);
+      padding: 0 4px;
+    }
+    .gw-nick.is-host { color: var(--mauve); }
+    .gw-bubble {
+      background: rgba(49,50,68,0.5);
+      border: 1px solid rgba(180,190,254,0.08);
+      border-radius: 4px 12px 12px 12px;
+      padding: 7px 10px;
+      font-size: 12px;
+      color: var(--subtext1);
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+      word-break: break-word;
+    }
+    .gw-time {
+      font-size: 8px;
+      color: var(--overlay0);
+      padding: 0 4px;
+      letter-spacing: 0.1em;
+    }
+    #gw-empty {
+      font-size: 11px;
+      color: var(--overlay0);
+      letter-spacing: 0.1em;
+      text-align: center;
+      padding: 20px 0;
+    }
+    #gw-footer {
+      border-top: 1px solid rgba(180,190,254,0.08);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    #gw-nick-input {
+      width: 100%;
+      background: rgba(49,50,68,0.4);
+      border: 1px solid rgba(180,190,254,0.08);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-family: inherit;
+      font-size: 11px;
+      color: var(--text);
+      outline: none;
+      letter-spacing: 0.05em;
+      transition: border-color 0.2s;
+    }
+    #gw-nick-input:focus { border-color: rgba(203,166,247,0.3); }
+    #gw-nick-input::placeholder { color: var(--overlay0); }
+    #gw-input-row { display: flex; gap: 6px; }
+    #gw-msg-input {
+      flex: 1;
+      background: rgba(49,50,68,0.4);
+      border: 1px solid rgba(180,190,254,0.08);
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-family: inherit;
+      font-size: 12px;
+      color: var(--text);
+      outline: none;
+      letter-spacing: 0.03em;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    #gw-msg-input:focus { border-color: rgba(203,166,247,0.3); }
+    #gw-msg-input::placeholder { color: var(--overlay0); }
+    #gw-send {
+      background: rgba(203,166,247,0.12);
+      border: 1px solid rgba(203,166,247,0.25);
+      border-radius: 4px;
+      color: var(--mauve);
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      padding: 8px 12px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      align-self: flex-end;
+    }
+    #gw-send:hover:not(:disabled) {
+      background: rgba(203,166,247,0.22);
+      border-color: rgba(203,166,247,0.45);
+    }
+    #gw-send:disabled { opacity: 0.4; cursor: not-allowed; }
+    #gw-status { font-size: 10px; letter-spacing: 0.08em; min-height: 14px; padding: 0 2px; }
+    #gw-status.error { color: var(--red); }
+    #gw-status.ok    { color: var(--green); }
+    #gw-status.warn  { color: var(--yellow); }
 
-        #login-section {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 24px;
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        .login-box {
-            width: min(100%, 360px);
-            text-align: center;
-        }
-
-        .login-fields {
-            opacity: 0;
-            animation: fadeUp 0.6s 0.4s forwards;
-        }
-
-        .input-wrap {
-            position: relative;
-            margin-bottom: 10px;
-        }
-
-        .input-wrap input {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(49,50,68,0.6);
-            border: 1px solid rgba(180,190,254,0.1);
-            border-radius: 4px;
-            color: var(--text);
-            font-family: inherit;
-            font-size: 13px;
-            letter-spacing: 0.05em;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .input-wrap input:focus {
-            border-color: rgba(203,166,247,0.4);
-        }
-
-        .input-wrap input::placeholder { color: var(--overlay0); }
-
-        .btn-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 4px;
-        }
-
-        button {
-            font-family: inherit;
-            font-size: 12px;
-            letter-spacing: 0.1em;
-            cursor: pointer;
-            border: none;
-            border-radius: 4px;
-            padding: 11px 18px;
-            transition: all 0.2s;
-        }
-
-        .btn-main {
-            flex: 1;
-            background: rgba(203,166,247,0.15);
-            color: var(--mauve);
-            border: 1px solid rgba(203,166,247,0.3);
-        }
-        .btn-main:hover {
-            background: rgba(203,166,247,0.25);
-            border-color: rgba(203,166,247,0.5);
-        }
-
-        .btn-ghost {
-            background: rgba(49,50,68,0.6);
-            color: var(--overlay1);
-            border: 1px solid rgba(180,190,254,0.1);
-        }
-        .btn-ghost:hover {
-            color: var(--text);
-            border-color: rgba(180,190,254,0.25);
-        }
-
-        .btn-red {
-            background: rgba(243,139,168,0.12);
-            color: var(--red);
-            border: 1px solid rgba(243,139,168,0.25);
-        }
-        .btn-red:hover {
-            background: rgba(243,139,168,0.22);
-        }
-
-        .btn-red-confirm {
-            background: rgba(243,139,168,0.3);
-            color: var(--red);
-            border: 1px solid rgba(243,139,168,0.55);
-            animation: confirmPulse 0.2s ease;
-        }
-        .btn-red-confirm:hover {
-            background: rgba(243,139,168,0.45);
-        }
-
-        @keyframes confirmPulse {
-            from { transform: scale(0.95); }
-            to   { transform: scale(1); }
-        }
-
-        .btn-green {
-            background: rgba(166,227,161,0.12);
-            color: var(--green);
-            border: 1px solid rgba(166,227,161,0.25);
-        }
-        .btn-green:hover {
-            background: rgba(166,227,161,0.22);
-        }
-
-        .error-msg {
-            font-size: 12px;
-            color: var(--red);
-            letter-spacing: 0.05em;
-            margin-top: 10px;
-            min-height: 18px;
-        }
-
-        #admin-section {
-            display: none;
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 48px 24px 80px;
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 36px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(180,190,254,0.08);
-        }
-
-        .admin-title {
-            font-size: 13px;
-            color: var(--overlay1);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-        }
-
-        .admin-title span { color: var(--mauve); }
-
-        .card {
-            background: rgba(24,24,37,0.6);
-            border: 1px solid rgba(180,190,254,0.08);
-            border-radius: 6px;
-            padding: 24px;
-            margin-bottom: 16px;
-            backdrop-filter: blur(8px);
-        }
-
-        .card-label {
-            font-size: 10px;
-            letter-spacing: 0.3em;
-            color: var(--mauve);
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-label::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: rgba(203,166,247,0.15);
-        }
-
-        .card-label-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .card-label-row .card-label {
-            margin-bottom: 0;
-            flex: 1;
-        }
-
-        .refresh-indicator {
-            font-size: 9px;
-            letter-spacing: 0.15em;
-            color: var(--overlay0);
-            text-transform: uppercase;
-            opacity: 0;
-            transition: opacity 0.3s;
-            flex-shrink: 0;
-            margin-left: 10px;
-        }
-
-        .refresh-indicator.visible {
-            opacity: 1;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 24px;
-        }
-
-        .stat-box {
-            background: rgba(49,50,68,0.4);
-            border: 1px solid rgba(180,190,254,0.06);
-            border-radius: 4px;
-            padding: 16px 12px;
-            text-align: center;
-        }
-
-        .stat-num {
-            font-size: 30px;
-            font-weight: bold;
-            color: var(--text);
-            line-height: 1;
-            margin-bottom: 6px;
-        }
-
-        .stat-num.green { color: var(--green); }
-        .stat-num.blue  { color: var(--blue); }
-        .stat-num.mauve { color: var(--mauve); }
-
-        .stat-label {
-            font-size: 9px;
-            letter-spacing: 0.2em;
-            color: var(--overlay0);
-            text-transform: uppercase;
-        }
-
-        .views-list { margin-top: 4px; }
-
-        .views-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 9px 0;
-            border-bottom: 1px solid rgba(180,190,254,0.05);
-            font-size: 12px;
-        }
-
-        .views-row:last-child { border-bottom: none; }
-
-        .views-path { color: var(--blue); letter-spacing: 0.05em; }
-
-        .views-count {
-            font-size: 11px;
-            color: var(--overlay1);
-            background: rgba(49,50,68,0.6);
-            padding: 2px 10px;
-            border-radius: 99px;
-            border: 1px solid rgba(180,190,254,0.08);
-        }
-
-        .views-empty {
-            font-size: 12px;
-            color: var(--overlay0);
-            letter-spacing: 0.1em;
-            padding: 8px 0;
-        }
-
-        .announce-input-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .announce-input-row input {
-            flex: 1;
-            padding: 11px 14px;
-            background: rgba(49,50,68,0.6);
-            border: 1px solid rgba(180,190,254,0.1);
-            border-radius: 4px;
-            color: var(--text);
-            font-family: inherit;
-            font-size: 13px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .announce-input-row input:focus {
-            border-color: rgba(203,166,247,0.4);
-        }
-
-        .announce-input-row input::placeholder { color: var(--overlay0); }
-
-        .announcement-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 14px;
-            background: rgba(49,50,68,0.3);
-            border: 1px solid rgba(180,190,254,0.06);
-            border-radius: 4px;
-            margin-bottom: 8px;
-            font-size: 12px;
-        }
-
-        .badge {
-            font-size: 9px;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            padding: 3px 8px;
-            border-radius: 99px;
-            flex-shrink: 0;
-        }
-
-        .badge-live {
-            background: rgba(166,227,161,0.12);
-            color: var(--green);
-            border: 1px solid rgba(166,227,161,0.25);
-        }
-
-        .badge-off {
-            background: rgba(243,139,168,0.1);
-            color: var(--maroon);
-            border: 1px solid rgba(243,139,168,0.2);
-        }
-
-        .badge-host {
-            background: rgba(203,166,247,0.12);
-            color: var(--mauve);
-            border: 1px solid rgba(203,166,247,0.25);
-        }
-
-        .badge-guest {
-            background: rgba(49,50,68,0.6);
-            color: var(--overlay1);
-            border: 1px solid rgba(180,190,254,0.1);
-        }
-
-        .announce-msg {
-            flex: 1;
-            color: var(--subtext1);
-            word-break: break-word;
-            letter-spacing: 0.03em;
-        }
-
-        .announce-actions {
-            display: flex;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-
-        .announce-actions button {
-            padding: 5px 10px;
-            font-size: 10px;
-            letter-spacing: 0.1em;
-        }
-
-        .no-announce {
-            font-size: 12px;
-            color: var(--overlay0);
-            letter-spacing: 0.1em;
-            padding: 4px 0;
-        }
-
-        .gw-nick {
-            color: var(--overlay1);
-            margin-right: 6px;
-        }
-
-        .gw-time {
-            display: block;
-            font-size: 10px;
-            color: var(--overlay0);
-            margin-top: 3px;
-            letter-spacing: 0.08em;
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
-
-        @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-            .stat-num { font-size: 22px; }
-            .announce-input-row { flex-direction: column; }
-        }
-    </style>
+    @media (max-width: 480px) {
+      .typewriter-card { min-width: unset; width: 100%; }
+      .countdown-num { min-width: 56px; font-size: 28px; }
+      footer { padding: 0 16px 12px; }
+      #guest-wall { width: calc(100vw - 24px); right: 12px; }
+    }
+  </style>
 </head>
 <body>
-
+<div id="particles-js"></div>
 <div class="corner corner-tl"></div>
 <div class="corner corner-br"></div>
 
-<div id="login-section">
-    <div class="login-box">
-        <div class="login-fields">
-            <div class="input-wrap">
-                <input type="email" id="email" placeholder="email">
-            </div>
-            <div class="input-wrap">
-                <input type="password" id="password" placeholder="password">
-            </div>
-            <div class="btn-row">
-                <button class="btn-main" id="login-button">login</button>
-                <button class="btn-ghost" id="toggle-password">show</button>
-            </div>
-            <p class="error-msg" id="error-message"></p>
-        </div>
-    </div>
+<div id="announcement-banner">
+  <span id="announcement-text"></span>
+  <button id="announcement-close" aria-label="Dismiss">×</button>
 </div>
 
-<div id="admin-section">
-    <div class="admin-header">
-        <p class="admin-title"><span>//</span> admin dashboard</p>
-        <button class="btn-red" id="logout-button">logout</button>
-    </div>
+<nav id="main-nav">
+  <a href="https://exophs.is-a.dev/" class="nav-logo">
+    <span>.</span>exophs
+  </a>
+  <div class="hamburger" id="hamburger">
+    <div></div><div></div><div></div>
+  </div>
+</nav>
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="slide-menu" id="slideMenu">
+  <a href="https://exophs.vercel.app/about/" aria-label="About Me">
+    <div class="menu-item"><span class="num">01</span> About Me</div>
+  </a>
+  <a href="https://exophs.vercel.app/geocities/" aria-label="Silly Geocities Thing">
+    <div class="menu-item"><span class="num">02</span> Geocities thing</div>
+    <span class="menu-warn">⚠ Epilepsy warning: flashing lights</span>
+  </a>
+  <a href="https://exophs.vercel.app/text-editor/" aria-label="Text Editor">
+    <div class="menu-item"><span class="num">03</span> Text Editor</div>
+  </a>
+  <a href="https://exophs.vercel.app/terminal/" aria-label="Terminal">
+    <div class="menu-item"><span class="num">04</span> Terminal</div>
+  </a>
+  <a href="https://exophs.vercel.app/terminal/terminalV2/" aria-label="TerminalV2">
+    <div class="menu-item"><span class="num">05</span> Terminal V2</div>
+  </a>
+</div>
 
-    <div class="card">
-        <div class="card-label-row">
-            <p class="card-label">site analytics</p>
-            <span class="refresh-indicator" id="analytics-refresh-indicator">refreshed</span>
-        </div>
-        <div class="stats-grid">
-            <div class="stat-box">
-                <div class="stat-num mauve" id="stat-total">—</div>
-                <div class="stat-label">total</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-num green" id="stat-today">—</div>
-                <div class="stat-label">today</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-num blue" id="stat-week">—</div>
-                <div class="stat-label">this week</div>
-            </div>
-        </div>
-        <p class="card-label">top pages</p>
-        <div class="views-list" id="top-pages"></div>
+<main>
+  <div class="hero">
+    <p class="eyebrow">Welcome to my website, have a look around</p>
+    <a href="https://exophs.is-a.dev/" style="text-decoration:none;">
+      <h1 class="hero-name" id="main-title">Hey Chat</h1>
+    </a>
+    <p class="hero-sub">// exophs &nbsp;·&nbsp; builder of things &nbsp;·&nbsp; .exophs on discord</p>
+    <div class="typewriter-wrap">
+      <div class="typewriter-card">
+        <span class="typewriter-prompt">~$</span>
+        <span id="typewriter"></span>
+        <span class="cursor-blink"></span>
+      </div>
     </div>
+    <div class="countdown-wrap" id="countdownWrap">
+      <p class="countdown-label">countdown to 19th birthday — oct 16</p>
+      <div class="countdown-grid" id="countdownGrid">
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-days">000</div>
+          <div class="countdown-lbl">days</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-hours">00</div>
+          <div class="countdown-lbl">hours</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-mins">00</div>
+          <div class="countdown-lbl">mins</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-secs">00</div>
+          <div class="countdown-lbl">secs</div>
+        </div>
+      </div>
+    </div>
+    <div id="secret-message" style="display:none; margin-top:32px;">
+      <a href="https://exophs.vercel.app/this/is/not/a/secret/">🔒 click here to reveal the secret page</a>
+    </div>
+  </div>
+</main>
 
-    <div class="card">
-        <p class="card-label">announcement banner</p>
-        <div class="announce-input-row">
-            <input type="text" id="announcement-input" placeholder="write an announcement...">
-            <button class="btn-green" id="post-announcement">post</button>
-        </div>
-        <div id="announcement-list"></div>
-    </div>
+<div class="hint" id="hintMessage">
+  <p>find the hidden secret — hint: the title</p>
+</div>
 
-    <div class="card">
-        <div class="card-label-row">
-            <p class="card-label">guest wall messages</p>
-            <span class="refresh-indicator" id="gw-refresh-indicator">new message</span>
-        </div>
-        <div id="gw-list"></div>
+<footer>
+  <p>© 2026 <a href="https://exophs.is-a.dev">exophs</a></p>
+</footer>
+
+<!-- Guest Wall -->
+<div id="guest-wall">
+  <div id="gw-panel">
+    <div id="gw-header">
+      <span id="gw-header-left"><span>//</span>guest wall</span>
+      <span id="gw-count"></span>
     </div>
+    <div id="gw-messages">
+      <div id="gw-empty">no messages yet. say something!</div>
+    </div>
+    <div id="gw-footer">
+      <input id="gw-nick-input" type="text" placeholder="nickname (optional)" maxlength="24" autocomplete="off">
+      <div id="gw-input-row">
+        <textarea id="gw-msg-input" placeholder="leave a message..." maxlength="200" rows="2"></textarea>
+        <button id="gw-send">send</button>
+      </div>
+      <div id="gw-status"></div>
+    </div>
+  </div>
+  <button id="gw-toggle">// guest wall</button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    let sb;
-    let ADMIN_EMAIL;
-    let analyticsInterval = null;
+const _sb = supabase.createClient(
+  'https://vhyboshqppbgzarylmuv.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoeWJvc2hxcHBiZ3phcnlsbXV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNTUzMzksImV4cCI6MjA5NDczMTMzOX0.ROc6E_HsMZOuRQB1C9Fj37QWA8PddcZwXxcrgv_kP0Q'
+);
 
-    async function init() {
-        const config = await fetch('/api/admin-data').then(r => r.json());
-        ADMIN_EMAIL = config.email;
-        const { createClient } = supabase;
-        sb = createClient(config.url, config.key);
-        checkSession();
+const COOLDOWN_MS = 30000;
+
+if (!sessionStorage.getItem('tracked')) {
+  _sb.from('page_views').insert({ path: window.location.pathname }).then(() => {});
+  sessionStorage.setItem('tracked', '1');
+}
+
+(async () => {
+  const { data } = await _sb
+    .from('announcements')
+    .select('message')
+    .eq('active', true)
+    .order('created_at', { ascending: false })
+    .limit(1);
+  if (data && data.length > 0) {
+    const banner = document.getElementById('announcement-banner');
+    document.getElementById('announcement-text').textContent = data[0].message;
+    banner.classList.add('visible');
+    document.getElementById('announcement-close').addEventListener('click', () => {
+      banner.style.transition = 'all 0.3s ease';
+      banner.style.opacity = '0';
+      banner.style.transform = 'translateY(-100%)';
+      setTimeout(() => banner.classList.remove('visible'), 300);
+    });
+  }
+})();
+
+(function() {
+  const panel     = document.getElementById('gw-panel');
+  const toggle    = document.getElementById('gw-toggle');
+  const msgBox    = document.getElementById('gw-messages');
+  const emptyMsg  = document.getElementById('gw-empty');
+  const nickInput = document.getElementById('gw-nick-input');
+  const msgInput  = document.getElementById('gw-msg-input');
+  const sendBtn   = document.getElementById('gw-send');
+  const status    = document.getElementById('gw-status');
+  const countEl   = document.getElementById('gw-count');
+
+  let open = false;
+  let messages = [];
+  let cooldownEnd = parseInt(localStorage.getItem('gw_cooldown') || '0');
+
+  toggle.addEventListener('click', () => {
+    open = !open;
+    panel.classList.toggle('open', open);
+    toggle.textContent = open ? '// close' : '// guest wall';
+    if (open) { loadMessages(); scrollBottom(); }
+  });
+
+  function timeAgo(iso) {
+    const diff = Date.now() - new Date(iso).getTime();
+    const m = Math.floor(diff / 60000);
+    const h = Math.floor(diff / 3600000);
+    const d = Math.floor(diff / 86400000);
+    if (diff < 60000) return 'just now';
+    if (m < 60) return m + 'm ago';
+    if (h < 24) return h + 'h ago';
+    return d + 'd ago';
+  }
+
+  function sanitize(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function renderMessages() {
+    if (messages.length === 0) {
+      emptyMsg.style.display = 'block';
+      countEl.textContent = '';
+      return;
     }
+    emptyMsg.style.display = 'none';
+    countEl.textContent = messages.length + ' message' + (messages.length !== 1 ? 's' : '');
+    msgBox.innerHTML = '';
+    msgBox.appendChild(emptyMsg);
+    messages.forEach(m => {
+      const wrap = document.createElement('div');
+      const isHost = m.source === 'discord';
+      wrap.className = 'gw-msg' + (isHost ? ' gw-msg-from-discord' : '');
+      const nick = m.nickname || 'anonymous';
+      wrap.innerHTML = `
+        <div class="gw-nick ${isHost ? 'is-host' : ''}">${sanitize(nick)}${isHost ? ' · host' : ''}</div>
+        <div class="gw-bubble">${sanitize(m.message)}</div>
+        <div class="gw-time">${timeAgo(m.created_at)}</div>
+      `;
+      msgBox.appendChild(wrap);
+    });
+    scrollBottom();
+  }
 
-    init();
+  function scrollBottom() {
+    requestAnimationFrame(() => { msgBox.scrollTop = msgBox.scrollHeight; });
+  }
 
-    const loginSection = document.getElementById('login-section');
-    const adminSection = document.getElementById('admin-section');
-    const errorMessage = document.getElementById('error-message');
+  async function loadMessages() {
+    const { data } = await _sb
+      .from('guest_wall')
+      .select('*')
+      .order('created_at', { ascending: true })
+      .limit(50);
+    if (data) { messages = data; renderMessages(); }
+  }
 
-    async function checkSession() {
-        const { data: { session } } = await sb.auth.getSession();
-        if (session && session.user.email === ADMIN_EMAIL) showAdmin();
+  function setCooldown() {
+    cooldownEnd = Date.now() + COOLDOWN_MS;
+    localStorage.setItem('gw_cooldown', cooldownEnd.toString());
+    updateCooldownUI();
+  }
+
+  function updateCooldownUI() {
+    const remaining = cooldownEnd - Date.now();
+    if (remaining > 0) {
+      sendBtn.disabled = true;
+      status.textContent = 'cooldown: ' + Math.ceil(remaining / 1000) + 's';
+      status.className = 'warn';
+      setTimeout(updateCooldownUI, 1000);
+    } else {
+      sendBtn.disabled = false;
+      status.textContent = '';
+      status.className = '';
     }
+  }
 
-    function showAdmin() {
-        loginSection.style.display = 'none';
-        adminSection.style.display = 'block';
-        loadAnalytics();
-        loadAnnouncements();
-        loadGuestWall();
-        startAnalyticsPolling();
-        startGuestWallRealtime();
-    }
+  function isSpam(text) {
+    if (text.length < 2) return true;
+    if (/(.)\1{6,}/.test(text)) return true;
+    if (text.split(' ').length === 1 && text.length > 40) return true;
+    const words = text.toLowerCase().split(/\s+/);
+    const unique = new Set(words);
+    if (words.length > 4 && unique.size / words.length < 0.3) return true;
+    return false;
+  }
 
-    function showLogin() {
-        loginSection.style.display = 'flex';
-        adminSection.style.display = 'none';
-        errorMessage.textContent = '';
-        if (analyticsInterval) { clearInterval(analyticsInterval); analyticsInterval = null; }
-    }
+  sendBtn.addEventListener('click', sendMessage);
+  msgInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
 
-    function flashRefreshIndicator(id) {
-        const el = document.getElementById(id);
-        el.classList.add('visible');
-        setTimeout(() => el.classList.remove('visible'), 1500);
-    }
+  async function sendMessage() {
+    const msg = msgInput.value.trim();
+    const nick = nickInput.value.trim().slice(0, 24) || 'anonymous';
 
-    function startAnalyticsPolling() {
-        if (analyticsInterval) clearInterval(analyticsInterval);
-        analyticsInterval = setInterval(async () => {
-            await loadAnalytics();
-            flashRefreshIndicator('analytics-refresh-indicator');
-        }, 60000);
-    }
+    if (!msg) { status.textContent = 'message is empty.'; status.className = 'error'; return; }
+    if (msg.length > 200) { status.textContent = 'too long (max 200 chars).'; status.className = 'error'; return; }
+    if (isSpam(msg)) { status.textContent = 'message looks like spam.'; status.className = 'error'; return; }
+    if (Date.now() < cooldownEnd) { updateCooldownUI(); return; }
 
-    function startGuestWallRealtime() {
-        sb.channel('admin_gw_realtime')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'guest_wall' }, async () => {
-                await loadGuestWall();
-                flashRefreshIndicator('gw-refresh-indicator');
-            })
-            .subscribe();
-    }
+    sendBtn.disabled = true;
+    status.textContent = 'sending...';
+    status.className = '';
 
-    document.getElementById('login-button').addEventListener('click', async () => {
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        errorMessage.textContent = '';
-        const { data, error } = await sb.auth.signInWithPassword({ email, password });
-        if (error || !data.user) { errorMessage.textContent = 'invalid credentials.'; return; }
-        if (data.user.email !== ADMIN_EMAIL) { await sb.auth.signOut(); errorMessage.textContent = 'access denied.'; return; }
-        showAdmin();
+    // Insert into Supabase
+    const { error } = await _sb.from('guest_wall').insert({
+      nickname: nick === 'anonymous' ? null : nick,
+      message: msg,
+      source: 'web'
     });
 
-    document.getElementById('logout-button').addEventListener('click', async () => {
-        await sb.auth.signOut();
-        showLogin();
-    });
+    if (error) {
+      status.textContent = 'failed to save message.';
+      status.className = 'error';
+      sendBtn.disabled = false;
+      return;
+    }
 
-    document.getElementById('toggle-password').addEventListener('click', () => {
-        const pw = document.getElementById('password');
-        const btn = document.getElementById('toggle-password');
-        pw.type = pw.type === 'password' ? 'text' : 'password';
-        btn.textContent = pw.type === 'password' ? 'show' : 'hide';
-    });
+    // Send to Discord via our secure API route
+    try {
+      const response = await fetch('/api/send-guestwall', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: 'Guest Wall',
+          embeds: [{
+            description: msg,
+            color: 0xcba6f7,
+            author: { name: nick },
+            footer: { text: 'exophs.vercel.app · guest wall' },
+            timestamp: new Date().toISOString()
+          }]
+        })
+      });
 
-    document.getElementById('password').addEventListener('keydown', e => {
-        if (e.key === 'Enter') document.getElementById('login-button').click();
-    });
+      if (!response.ok) throw new Error('Discord request failed');
+    } catch (err) {
+      console.error('Discord webhook failed:', err);
+      // Don't show error to user since message is already saved
+    }
 
-    async function loadAnalytics() {
-        const { data: all } = await sb.from('page_views').select('path, visited_at');
-        if (!all) return;
+    msgInput.value = '';
+    status.textContent = 'message sent!';
+    status.className = 'ok';
+    setCooldown();
+    await loadMessages();
 
-        const now = new Date();
-        const todayStr = now.toISOString().slice(0, 10);
-        const weekAgo = new Date(now - 7 * 86400000).toISOString();
+    setTimeout(() => {
+      if (status.className === 'ok') {
+        status.textContent = '';
+        status.className = '';
+      }
+    }, 2000);
+  }
 
-        document.getElementById('stat-total').textContent = all.length;
-        document.getElementById('stat-today').textContent = all.filter(r => r.visited_at.startsWith(todayStr)).length;
-        document.getElementById('stat-week').textContent = all.filter(r => r.visited_at >= weekAgo).length;
+  _sb
+    .channel('guest_wall_realtime')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'guest_wall' }, payload => {
+      messages.push(payload.new);
+      if (open) renderMessages();
+    })
+    .subscribe();
 
-        const counts = {};
-        all.forEach(r => { counts[r.path] = (counts[r.path] || 0) + 1; });
-        const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  if (Date.now() < cooldownEnd) updateCooldownUI();
+  loadMessages();
+})();
+</script>
 
-        const container = document.getElementById('top-pages');
-        if (sorted.length === 0) {
-            container.innerHTML = '<p class="views-empty">no data yet.</p>';
-            return;
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof particlesJS !== 'undefined') {
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 60 },
+        color: { value: "#cba6f7" },
+        shape: { type: "circle" },
+        opacity: { value: 0.18, random: true },
+        size: { value: 1.5, random: true },
+        line_linked: {
+          enable: true,
+          distance: 160,
+          color: "#cba6f7",
+          opacity: 0.06,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 0.4,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out"
         }
-        container.innerHTML = sorted.map(([path, count]) =>
-            `<div class="views-row">
-                <span class="views-path">${path}</span>
-                <span class="views-count">${count} views</span>
-            </div>`
-        ).join('');
-    }
-
-    async function loadAnnouncements() {
-        const { data } = await sb.from('announcements').select('*').order('created_at', { ascending: false }).limit(10);
-        const container = document.getElementById('announcement-list');
-        if (!data || data.length === 0) {
-            container.innerHTML = '<p class="no-announce">no announcements yet.</p>';
-            return;
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "grab" },
+          onclick: { enable: true, mode: "push" },
+          resize: true
+        },
+        modes: {
+          grab: { distance: 140, line_linked: { opacity: 0.25 } },
+          push: { particles_nb: 3 }
         }
-        container.innerHTML = data.map(a => `
-            <div class="announcement-item">
-                <span class="badge ${a.active ? 'badge-live' : 'badge-off'}">${a.active ? 'live' : 'off'}</span>
-                <span class="announce-msg">${a.message}</span>
-                <div class="announce-actions">
-                    <button class="btn-ghost" onclick="toggleAnnouncement('${a.id}', ${a.active})">${a.active ? 'deactivate' : 'activate'}</button>
-                    <button class="btn-red" onclick="deleteAnnouncement('${a.id}', this)">delete</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    document.getElementById('post-announcement').addEventListener('click', async () => {
-        const msg = document.getElementById('announcement-input').value.trim();
-        if (!msg) return;
-        await sb.from('announcements').insert({ message: msg, active: true });
-        document.getElementById('announcement-input').value = '';
-        loadAnnouncements();
+      }
     });
+  }
 
-    document.getElementById('announcement-input').addEventListener('keydown', e => {
-        if (e.key === 'Enter') document.getElementById('post-announcement').click();
-    });
+  const hamburger = document.getElementById('hamburger');
+  const slideMenu = document.getElementById('slideMenu');
+  const menuOverlay = document.getElementById('menuOverlay');
+  hamburger.addEventListener('click', () => {
+    slideMenu.classList.toggle('open');
+    menuOverlay.classList.toggle('open');
+    hamburger.classList.toggle('open');
+  });
+  menuOverlay.addEventListener('click', () => {
+    slideMenu.classList.remove('open');
+    menuOverlay.classList.remove('open');
+    hamburger.classList.remove('open');
+  });
 
-    async function toggleAnnouncement(id, current) {
-        await sb.from('announcements').update({ active: !current }).eq('id', id);
-        loadAnnouncements();
+  document.getElementById('main-title').addEventListener('contextmenu', e => {
+    e.preventDefault();
+    document.getElementById('secret-message').style.display = 'block';
+  });
+
+  let pressTimer;
+  document.getElementById('main-title').addEventListener('touchstart', () => {
+    pressTimer = setTimeout(() => {
+      document.getElementById('secret-message').style.display = 'block';
+    }, 800);
+  });
+  document.getElementById('main-title').addEventListener('touchend', () => clearTimeout(pressTimer));
+
+  const texts = [
+    "add me on discord: .exophs",
+    "visit my github for more projects",
+    "i can see you, yeah you!",
+    "what are you looking at?",
+    ":3",
+    "<3",
+    "meow",
+    "hey fag",
+    "do you like my website?",
+  ];
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
+  }
+  shuffle(texts);
 
-    const confirmStates = {};
-
-    function deleteAnnouncement(id, btn) {
-        if (!confirmStates['ann-' + id]) {
-            confirmStates['ann-' + id] = true;
-            btn.textContent = 'confirm?';
-            btn.classList.remove('btn-red');
-            btn.classList.add('btn-red-confirm');
-            setTimeout(() => {
-                if (confirmStates['ann-' + id]) {
-                    confirmStates['ann-' + id] = false;
-                    if (btn.isConnected) {
-                        btn.textContent = 'delete';
-                        btn.classList.remove('btn-red-confirm');
-                        btn.classList.add('btn-red');
-                    }
-                }
-            }, 3000);
-        } else {
-            confirmStates['ann-' + id] = false;
-            sb.from('announcements').delete().eq('id', id).then(() => loadAnnouncements());
-        }
+  let tIdx = 0, cIdx = 0, deleting = false;
+  function type() {
+    const el = document.getElementById('typewriter');
+    const cur = texts[tIdx];
+    const speed = deleting ? 40 : 120;
+    if (!deleting && cIdx < cur.length) {
+      el.textContent = cur.slice(0, cIdx + 1);
+      cIdx++;
+      setTimeout(type, speed);
+    } else if (deleting && cIdx > 0) {
+      el.textContent = cur.slice(0, cIdx - 1);
+      cIdx--;
+      setTimeout(type, speed);
+    } else if (!deleting && cIdx === cur.length) {
+      deleting = true;
+      setTimeout(type, 1800);
+    } else {
+      deleting = false;
+      tIdx = (tIdx + 1) % texts.length;
+      if (tIdx === 0) shuffle(texts);
+      setTimeout(type, 400);
     }
+  }
+  setTimeout(type, 1200);
 
-    async function loadGuestWall() {
-        const { data } = await sb
-            .from('guest_wall')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(50);
+  const cdDays = document.getElementById('cd-days');
+  const cdHours = document.getElementById('cd-hours');
+  const cdMins = document.getElementById('cd-mins');
+  const cdSecs = document.getElementById('cd-secs');
+  const countdownWrap = document.getElementById('countdownWrap');
 
-        const container = document.getElementById('gw-list');
-        if (!data || data.length === 0) {
-            container.innerHTML = '<p class="no-announce">no messages yet.</p>';
-            return;
-        }
+  function pad(n, len = 2) { return String(n).padStart(len, '0'); }
 
-        container.innerHTML = data.map(m => {
-            const nick = m.nickname || 'anonymous';
-            const isHost = m.source === 'discord';
-            const time = new Date(m.created_at).toLocaleString();
-            return `
-                <div class="announcement-item">
-                    <span class="badge ${isHost ? 'badge-host' : 'badge-guest'}">${isHost ? 'host' : 'guest'}</span>
-                    <span class="announce-msg">
-                        <span class="gw-nick">${nick}</span>${m.message}<span class="gw-time">${time}</span>
-                    </span>
-                    <div class="announce-actions">
-                        <button class="btn-red" onclick="deleteGuestMsg('${m.id}', this)">delete</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
+  function flip(el, val) {
+    if (el.textContent !== val) {
+      el.textContent = val;
+      el.classList.remove('flip');
+      void el.offsetWidth;
+      el.classList.add('flip');
     }
+  }
 
-    function deleteGuestMsg(id, btn) {
-        if (!confirmStates['gw-' + id]) {
-            confirmStates['gw-' + id] = true;
-            btn.textContent = 'confirm?';
-            btn.classList.remove('btn-red');
-            btn.classList.add('btn-red-confirm');
-            setTimeout(() => {
-                if (confirmStates['gw-' + id]) {
-                    confirmStates['gw-' + id] = false;
-                    if (btn.isConnected) {
-                        btn.textContent = 'delete';
-                        btn.classList.remove('btn-red-confirm');
-                        btn.classList.add('btn-red');
-                    }
-                }
-            }, 3000);
-        } else {
-            confirmStates['gw-' + id] = false;
-            btn.disabled = true;
-            btn.textContent = '...';
-            sb.from('guest_wall').delete().eq('id', id).then(() => {
-                btn.closest('.announcement-item').remove();
-                const remaining = document.querySelectorAll('#gw-list .announcement-item').length;
-                if (remaining === 0) document.getElementById('gw-list').innerHTML = '<p class="no-announce">no messages yet.</p>';
-            });
-        }
+  function updateCountdown() {
+    const target = new Date(2026, 9, 16, 0, 0, 0);
+    const diff = target - new Date();
+    if (diff <= 0) {
+      countdownWrap.innerHTML = '<p class="birthday-msg">🎉 happy birthday!! you\'re 19!! 🎉</p>';
+      return;
     }
-
-    checkSession();
+    flip(cdDays, pad(Math.floor(diff / 86400000), 3));
+    flip(cdHours, pad(Math.floor((diff % 86400000) / 3600000)));
+    flip(cdMins, pad(Math.floor((diff % 3600000) / 60000)));
+    flip(cdSecs, pad(Math.floor((diff % 60000) / 1000)));
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+});
 </script>
 </body>
 </html>
