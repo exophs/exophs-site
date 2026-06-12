@@ -4,12 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Visualizer</title>
-    <link rel="icon" href="https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/647227-200.png?v=1743161641679" type="image/png"> 
+    <link rel="icon" href="https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/647227-200.png?v=1743161641679" type="image/png">
     <style>
+        :root {
+            --base: #1e1e2e;
+            --mantle: #181825;
+            --crust: #11111b;
+            --surface0: #313244;
+            --surface1: #45475a;
+            --surface2: #585b70;
+            --text: #cdd6f4;
+            --subtext: #a6adc8;
+            --mauve: #cba6f7;
+            --pink: #f5c2e7;
+            --blue: #89b4fa;
+            --sky: #89dceb;
+            --teal: #94e2d5;
+            --green: #a6e3a1;
+            --yellow: #f9e2af;
+            --peach: #fab387;
+            --red: #f38ba8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--crust);
+            color: var(--text);
             margin: 0;
             padding: 20px;
             display: flex;
@@ -19,28 +43,41 @@
         }
 
         .container {
-            width: 90%;
+            width: 100%;
             max-width: 900px;
-            background-color: #1e1e1e;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            background-color: var(--base);
+            border: 1px solid var(--surface0);
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
         }
 
         h1 {
             text-align: center;
-            margin-bottom: 30px;
-            color: #4CAF50;
+            margin: 0 0 24px;
+            color: var(--mauve);
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
+        /* Drop zone / upload */
         .upload-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            border: 2px dashed #4CAF50;
-            border-radius: 8px;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 28px 16px;
+            border: 2px dashed var(--surface2);
+            border-radius: 10px;
+            background-color: var(--mantle);
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+            text-align: center;
+        }
+
+        .upload-section.dragover {
+            border-color: var(--mauve);
+            background-color: var(--surface0);
         }
 
         .file-input {
@@ -48,126 +85,228 @@
         }
 
         .upload-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
+            background-color: var(--mauve);
+            color: var(--crust);
+            padding: 10px 22px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            font-size: 15px;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.1s ease;
         }
 
         .upload-btn:hover {
-            background-color: #45a049;
+            background-color: var(--pink);
+        }
+
+        .upload-btn:active {
+            transform: scale(0.97);
+        }
+
+        .drop-hint {
+            font-size: 13px;
+            color: var(--subtext);
         }
 
         .file-info {
-            margin-top: 10px;
+            margin-top: 4px;
             font-size: 14px;
+            color: var(--subtext);
         }
 
+        .file-info.error {
+            color: var(--red);
+        }
+
+        .audio-info {
+            text-align: center;
+            margin-bottom: 18px;
+            font-size: 16px;
+            color: var(--text);
+            min-height: 1.4em;
+        }
+
+        /* Controls row */
         .controls {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
         }
 
         .control-btn {
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            background-color: var(--surface0);
+            color: var(--text);
+            border: 1px solid var(--surface1);
+            padding: 9px 16px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            font-size: 14px;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
         }
 
         .control-btn:hover {
-            background-color: #555;
+            background-color: var(--surface1);
+            border-color: var(--mauve);
         }
 
         .control-btn.active {
-            background-color: #4CAF50;
+            background-color: var(--mauve);
+            color: var(--crust);
+            border-color: var(--mauve);
+            font-weight: 600;
         }
 
+        /* Volume control */
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--surface0);
+            border: 1px solid var(--surface1);
+            border-radius: 8px;
+            padding: 6px 14px;
+        }
+
+        .volume-icon {
+            font-size: 16px;
+            color: var(--subtext);
+            width: 20px;
+            text-align: center;
+        }
+
+        input[type="range"]#volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 110px;
+            height: 4px;
+            border-radius: 4px;
+            background: var(--surface2);
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]#volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--mauve);
+            border: none;
+            transition: background-color 0.2s ease;
+        }
+
+        input[type="range"]#volume-slider::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--mauve);
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]#volume-slider:hover::-webkit-slider-thumb {
+            background: var(--pink);
+        }
+
+        #volume-value {
+            font-size: 13px;
+            color: var(--subtext);
+            width: 34px;
+            text-align: right;
+        }
+
+        /* Progress */
         .progress-container {
             width: 100%;
-            height: 5px;
-            background-color: #333;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            height: 6px;
+            background-color: var(--surface0);
+            border-radius: 6px;
+            margin-bottom: 10px;
             cursor: pointer;
+            overflow: hidden;
         }
 
         .progress-bar {
             height: 100%;
-            background-color: #4CAF50;
-            border-radius: 5px;
+            background-color: var(--mauve);
+            border-radius: 6px;
             width: 0%;
+            transition: background-color 0.2s ease;
         }
 
         .time-display {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
+            font-size: 13px;
+            color: var(--subtext);
         }
 
-        /* Visualizer Grid Styles */
+        /* Visualizer Grid */
         .visualizer-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 20px;
         }
 
         .visualizer-option {
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
+            background-color: var(--surface0);
+            color: var(--subtext);
+            border: 1px solid var(--surface1);
+            padding: 10px 6px;
+            border-radius: 8px;
             cursor: pointer;
             text-align: center;
-            transition: all 0.3s;
-            font-size: 14px;
+            transition: all 0.2s ease;
+            font-size: 13px;
         }
 
         .visualizer-option:hover {
-            background-color: #4CAF50;
+            background-color: var(--surface1);
+            color: var(--text);
         }
 
         .visualizer-option.active {
-            background-color: #4CAF50;
-            font-weight: bold;
+            background-color: var(--mauve);
+            color: var(--crust);
+            border-color: var(--mauve);
+            font-weight: 600;
         }
 
-        /* Canvas Styles */
+        /* Canvas */
         canvas {
             width: 100%;
             height: 400px;
-            background-color: #121212;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background-color: var(--mantle);
+            border: 1px solid var(--surface0);
+            border-radius: 10px;
+            margin-bottom: 4px;
             display: block;
         }
 
-        /* Audio Info Styles */
-        .audio-info {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-
-        /* Responsive Adjustments */
         @media (max-width: 768px) {
             .visualizer-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
+
             .controls {
-                flex-wrap: wrap;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .control-btn, .volume-control {
+                width: 100%;
+                justify-content: center;
+            }
+
+            input[type="range"]#volume-slider {
+                width: 100%;
             }
         }
 
@@ -175,9 +314,9 @@
             .visualizer-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .container {
-                padding: 15px;
+                padding: 16px;
             }
         }
     </style>
@@ -187,37 +326,42 @@
     <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-    <!-- HTML content remains exactly the same as previous full implementation -->
     <div class="container">
         <h1>Audio Visualizer</h1>
-        
-        <div class="upload-section">
-            <input type="file" id="audio-upload" class="file-input" accept="audio/*">
-            <button class="upload-btn" id="upload-btn">Choose Audio File</button>
+
+        <div class="upload-section" id="upload-section">
+            <input type="file" id="audio-upload" class="file-input" accept="audio/mpeg,.mp3">
+            <button class="upload-btn" id="upload-btn">Choose MP3 File</button>
+            <div class="drop-hint">or drag and drop an MP3 file here</div>
             <div class="file-info" id="file-info">No file selected</div>
         </div>
-        
+
         <div class="audio-info">
             <div id="now-playing">No audio loaded</div>
         </div>
-        
+
         <div class="controls">
             <button class="control-btn" id="play-btn">Play</button>
             <button class="control-btn" id="pause-btn">Pause</button>
             <button class="control-btn" id="stop-btn">Stop</button>
             <button class="control-btn" id="fullscreen-btn">Fullscreen</button>
+            <div class="volume-control">
+                <span class="volume-icon" id="volume-icon">🔊</span>
+                <input type="range" id="volume-slider" min="0" max="100" value="100">
+                <span id="volume-value">100%</span>
+            </div>
         </div>
-        
+
         <div class="progress-container" id="progress-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
-        
+
         <div class="time-display">
             <span id="current-time">0:00</span>
             <span id="duration">0:00</span>
         </div>
-        
-        <h3 style="text-align: center; margin-bottom: 10px;">Select Visualizer:</h3>
+
+        <h3 style="text-align: center; margin-bottom: 10px; color: var(--subtext); font-weight: 500;">Select Visualizer</h3>
         <div class="visualizer-grid" id="visualizer-grid">
             <div class="visualizer-option active" data-type="waveform">Waveform</div>
             <div class="visualizer-option" data-type="bars">Frequency Bars</div>
@@ -228,16 +372,15 @@
             <div class="visualizer-option" data-type="tunnel">Infinite Tunnel</div>
             <div class="visualizer-option" data-type="spectrogram">Waterfall Spectrogram</div>
         </div>
-        
+
         <canvas id="visualizer"></canvas>
     </div>
 
-    <!-- JavaScript remains exactly the same as previous full implementation -->
     <script>
-        // [All JavaScript code from previous implementation remains unchanged]
         // DOM Elements
         const audioUpload = document.getElementById('audio-upload');
         const uploadBtn = document.getElementById('upload-btn');
+        const uploadSection = document.getElementById('upload-section');
         const fileInfo = document.getElementById('file-info');
         const nowPlaying = document.getElementById('now-playing');
         const playBtn = document.getElementById('play-btn');
@@ -251,11 +394,35 @@
         const visualizerGrid = document.getElementById('visualizer-grid');
         const canvas = document.getElementById('visualizer');
         const ctx = canvas.getContext('2d');
+        const volumeSlider = document.getElementById('volume-slider');
+        const volumeValue = document.getElementById('volume-value');
+        const volumeIcon = document.getElementById('volume-icon');
+
+        // Catppuccin Mocha accent palette used across visualizers
+        const ACCENTS = [
+            { h: 267, name: 'mauve' },  // #cba6f7
+            { h: 316, name: 'pink' },   // #f5c2e7
+            { h: 217, name: 'blue' },   // #89b4fa
+            { h: 189, name: 'sky' },    // #89dceb
+            { h: 170, name: 'teal' },   // #94e2d5
+            { h: 115, name: 'green' },  // #a6e3a1
+            { h: 41,  name: 'yellow' }, // #f9e2af
+            { h: 23,  name: 'peach' },  // #fab387
+            { h: 343, name: 'red' }     // #f38ba8
+        ];
+
+        function accentHue(progress) {
+            // progress: 0..1, maps to a hue sweep across the mocha accent range
+            const startHue = 267; // mauve
+            const sweep = 200;    // degrees to sweep through (avoids harsh wrap)
+            return startHue + progress * sweep;
+        }
 
         // Audio context and variables
         let audioContext;
         let audioSource;
         let analyser;
+        let gainNode;
         let frequencyData;
         let waveformData;
         let audioElement;
@@ -277,8 +444,10 @@
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 analyser = audioContext.createAnalyser();
                 analyser.fftSize = 512;
-                
-                // Create buffers for both frequency and waveform data
+
+                gainNode = audioContext.createGain();
+                gainNode.gain.value = volumeSlider.value / 100;
+
                 frequencyData = new Uint8Array(analyser.frequencyBinCount);
                 waveformData = new Uint8Array(analyser.frequencyBinCount);
             }
@@ -292,12 +461,11 @@
                 });
                 e.target.classList.add('active');
                 currentVisualizer = e.target.dataset.type;
-                
-                // Clear spectrogram history when switching modes
+
                 if (currentVisualizer !== 'spectrogram') {
                     spectrogramHistory = [];
                 }
-                
+
                 if (isPlaying) {
                     cancelAnimationFrame(animationId);
                     drawVisualizer();
@@ -305,15 +473,26 @@
             }
         });
 
-        // File upload handler
-        uploadBtn.addEventListener('click', () => audioUpload.click());
+        // ---- File loading (shared by click-upload and drag-and-drop) ----
+        function isMp3File(file) {
+            if (!file) return false;
+            const nameOk = file.name.toLowerCase().endsWith('.mp3');
+            const typeOk = file.type === 'audio/mpeg' || file.type === 'audio/mp3' || file.type === '';
+            return nameOk && typeOk;
+        }
 
-        audioUpload.addEventListener('change', (e) => {
-            const file = e.target.files[0];
+        function loadAudioFile(file) {
             if (!file) return;
 
+            if (!isMp3File(file)) {
+                fileInfo.textContent = 'Please choose an MP3 file (.mp3)';
+                fileInfo.classList.add('error');
+                return;
+            }
+
+            fileInfo.classList.remove('error');
             fileInfo.textContent = `Selected: ${file.name}`;
-            
+
             if (audioElement) {
                 audioElement.pause();
                 audioElement.currentTime = 0;
@@ -322,15 +501,15 @@
 
             const fileURL = URL.createObjectURL(file);
             audioElement = new Audio(fileURL);
+            audioElement.volume = volumeSlider.value / 100;
             nowPlaying.textContent = `Now Playing: ${file.name}`;
 
-            // Setup audio graph
             initAudioContext();
             audioSource = audioContext.createMediaElementSource(audioElement);
             audioSource.connect(analyser);
-            analyser.connect(audioContext.destination);
+            analyser.connect(gainNode);
+            gainNode.connect(audioContext.destination);
 
-            // Event listeners
             audioElement.addEventListener('play', () => {
                 isPlaying = true;
                 drawVisualizer();
@@ -349,6 +528,58 @@
             });
 
             audioElement.addEventListener('timeupdate', updateProgress);
+        }
+
+        // File upload handler (click)
+        uploadBtn.addEventListener('click', () => audioUpload.click());
+
+        audioUpload.addEventListener('change', (e) => {
+            loadAudioFile(e.target.files[0]);
+        });
+
+        // Drag-and-drop handlers
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadSection.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                uploadSection.classList.add('dragover');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadSection.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                uploadSection.classList.remove('dragover');
+            });
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            if (files && files.length > 0) {
+                loadAudioFile(files[0]);
+            }
+        });
+
+        // Volume control
+        volumeSlider.addEventListener('input', () => {
+            const val = volumeSlider.value;
+            volumeValue.textContent = `${val}%`;
+
+            if (audioElement) {
+                audioElement.volume = val / 100;
+            }
+            if (gainNode) {
+                gainNode.gain.value = val / 100;
+            }
+
+            if (val == 0) {
+                volumeIcon.textContent = '🔇';
+            } else if (val < 50) {
+                volumeIcon.textContent = '🔉';
+            } else {
+                volumeIcon.textContent = '🔊';
+            }
         });
 
         // Control buttons
@@ -383,7 +614,7 @@
                 const { currentTime, duration } = audioElement;
                 const progressPercent = (currentTime / duration) * 100;
                 progressBar.style.width = `${progressPercent}%`;
-                
+
                 currentTimeDisplay.textContent = formatTime(currentTime);
                 durationDisplay.textContent = formatTime(duration);
             }
@@ -410,13 +641,12 @@
 
         function drawVisualizer() {
             if (!isPlaying) return;
-            
-            // Get both frequency and waveform data
+
             analyser.getByteFrequencyData(frequencyData);
             analyser.getByteTimeDomainData(waveformData);
-            
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             switch (currentVisualizer) {
                 case 'waveform':
                     drawWaveform();
@@ -443,32 +673,32 @@
                     drawWaterfallSpectrogram();
                     break;
             }
-            
+
             animationId = requestAnimationFrame(drawVisualizer);
         }
 
         // 1. Classic Waveform
         function drawWaveform() {
             ctx.lineWidth = 2;
-            ctx.strokeStyle = '#4CAF50';
+            ctx.strokeStyle = '#cba6f7';
             ctx.beginPath();
-            
+
             const sliceWidth = canvas.width / waveformData.length;
             let x = 0;
-            
+
             for (let i = 0; i < waveformData.length; i++) {
                 const v = waveformData[i] / 128.0;
                 const y = v * canvas.height / 2;
-                
+
                 if (i === 0) {
                     ctx.moveTo(x, y);
                 } else {
                     ctx.lineTo(x, y);
                 }
-                
+
                 x += sliceWidth;
             }
-            
+
             ctx.lineTo(canvas.width, canvas.height / 2);
             ctx.stroke();
         }
@@ -477,11 +707,11 @@
         function drawBars() {
             const barWidth = (canvas.width / frequencyData.length) * 2.5;
             let x = 0;
-            
+
             for (let i = 0; i < frequencyData.length; i++) {
                 const barHeight = frequencyData[i] / 2;
-                const hue = i / frequencyData.length * 360;
-                ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+                const hue = accentHue(i / frequencyData.length);
+                ctx.fillStyle = `hsl(${hue}, 70%, 75%)`;
                 ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
                 x += barWidth + 1;
             }
@@ -492,26 +722,26 @@
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
             const radius = Math.min(canvas.width, canvas.height) * 0.4;
-            
+
             ctx.lineWidth = 2;
-            ctx.strokeStyle = '#4CAF50';
+            ctx.strokeStyle = '#cba6f7';
             ctx.beginPath();
-            
+
             for (let i = 0; i < frequencyData.length; i++) {
                 const angle = (i / frequencyData.length) * Math.PI * 2;
                 const value = frequencyData[i] / 255;
                 const adjustedRadius = radius * (1 + value * 0.5);
-                
+
                 const x = centerX + Math.cos(angle) * adjustedRadius;
                 const y = centerY + Math.sin(angle) * adjustedRadius;
-                
+
                 if (i === 0) {
                     ctx.moveTo(x, y);
                 } else {
                     ctx.lineTo(x, y);
                 }
             }
-            
+
             ctx.closePath();
             ctx.stroke();
         }
@@ -521,42 +751,42 @@
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
             const maxRadius = Math.min(canvas.width, canvas.height) * 0.4;
-            
-            for (let i = 0; i < frequencyData.length; i += 4) { // Skip some for performance
+
+            for (let i = 0; i < frequencyData.length; i += 4) {
                 const value = frequencyData[i] / 255;
                 const angle = (i / frequencyData.length) * Math.PI * 2;
                 const radius = value * maxRadius;
-                
+
                 const x = centerX + Math.cos(angle) * radius;
                 const y = centerY + Math.sin(angle) * radius;
-                
-                const hue = i / frequencyData.length * 360;
-                ctx.fillStyle = `hsla(${hue}, 100%, 50%, ${value})`;
+
+                const hue = accentHue(i / frequencyData.length);
+                ctx.fillStyle = `hsla(${hue}, 70%, 75%, ${value})`;
                 ctx.beginPath();
                 ctx.arc(x, y, value * 5, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        // 5. Radial Spectrum (New)
+        // 5. Radial Spectrum
         function drawRadialSpectrum() {
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
             const maxRadius = Math.min(canvas.width, canvas.height) * 0.4;
-            
+
             for (let i = 0; i < frequencyData.length; i++) {
                 const value = frequencyData[i] / 255;
                 const angle = (i / frequencyData.length) * Math.PI * 2;
                 const barLength = value * maxRadius * 0.5;
                 const barWidth = 2;
-                
+
                 const x1 = centerX + Math.cos(angle) * maxRadius * 0.6;
                 const y1 = centerY + Math.sin(angle) * maxRadius * 0.6;
                 const x2 = centerX + Math.cos(angle) * (maxRadius * 0.6 + barLength);
                 const y2 = centerY + Math.sin(angle) * (maxRadius * 0.6 + barLength);
-                
-                const hue = i / frequencyData.length * 360;
-                ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+
+                const hue = accentHue(i / frequencyData.length);
+                ctx.strokeStyle = `hsl(${hue}, 70%, 75%)`;
                 ctx.lineWidth = barWidth + value * 3;
                 ctx.beginPath();
                 ctx.moveTo(x1, y1);
@@ -565,99 +795,95 @@
             }
         }
 
-        // 6. Audio Flower (New)
+        // 6. Audio Flower
         function drawAudioFlower() {
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
             const maxRadius = Math.min(canvas.width, canvas.height) * 0.4;
             const petalCount = 12;
-            
+
             for (let p = 0; p < petalCount; p++) {
                 const petalAngle = (p / petalCount) * Math.PI * 2;
                 const petalSize = frequencyData[p % frequencyData.length] / 255 * maxRadius * 0.7;
-                
-                ctx.fillStyle = `hsla(${p * 30}, 80%, 60%, 0.7)`;
+
+                const hue = accentHue(p / petalCount);
+                ctx.fillStyle = `hsla(${hue}, 65%, 75%, 0.65)`;
                 ctx.beginPath();
-                
-                // Create petal shape
+
                 for (let i = 0; i < 20; i++) {
                     const angle = petalAngle + (i / 20) * Math.PI / 4 - Math.PI / 8;
                     const radius = petalSize * (1 - Math.abs(i - 10) / 10);
                     const x = centerX + Math.cos(angle) * radius;
                     const y = centerY + Math.sin(angle) * radius;
-                    
+
                     if (i === 0) {
                         ctx.moveTo(x, y);
                     } else {
                         ctx.lineTo(x, y);
                     }
                 }
-                
+
                 ctx.closePath();
                 ctx.fill();
             }
         }
 
-        // 7. Infinite Tunnel (New)
+        // 7. Infinite Tunnel
         function drawInfiniteTunnel() {
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
             const maxDepth = 20;
-            
+
             for (let d = maxDepth; d > 0; d--) {
                 const depthRatio = d / maxDepth;
                 const radius = depthRatio * Math.min(canvas.width, canvas.height) * 0.4;
                 const opacity = 1 - depthRatio * 0.8;
-                
-                // Use frequency data for this "ring" of the tunnel
+
                 const freqIndex = Math.floor((1 - depthRatio) * frequencyData.length);
                 const value = frequencyData[freqIndex] / 255;
-                
-                ctx.strokeStyle = `hsla(${d * 20}, 100%, 50%, ${opacity})`;
+
+                const hue = accentHue(d / maxDepth);
+                ctx.strokeStyle = `hsla(${hue}, 70%, 75%, ${opacity})`;
                 ctx.lineWidth = 2 + value * 5;
                 ctx.beginPath();
-                
-                // Draw distorted circle based on audio
+
                 for (let i = 0; i < 360; i += 10) {
                     const angle = (i / 180) * Math.PI;
                     const distortion = 1 + (frequencyData[i % frequencyData.length] / 255) * 0.5;
                     const x = centerX + Math.cos(angle) * radius * distortion;
                     const y = centerY + Math.sin(angle) * radius * distortion;
-                    
+
                     if (i === 0) {
                         ctx.moveTo(x, y);
                     } else {
                         ctx.lineTo(x, y);
                     }
                 }
-                
+
                 ctx.closePath();
                 ctx.stroke();
             }
         }
 
-        // 8. Waterfall Spectrogram (New)
+        // 8. Waterfall Spectrogram
         function drawWaterfallSpectrogram() {
-            // Add current frequency data to history
             const currentData = Array.from(frequencyData);
             spectrogramHistory.unshift(currentData);
-            
-            // Keep history at fixed length
+
             if (spectrogramHistory.length > HISTORY_LENGTH) {
                 spectrogramHistory.pop();
             }
-            
+
             const cellWidth = canvas.width / frequencyData.length;
             const cellHeight = canvas.height / HISTORY_LENGTH;
-            
-            // Draw the spectrogram
+
             for (let t = 0; t < spectrogramHistory.length; t++) {
                 for (let f = 0; f < frequencyData.length; f++) {
                     const value = spectrogramHistory[t][f] / 255;
-                    const hue = (1 - value) * 240; // Blue (low) to Red (high)
+                    const hue = 267 - value * 130; // mauve fading toward blue/sky as intensity rises
                     const y = t * cellHeight;
-                    
-                    ctx.fillStyle = `hsla(${hue}, 100%, 50%, ${value})`;
+
+                    ctx.fillStyle = `hsla(${hue}, 70%, ${30 + value * 45}%, ${0.3 + value * 0.7})`;
                     ctx.fillRect(f * cellWidth, y, cellWidth, cellHeight);
                 }
             }
@@ -674,7 +900,6 @@
 
         // Initial setup
         setupCanvas();
-        document.querySelector('.visualizer-option').classList.add('active');
     </script>
 </body>
 </html>
