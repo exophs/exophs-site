@@ -1,5 +1,5 @@
 const video = document.createElement('video');
-video.src = 'https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/bad-apple.mp4?v=1729383680202';
+video.src = 'https://ia601807.us.archive.org/26/items/bad-apple-pv_202307/%E3%80%90%E6%9D%B1%E6%96%B9%E3%80%91Bad%20Apple%21%21%20%EF%BC%B0%EF%BC%B6%E3%80%90%E5%BD%B1%E7%B5%B5%E3%80%91.mp4';
 video.crossOrigin = 'anonymous';
 video.loop = true;
 video.muted = false;
