@@ -455,7 +455,6 @@
     }
     .flip { animation: numFlip 0.2s ease forwards; }
 
-    /* Guest Wall Styles */
     #guest-wall {
       position: fixed;
       bottom: 20px;
@@ -693,7 +692,7 @@
     <a href="https://exophs.is-a.dev/" style="text-decoration:none;">
       <h1 class="hero-name" id="main-title">Hey Chat</h1>
     </a>
-    <p class="hero-sub">// exophs &nbsp;·&nbsp; builder of things &nbsp;·&nbsp; .exophs on discord</p>
+    <p class="hero-sub">// exophs &nbsp;·&nbsp; i make bullshit stuff idk &nbsp;·&nbsp; .exophs on discord</p>
     <div class="typewriter-wrap">
       <div class="typewriter-card">
         <span class="typewriter-prompt">~$</span>
@@ -736,7 +735,6 @@
   <p>© 2026 <a href="https://exophs.is-a.dev">exophs</a></p>
 </footer>
 
-<!-- Guest Wall -->
 <div id="guest-wall">
   <div id="gw-panel">
     <div id="gw-header">
@@ -917,7 +915,6 @@ if (!sessionStorage.getItem('tracked')) {
     status.textContent = 'sending...';
     status.className = '';
 
-    // Insert into Supabase
     const { error } = await _sb.from('guest_wall').insert({
       nickname: nick === 'anonymous' ? null : nick,
       message: msg,
@@ -931,7 +928,6 @@ if (!sessionStorage.getItem('tracked')) {
       return;
     }
 
-    // Send to Discord via our secure API route
     try {
       const response = await fetch('/api/send-guestwall', {
         method: 'POST',
@@ -951,7 +947,6 @@ if (!sessionStorage.getItem('tracked')) {
       if (!response.ok) throw new Error('Discord request failed');
     } catch (err) {
       console.error('Discord webhook failed:', err);
-      // Don't show error to user since message is already saved
     }
 
     msgInput.value = '';
@@ -1059,7 +1054,6 @@ document.addEventListener('DOMContentLoaded', () => {
     "meow",
     "hey fag",
     "do you like my website?",
-    "i love you aly <3",
   ];
 
   function shuffle(arr) {
