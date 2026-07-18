@@ -643,7 +643,7 @@
             const time = new Date(m.created_at).toLocaleString();
             return `
                 <div class="announcement-item">
-                    <span class="badge ${isHost ? 'badge-host' : 'badge-guest'}">${isHost ? 'host' : 'guest'}</span>
+                    <span class="badge ${isHost ? 'badge-host' : 'badge-guest'}">${isHost ? 'Owner' : 'guest'}</span>
                     <span class="announce-msg">
                         <span class="gw-nick">${nick}</span>${m.message}<span class="gw-time">${time}</span>
                     </span>
