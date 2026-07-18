@@ -1,204 +1,442 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#fff">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>exophs.vercel.app</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="https://raw.githubusercontent.com/exophs/favicon/main/favicon_io/favicon.ico" />
+<title>Contacts - Ray</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <style>
+:root {
+  --crust:     #11111b;
+  --mantle:    #181825;
+  --base:      #1e1e2e;
+  --surface0:  #313244;
+  --surface1:  #45475a;
+  --surface2:  #585b70;
+  --overlay0:  #6c7086;
+  --overlay1:  #7f849c;
+  --overlay2:  #9399b2;
+  --subtext0:  #a6adc8;
+  --subtext1:  #bac2de;
+  --text:      #cdd6f4;
+  --lavender:  #b4befe;
+  --blue:      #89b4fa;
+  --sapphire:  #74c7ec;
+  --sky:       #89dceb;
+  --teal:      #94e2d5;
+  --green:     #a6e3a1;
+  --yellow:    #f9e2af;
+  --peach:     #fab387;
+  --maroon:    #eba0ac;
+  --red:       #f38ba8;
+  --mauve:     #cba6f7;
+  --pink:      #f5c2e7;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-  --background-color: #fff;
-  --error-code-color: rgb(95, 99, 104);
-  --google-gray-300: rgb(218, 220, 224);
-  --google-gray-500: rgb(154, 160, 166);
-  --google-gray-50: rgb(248, 249, 250);
-  --google-gray-600: rgb(128, 134, 139);
-  --google-gray-700: rgb(95, 99, 104);
-  --google-gray-900: rgb(32, 33, 36);
-  --heading-color: var(--google-gray-900);
-  --link-color: rgb(88, 88, 88);
-  --primary-color: #4a46e0;
-  --primary-color-hover: #251491;
-  --primary-button-fill-color-active: var(--primary-color-hover);
-  --primary-button-fill-color: var(--primary-color);
-  --primary-button-text-color: #fff;
-  --secondary-button-border-color: var(--google-gray-500);
-  --secondary-button-fill-color: #fff;
-  --secondary-button-hover-border-color: var(--google-gray-600);
-  --secondary-button-hover-fill-color: var(--google-gray-50);
-  --secondary-button-text-color: var(--google-gray-700);
-  --text-color: var(--google-gray-700);
-  background: var(--background-color);
-  color: var(--text-color);
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  font-size: 75%;
-  overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--base);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 10%, rgba(203,166,247,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 10% 80%, rgba(137,180,250,0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.025) 2px, rgba(0,0,0,0.025) 4px
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 1;
+  animation: scanlines 10s linear infinite;
+}
+
+@keyframes scanlines {
+  from { background-position: 0 0; }
+  to   { background-position: 0 100px; }
+}
+
+.page {
   position: relative;
+  z-index: 2;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 60px 24px 100px;
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    --background-color: rgb(32, 33, 36);
-    --error-code-color: var(--google-gray-500);
-    --heading-color: var(--google-gray-500);
-    --link-color: rgb(138, 180, 248);
-    --primary-color: #c1c4ff;
-    --primary-color-hover: #dfe1ff;
-    --primary-button-text-color: rgb(32, 33, 36);
-    --secondary-button-border-color: var(--google-gray-700);
-    --secondary-button-fill-color: rgb(32, 33, 36);
-    --secondary-button-hover-fill-color: rgb(48, 51, 57);
-    --secondary-button-text-color: rgb(138, 180, 248);
-    --text-color: var(--google-gray-500);
-  }
-}
-
-html { -webkit-text-size-adjust: 100%; font-size: 125%; }
-
-.icon { height: 72px; margin: 0 0 40px; width: 72px; display: inline-block; background-repeat: no-repeat; background-size: 100%;
-  content: image-set(url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABIAQMAAABvIyEEAAAABlBMVEUAAABTU1OoaSf/AAAAAXRSTlMAQObYZgAAAENJREFUeF7tzbEJACEQRNGBLeAasBCza2lLEGx0CxFGG9hBMDDxRy/72O9FMnIFapGylsu1fgoBdkXfUHLrQgdfrlJN1BdYBjQQm3UAAAAASUVORK5CYII=) 1x,
-    url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAACQAQMAAADdiHD7AAAABlBMVEUAAABTU1OoaSf/AAAAAXRSTlMAQObYZgAAAFJJREFUeF7t0cENgDAMQ9FwYgxG6WjpaIzCCAxQxVggFuDiCvlLOeRdHR9yzjncHVoq3npu+wQUrUuJHylSTmBaespJyJQoObUeyxDQb3bEm5Au81c0pSCD8HYAAAAASUVORK5CYII=) 2x);
-}
-@media (prefers-color-scheme: dark) { .icon { filter: invert(1); } }
-
-h1 { color: var(--heading-color); font-size: 1.6em; font-weight: normal; line-height: 1.25em; margin: 0 0 16px; word-wrap: break-word; }
-h1 span { font-weight: 500; }
-.error-code { color: var(--error-code-color); font-size: .8em; margin-top: 12px; text-transform: uppercase; }
-
-.interstitial-wrapper {
-  box-sizing: border-box; font-size: 1em; line-height: 1.6em; margin: 14vh auto 0; max-width: 600px; width: 100%; position: relative; z-index: 1;
-}
-#main-message > p { display: inline; margin: 0; }
-.nav-wrapper { margin-top: 51px; }
-.nav-wrapper::after { clear: both; content: ''; display: table; width: 100%; }
-.suggested-left > #control-buttons { float: left; }
-
-button {
-  background: var(--primary-button-fill-color); border: 0; border-radius: 20px; box-sizing: border-box;
-  color: var(--primary-button-text-color); cursor: pointer; float: right; font-size: .875em; margin: 0;
-  padding: 9px; transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1); user-select: none;
-}
-button:active { background: var(--primary-button-fill-color-active); outline: 0; }
-
-@media (max-width: 420px) {
-  button { float: none; font-size: .825em; font-weight: 500; width: 100%; padding: 16px 24px; }
-  .interstitial-wrapper { padding: 0 5%; margin: 7vh auto 12px; }
-  h1 { font-size: 1.5em; margin-bottom: 8px; }
-  .icon { margin-bottom: 5.69vh; }
-  .nav-wrapper { margin-top: 30px; }
-}
-
-/* Main Trollface */
-#trollface {
-  position: fixed;
-  bottom: -100%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: auto;
-  max-width: 90vw;
-  z-index: 10;
+/* ── NAV ── */
+.topnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 72px;
   opacity: 0;
-  transition: all 4s cubic-bezier(0.25, 0.1, 0.25, 1);
-  pointer-events: none;
-}
-#trollface.show {
-  bottom: 10%;
-  width: 500px;
-  opacity: 1;
-}
-#trollface.dancing {
-  animation: trollDance 2.8s infinite alternate ease-in-out;
-  width: 420px;
+  animation: fadeUp 0.6s 0.1s forwards;
 }
 
-@keyframes trollDance {
-  0%   { transform: translate(-50%, 0) rotate(-12deg) scale(1); }
-  25%  { transform: translate(calc(-50% + 180px), -80px) rotate(8deg) scale(1.08); }
-  50%  { transform: translate(-50%, -40px) rotate(-15deg) scale(0.95); }
-  75%  { transform: translate(calc(-50% - 160px), -120px) rotate(10deg) scale(1.05); }
-  100% { transform: translate(-50%, 0) rotate(-8deg) scale(1); }
+.topnav a {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--overlay1);
+  padding: 7px 14px;
+  border: 1px solid var(--surface1);
+  border-radius: 3px;
+  transition: color 0.2s, border-color 0.2s;
 }
 
-/* Continuous raining mini trolls */
-.mini-troll {
-  position: fixed;
-  top: -120px;
-  width: 60px;
-  height: auto;
-  z-index: 5;
-  opacity: 0.85;
-  pointer-events: none;
-  animation: trollRain linear forwards;
+.topnav a:hover { color: var(--mauve); border-color: var(--mauve); }
+
+/* ── HERO ── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 64px;
 }
 
-@keyframes trollRain {
-  to {
-    transform: translateY(140vh) rotate(1440deg);
-  }
+.hero-left {
+  opacity: 0;
+  animation: fadeUp 0.7s 0.2s forwards;
+}
+
+.hero-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--mauve);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-label::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--mauve);
+  opacity: 0.5;
+}
+
+h1 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+h1 span { color: var(--mauve); }
+
+.hero-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--overlay1);
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+
+.hero-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--subtext0);
+}
+
+.wip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  background: rgba(249,226,175,0.08);
+  border: 1px solid rgba(249,226,175,0.25);
+  border-radius: 3px;
+  padding: 5px 10px;
+  margin-top: 16px;
+}
+
+.wip-badge::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--yellow);
+  animation: blink 1.4s step-end infinite;
+}
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.hero-right {
+  opacity: 0;
+  animation: fadeUp 0.7s 0.35s forwards;
+}
+
+.avatar-wrap {
+  position: relative;
+  width: 140px;
+}
+
+.avatar-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(203,166,247,0.3), rgba(137,180,250,0.15), transparent);
+  z-index: -1;
+}
+
+.avatar-wrap img {
+  width: 140px;
+  height: 140px;
+  border-radius: 14px;
+  object-fit: cover;
+  display: block;
+  border: 1px solid var(--surface1);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.avatar-wrap img:hover {
+  transform: scale(1.04) rotate(-1deg);
+  box-shadow: 0 20px 60px rgba(203,166,247,0.2);
+}
+
+/* ── RULE ── */
+.rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--surface1), transparent);
+  margin: 56px 0;
+  opacity: 0;
+  animation: fadeIn 0.8s 0.45s forwards;
+}
+
+/* ── SECTION LABEL ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--overlay0);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--surface1);
+}
+
+/* ── CONTACT CARDS ── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 56px;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.4s forwards;
+}
+
+.contact-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--mantle);
+  border: 1px solid var(--surface0);
+  border-radius: 10px;
+  padding: 18px 20px;
+  text-decoration: none;
+  transition: border-color 0.25s, transform 0.25s, background 0.25s;
+}
+
+.contact-card:hover {
+  transform: translateY(-2px);
+  background: rgba(203,166,247,0.04);
+}
+
+.contact-card.discord:hover { border-color: #5865f2; }
+.contact-card.email:hover   { border-color: var(--peach); }
+.contact-card.github:hover  { border-color: var(--subtext1); }
+.contact-card.instagram:hover { border-color: #e1306c; }
+
+.card-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: var(--surface0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+
+.card-icon-wrap img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) saturate(100%) invert(80%) sepia(10%) saturate(400%) hue-rotate(190deg);
+}
+
+.card-text { min-width: 0; }
+
+.card-platform {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--overlay1);
+  margin-bottom: 3px;
+}
+
+.card-handle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── FOOTER ── */
+.page-footer {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--overlay0);
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 0.8s 0.7s forwards;
+}
+
+.page-footer a { color: var(--overlay0); text-decoration: none; transition: color 0.2s; }
+.page-footer a:hover { color: var(--mauve); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn { to { opacity: 1; } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 520px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { order: -1; }
+  .avatar-wrap, .avatar-wrap img { width: 100px; height: 100px; }
 }
 </style>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-  <div class="interstitial-wrapper">
-    <div class="icon"></div>
-    <div id="main-message">
-      <h1><span>This site can’t be reached</span></h1>
-      <p><strong>exophs.vercel.app</strong>'s DNS address could not be found. Diagnosing the problem.</p>
-      <div class="error-code">DNS_PROBE_POSSIBLE</div>
+
+<div class="page">
+
+  <nav class="topnav">
+    <a href="https://exophs.vercel.app/about/">← back</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-label">contact</p>
+      <h1>Get in <span>Touch</span></h1>
+      <p class="hero-sub">// reach out anytime</p>
+      <p class="hero-desc">Here are all the ways you can find me. I'm most reachable on Discord.</p>
+      <div class="wip-badge">still adding more socials</div>
     </div>
-    <div class="nav-wrapper suggested-left">
-      <div id="control-buttons">
-        <button id="troll-button">Reload</button>
+    <div class="hero-right">
+      <div class="avatar-wrap">
+        <img src="https://avatars.githubusercontent.com/u/91388963?v=4" alt="Ray's avatar">
       </div>
     </div>
-  </div>
+  </section>
 
-  <img id="trollface" src="https://upload.wikimedia.org/wikipedia/en/7/73/Trollface.png" alt="Trollface">
-  <audio id="audio" src="https://github.com/exophs/exophs-site/raw/refs/heads/main/music/you've%20been%20trolled.mp3"></audio>
+  <div class="rule"></div>
 
-  <script>
-    const trollButton = document.getElementById('troll-button');
-    const trollface = document.getElementById('trollface');
-    const audio = document.getElementById('audio');
+  <section>
+    <p class="section-label">socials & contact</p>
+    <div class="contact-grid">
 
-    function createMiniTroll() {
-      const mini = document.createElement('img');
-      mini.src = "https://upload.wikimedia.org/wikipedia/en/7/73/Trollface.png";
-      mini.className = 'mini-troll';
-      
-      mini.style.left = Math.random() * 100 + 'vw';
-      mini.style.width = (35 + Math.random() * 55) + 'px';
-      mini.style.animationDuration = (2.5 + Math.random() * 5) + 's';
-      mini.style.opacity = 0.5 + Math.random() * 0.5;
-      
-      document.body.appendChild(mini);
-      
-      // Remove after it falls off screen
-      setTimeout(() => mini.remove(), 12000);
-    }
+      <div class="contact-card discord">
+        <div class="card-icon-wrap">
+          <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord">
+        </div>
+        <div class="card-text">
+          <p class="card-platform">Discord</p>
+          <p class="card-handle">.exophs</p>
+        </div>
+      </div>
 
-    trollButton.addEventListener('click', () => {
-      trollButton.textContent = "You've been trolled!";
-      trollButton.style.pointerEvents = 'none';
+      <a href="mailto:bezeski@gmail.com" class="contact-card email">
+        <div class="card-icon-wrap" style="font-size:18px;">✉️</div>
+        <div class="card-text">
+          <p class="card-platform">Email</p>
+          <p class="card-handle">bezeski@gmail.com</p>
+        </div>
+      </a>
 
-      trollface.classList.add('show');
+      <a href="https://github.com/exophs" target="_blank" rel="noreferrer" class="contact-card github">
+        <div class="card-icon-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub">
+        </div>
+        <div class="card-text">
+          <p class="card-platform">GitHub</p>
+          <p class="card-handle">exophs</p>
+        </div>
+      </a>
 
-      trollface.addEventListener('transitionend', function handler(e) {
-        if (e.propertyName === 'bottom' || e.propertyName === 'width') {
-          trollface.classList.add('dancing');
-          audio.play().catch(() => {});
+      <a href="https://www.instagram.com/dotexophs" target="_blank" rel="noreferrer" class="contact-card instagram">
+        <div class="card-icon-wrap" style="font-size:18px;">📸</div>
+        <div class="card-text">
+          <p class="card-platform">Instagram</p>
+          <p class="card-handle">dotexophs</p>
+        </div>
+      </a>
 
-          // Start continuous troll rain
-          createMiniTroll(); // initial ones
-          setInterval(createMiniTroll, 120); // spawn new ones regularly
+    </div>
+  </section>
 
-          trollface.removeEventListener('transitionend', handler);
-        }
-      });
-    });
-  </script>
+  <footer class="page-footer">
+    <p>© 2026 <a href="https://exophs.vercel.app">exophs</a> &nbsp;·&nbsp; <a href="https://exophs.is-a.dev">exophs.is-a.dev</a></p>
+  </footer>
+
+</div>
+
 </body>
 </html>
