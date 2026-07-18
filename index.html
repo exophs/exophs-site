@@ -1,196 +1,1126 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#fff">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>exophs.vercel.app</title>
-<style>
-body {
-  --background-color: #fff;
-  --error-code-color: rgb(95, 99, 104);
-  --google-gray-300: rgb(218, 220, 224);
-  --google-gray-500: rgb(154, 160, 166);
-  --google-gray-50: rgb(248, 249, 250);
-  --google-gray-600: rgb(128, 134, 139);
-  --google-gray-700: rgb(95, 99, 104);
-  --google-gray-900: rgb(32, 33, 36);
-  --heading-color: var(--google-gray-900);
-  --link-color: rgb(88, 88, 88);
-  --primary-color: #4a46e0;
-  --primary-color-hover: #251491;
-  --primary-button-fill-color-active: var(--primary-color-hover);
-  --primary-button-fill-color: var(--primary-color);
-  --primary-button-text-color: #fff;
-  --secondary-button-border-color: var(--google-gray-500);
-  --secondary-button-fill-color: #fff;
-  --secondary-button-hover-border-color: var(--google-gray-600);
-  --secondary-button-hover-fill-color: var(--google-gray-50);
-  --secondary-button-text-color: var(--google-gray-700);
-  --text-color: var(--google-gray-700);
-  background: var(--background-color);
-  color: var(--text-color);
-  word-wrap: break-word;
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  font-size: 75%;
-}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Welcome to Ray's site! Explore my projects, enjoy the countdown to my birthday, and find hidden secrets!">
+  <meta name="keywords" content="Ray, exophs, projects, countdown, secrets, personal website">
+  <link rel="icon" href="https://raw.githubusercontent.com/exophs/favicon/main/favicon_io/favicon.ico">
+  <title>ray's site</title>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <meta property="og:title" content="Hey Chat">
+  <meta property="og:description" content="My website">
+  <meta property="og:image" content="https://ray.confusing.wtf/u/48xEZ1.jpg">
+  <meta property="og:url" content="http://exophs.space">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://exophs.vercel.app">
+  <style>
+    :root {
+      --crust:      #11111b;
+      --mantle:     #181825;
+      --base:       #1e1e2e;
+      --surface0:   #313244;
+      --surface1:   #45475a;
+      --surface2:   #585b70;
+      --overlay0:   #6c7086;
+      --overlay1:   #7f849c;
+      --overlay2:   #9399b2;
+      --subtext0:   #a6adc8;
+      --subtext1:   #bac2de;
+      --text:       #cdd6f4;
+      --lavender:   #b4befe;
+      --blue:       #89b4fa;
+      --sapphire:   #74c7ec;
+      --sky:        #89dceb;
+      --teal:       #94e2d5;
+      --green:      #a6e3a1;
+      --yellow:     #f9e2af;
+      --peach:      #fab387;
+      --maroon:     #eba0ac;
+      --red:        #f38ba8;
+      --mauve:      #cba6f7;
+      --pink:       #f5c2e7;
+      --flamingo:   #f2cdcd;
+      --rosewater:  #f5e0dc;
+    }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    --background-color: rgb(32, 33, 36);
-    --error-code-color: var(--google-gray-500);
-    --heading-color: var(--google-gray-500);
-    --link-color: rgb(138, 180, 248);
-    --primary-color: #c1c4ff;
-    --primary-color-hover: #dfe1ff;
-    --primary-button-text-color: rgb(32, 33, 36);
-    --secondary-button-border-color: var(--google-gray-700);
-    --secondary-button-fill-color: rgb(32, 33, 36);
-    --secondary-button-hover-fill-color: rgb(48, 51, 57);
-    --secondary-button-text-color: rgb(138, 180, 248);
-    --text-color: var(--google-gray-500);
-  }
-}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "DejaVu Sans Mono", "Roboto Mono", Consolas, Monaco, "Courier New", monospace;
+      background: var(--base);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 999;
+      animation: scanlines 8s linear infinite;
+    }
+    @keyframes scanlines {
+      from { background-position: 0 0; }
+      to { background-position: 0 100px; }
+    }
+    #particles-js {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-html {
-  -webkit-text-size-adjust: 100%;
-  font-size: 125%;
-}
+    #announcement-banner {
+      position: fixed;
+      top: 60px;
+      left: 0; right: 0;
+      z-index: 90;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 10px 48px 10px 20px;
+      background: rgba(203,166,247,0.08);
+      border-bottom: 1px solid rgba(203,166,247,0.2);
+      backdrop-filter: blur(12px);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      color: var(--subtext1);
+      animation: slideDown 0.4s ease forwards;
+    }
+    #announcement-banner.visible { display: flex; }
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    #announcement-banner::before {
+      content: '//';
+      color: var(--mauve);
+      opacity: 0.7;
+      flex-shrink: 0;
+      font-size: 11px;
+    }
+    #announcement-text { flex: 1; text-align: center; }
+    #announcement-close {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--overlay1);
+      font-size: 16px;
+      cursor: pointer;
+      padding: 4px 6px;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    #announcement-close:hover { color: var(--mauve); }
 
-.icon {
-  height: 72px;
-  margin: 0 0 40px;
-  width: 72px;
-  -webkit-user-select: none;
-  display: inline-block;
-  background-repeat: no-repeat;
-  background-size: 100%;
-  content: image-set(
-    url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABIAQMAAABvIyEEAAAABlBMVEUAAABTU1OoaSf/AAAAAXRSTlMAQObYZgAAAENJREFUeF7tzbEJACEQRNGBLeAasBCza2lLEGx0CxFGG9hBMDDxRy/72O9FMnIFapGylsu1fgoBdkXfUHLrQgdfrlJN1BdYBjQQm3UAAAAASUVORK5CYII=) 1x,
-    url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAACQAQMAAADdiHD7AAAABlBMVEUAAABTU1OoaSf/AAAAAXRSTlMAQObYZgAAAFJJREFUeF7t0cENgDAMQ9FwYgxG6WjpaIzCCAxQxVggFuDiCvlLOeRdHR9yzjncHVoq3npu+wQUrUuJHylSTmBaespJyJQoObUeyxDQb3bEm5Au81c0pSCD8HYAAAAASUVORK5CYII=) 2x
-  );
-}
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(30,30,46,0.7);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(180,190,254,0.1);
+      transition: transform 0.4s ease;
+    }
+    nav.hide { transform: translateY(-100%); }
+    .nav-logo {
+      font-weight: bold;
+      font-size: 14px;
+      color: var(--mauve);
+      letter-spacing: 0.15em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--overlay0); }
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+    }
+    .hamburger div {
+      width: 22px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+    .hamburger.open div:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open div:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open div:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .slide-menu {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      width: 100%;
+      height: auto;
+      background: rgba(24,24,37,0.97);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(180,190,254,0.1);
+      z-index: 150;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0 40px;
+      padding: 80px 40px 40px;
+      transform: translateY(-110%);
+      transition: transform 0.5s cubic-bezier(0.77,0,0.175,1);
+    }
+    .slide-menu.open { transform: translateY(0); }
+    .slide-menu a {
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0;
+      width: min(200px, 85vw);
+    }
+    .menu-item {
+      font-size: 13px;
+      color: var(--overlay1);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(180,190,254,0.08);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      width: 100%;
+      text-align: left;
+    }
+    .menu-item:hover { color: var(--mauve); border-bottom-color: var(--mauve); }
+    .menu-item .num { font-size: 10px; color: var(--mauve); opacity: 0.6; min-width: 20px; }
+    .menu-warn {
+      font-size: 9px;
+      color: var(--red);
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+      display: block;
+      margin-left: 32px;
+    }
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 140;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+    }
+    .menu-overlay.open { opacity: 1; pointer-events: all; }
+    main {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px 60px;
+    }
+    .hero {
+      text-align: center;
+      max-width: 700px;
+      width: 100%;
+    }
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      color: var(--mauve);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-name {
+      font-weight: bold;
+      font-size: clamp(52px, 10vw, 96px);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+      text-shadow: 0 0 80px rgba(203,166,247,0.12);
+      cursor: pointer;
+      display: inline-block;
+      transition: text-shadow 0.3s ease;
+    }
+    .hero-name:hover {
+      text-shadow: 0 0 40px rgba(203,166,247,0.35), 0 0 80px rgba(203,166,247,0.15);
+    }
+    .hero-sub {
+      font-size: 13px;
+      color: var(--overlay0);
+      letter-spacing: 0.15em;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+    .typewriter-wrap {
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+    .typewriter-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      background: rgba(49,50,68,0.6);
+      border: 1px solid rgba(180,190,254,0.1);
+      border-radius: 4px;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      min-height: 44px;
+      min-width: 300px;
+      justify-content: flex-start;
+    }
+    .typewriter-prompt {
+      color: var(--mauve);
+      opacity: 0.7;
+      flex-shrink: 0;
+    }
+    #typewriter { color: var(--text); white-space: nowrap; }
+    .cursor-blink {
+      display: inline-block;
+      width: 2px;
+      height: 13px;
+      background: var(--mauve);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .countdown-wrap {
+      opacity: 0;
+      animation: fadeUp 0.8s 1.0s forwards;
+    }
+    .countdown-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--overlay0);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .countdown-grid {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .countdown-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .countdown-num {
+      font-weight: bold;
+      font-size: clamp(28px, 5vw, 44px);
+      line-height: 1;
+      color: var(--text);
+      min-width: 70px;
+      text-align: center;
+      padding: 14px 10px 10px;
+      background: rgba(49,50,68,0.6);
+      border: 1px solid rgba(180,190,254,0.1);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    .countdown-unit:nth-child(2) .countdown-num { border-color: rgba(148,226,213,0.25); }
+    .countdown-unit:nth-child(3) .countdown-num { border-color: rgba(243,139,168,0.2); }
+    .countdown-unit:nth-child(4) .countdown-num { border-color: rgba(249,226,175,0.2); }
+    .countdown-num::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(203,166,247,0.04) 0%, transparent 100%);
+    }
+    .countdown-lbl {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      color: var(--overlay0);
+      text-transform: uppercase;
+    }
+    #secret-message {
+      margin-top: 40px;
+      opacity: 0;
+      animation: fadeIn 0.6s forwards;
+    }
+    #secret-message a {
+      font-size: 11px;
+      color: var(--yellow);
+      text-decoration: none;
+      letter-spacing: 0.2em;
+      border: 1px dashed rgba(249,226,175,0.4);
+      padding: 8px 16px;
+      display: inline-block;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    #secret-message a:hover {
+      background: rgba(249,226,175,0.08);
+      border-color: var(--yellow);
+    }
+    .corner {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .corner-tl { top: 70px; left: 20px; border-top: 1px solid rgba(203,166,247,0.2); border-left: 1px solid rgba(203,166,247,0.2); }
+    .corner-br { bottom: 40px; right: 20px; border-bottom: 1px solid rgba(203,166,247,0.2); border-right: 1px solid rgba(203,166,247,0.2); }
+    .hint {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      opacity: 0;
+      animation: fadeIn 1s 2s forwards;
+    }
+    .hint p {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--overlay0);
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 1px solid rgba(180,190,254,0.1);
+      border-radius: 99px;
+      background: rgba(24,24,37,0.8);
+      backdrop-filter: blur(8px);
+      white-space: nowrap;
+    }
+    footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 32px 16px;
+      pointer-events: none;
+    }
+    footer p {
+      font-size: 10px;
+      color: var(--overlay0);
+      letter-spacing: 0.1em;
+      pointer-events: all;
+    }
+    footer a { color: var(--overlay0); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--mauve); }
+    .birthday-msg {
+      font-weight: bold;
+      font-size: clamp(16px, 3vw, 24px);
+      color: var(--yellow);
+      letter-spacing: 0.15em;
+      text-align: center;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes numFlip {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .flip { animation: numFlip 0.2s ease forwards; }
 
-@media (prefers-color-scheme: dark) {
-  .icon {
-    filter: invert(1);
-  }
-}
+    #guest-wall {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 50;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    #gw-toggle {
+      align-self: flex-end;
+      background: rgba(24,24,37,0.85);
+      border: 1px solid rgba(203,166,247,0.2);
+      border-radius: 4px;
+      padding: 8px 14px;
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--mauve);
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    #gw-toggle:hover {
+      background: rgba(203,166,247,0.1);
+      border-color: rgba(203,166,247,0.4);
+    }
+    #gw-panel {
+      background: rgba(17,17,27,0.92);
+      border: 1px solid rgba(180,190,254,0.1);
+      border-radius: 6px;
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      margin-bottom: 8px;
+      max-height: 420px;
+      animation: gwSlideUp 0.25s ease forwards;
+    }
+    @keyframes gwSlideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    #gw-panel.open { display: flex; }
+    #gw-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(180,190,254,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    #gw-header-left {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--mauve);
+    }
+    #gw-header-left span { color: var(--overlay0); margin-right: 6px; }
+    #gw-count {
+      font-size: 10px;
+      color: var(--overlay0);
+      letter-spacing: 0.1em;
+    }
+    #gw-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--surface1) transparent;
+    }
+    #gw-messages::-webkit-scrollbar { width: 3px; }
+    #gw-messages::-webkit-scrollbar-track { background: transparent; }
+    #gw-messages::-webkit-scrollbar-thumb { background: var(--surface1); border-radius: 2px; }
+    .gw-msg {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      animation: fadeUp 0.3s ease forwards;
+    }
+    .gw-msg-from-discord .gw-bubble {
+      background: rgba(88,91,112,0.25);
+      border-color: rgba(88,91,112,0.3);
+      border-radius: 4px 12px 12px 4px;
+    }
+    .gw-nick {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      color: var(--overlay1);
+      padding: 0 4px;
+    }
+    .gw-nick.is-host { color: var(--mauve); }
+    .gw-bubble {
+      background: rgba(49,50,68,0.5);
+      border: 1px solid rgba(180,190,254,0.08);
+      border-radius: 4px 12px 12px 12px;
+      padding: 7px 10px;
+      font-size: 12px;
+      color: var(--subtext1);
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+      word-break: break-word;
+    }
+    .gw-time {
+      font-size: 8px;
+      color: var(--overlay0);
+      padding: 0 4px;
+      letter-spacing: 0.1em;
+    }
+    #gw-empty {
+      font-size: 11px;
+      color: var(--overlay0);
+      letter-spacing: 0.1em;
+      text-align: center;
+      padding: 20px 0;
+    }
+    #gw-footer {
+      border-top: 1px solid rgba(180,190,254,0.08);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    #gw-nick-input {
+      width: 100%;
+      background: rgba(49,50,68,0.4);
+      border: 1px solid rgba(180,190,254,0.08);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-family: inherit;
+      font-size: 11px;
+      color: var(--text);
+      outline: none;
+      letter-spacing: 0.05em;
+      transition: border-color 0.2s;
+    }
+    #gw-nick-input:focus { border-color: rgba(203,166,247,0.3); }
+    #gw-nick-input::placeholder { color: var(--overlay0); }
+    #gw-input-row { display: flex; gap: 6px; }
+    #gw-msg-input {
+      flex: 1;
+      background: rgba(49,50,68,0.4);
+      border: 1px solid rgba(180,190,254,0.08);
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-family: inherit;
+      font-size: 12px;
+      color: var(--text);
+      outline: none;
+      letter-spacing: 0.03em;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    #gw-msg-input:focus { border-color: rgba(203,166,247,0.3); }
+    #gw-msg-input::placeholder { color: var(--overlay0); }
+    #gw-send {
+      background: rgba(203,166,247,0.12);
+      border: 1px solid rgba(203,166,247,0.25);
+      border-radius: 4px;
+      color: var(--mauve);
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      padding: 8px 12px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      align-self: flex-end;
+    }
+    #gw-send:hover:not(:disabled) {
+      background: rgba(203,166,247,0.22);
+      border-color: rgba(203,166,247,0.45);
+    }
+    #gw-send:disabled { opacity: 0.4; cursor: not-allowed; }
+    #gw-status { font-size: 10px; letter-spacing: 0.08em; min-height: 14px; padding: 0 2px; }
+    #gw-status.error { color: var(--red); }
+    #gw-status.ok    { color: var(--green); }
+    #gw-status.warn  { color: var(--yellow); }
 
-h1 {
-  color: var(--heading-color);
-  font-size: 1.6em;
-  font-weight: normal;
-  line-height: 1.25em;
-  margin: 0 0 16px;
-  word-wrap: break-word;
-}
-
-h1 span {
-  font-weight: 500;
-}
-
-.error-code {
-  color: var(--error-code-color);
-  font-size: .8em;
-  margin-top: 12px;
-  text-transform: uppercase;
-}
-
-.interstitial-wrapper {
-  box-sizing: border-box;
-  font-size: 1em;
-  line-height: 1.6em;
-  margin: 14vh auto 0;
-  max-width: 600px;
-  width: 100%;
-}
-
-#main-message > p {
-  display: inline;
-  margin: 0;
-}
-
-.nav-wrapper {
-  margin-top: 51px;
-}
-
-.nav-wrapper::after {
-  clear: both;
-  content: '';
-  display: table;
-  width: 100%;
-}
-
-.suggested-left > #control-buttons {
-  float: left;
-}
-
-button {
-  background: var(--primary-button-fill-color);
-  border: 0;
-  border-radius: 20px;
-  box-sizing: border-box;
-  color: var(--primary-button-text-color);
-  cursor: pointer;
-  float: right;
-  font-size: .875em;
-  margin: 0;
-  padding: 9px;
-  transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  user-select: none;
-}
-
-button:active {
-  background: var(--primary-button-fill-color-active);
-  outline: 0;
-}
-
-@media (max-width: 420px) {
-  button {
-    float: none;
-    font-size: .825em;
-    font-weight: 500;
-    margin: 0;
-    width: 100%;
-    padding: 16px 24px;
-  }
-
-  .interstitial-wrapper {
-    padding: 0 5%;
-    margin: 7vh auto 12px;
-  }
-
-  h1 {
-    font-size: 1.5em;
-    margin-bottom: 8px;
-  }
-
-  .icon {
-    margin-bottom: 5.69vh;
-  }
-
-  .nav-wrapper {
-    margin-top: 30px;
-  }
-}
-</style>
+    @media (max-width: 480px) {
+      .typewriter-card { min-width: unset; width: 100%; }
+      .countdown-num { min-width: 56px; font-size: 28px; }
+      footer { padding: 0 16px 12px; }
+      #guest-wall { width: calc(100vw - 24px); right: 12px; }
+    }
+  </style>
 </head>
 <body>
-  <div class="interstitial-wrapper">
-    <div class="icon"></div>
-    <div id="main-message">
-      <h1><span>This site can’t be reached</span></h1>
-      <p><strong>exophs.vercel.app</strong>'s DNS address could not be found. Diagnosing the problem.</p>
-      <div class="error-code">DNS_PROBE_POSSIBLE</div>
-    </div>
-    <div class="nav-wrapper suggested-left">
-      <div id="control-buttons">
-        <button id="reload-button" class="blue-button text-button" onclick="location.reload()">Reload</button>
+<div id="particles-js"></div>
+<div class="corner corner-tl"></div>
+<div class="corner corner-br"></div>
+
+<div id="announcement-banner">
+  <span id="announcement-text"></span>
+  <button id="announcement-close" aria-label="Dismiss">×</button>
+</div>
+
+<nav id="main-nav">
+  <a href="https://exophs.is-a.dev/" class="nav-logo">
+    <span>.</span>exophs
+  </a>
+  <div class="hamburger" id="hamburger">
+    <div></div><div></div><div></div>
+  </div>
+</nav>
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="slide-menu" id="slideMenu">
+  <a href="https://exophs.vercel.app/about/" aria-label="About Me">
+    <div class="menu-item"><span class="num">01</span> About Me</div>
+  </a>
+  <a href="https://exophs.vercel.app/geocities/" aria-label="Silly Geocities Thing">
+    <div class="menu-item"><span class="num">02</span> Geocities thing</div>
+    <span class="menu-warn">⚠ Epilepsy warning: flashing lights</span>
+  </a>
+  <a href="https://exophs.vercel.app/text-editor/" aria-label="Text Editor">
+    <div class="menu-item"><span class="num">03</span> Text Editor</div>
+  </a>
+  <a href="https://exophs.vercel.app/terminal/" aria-label="Terminal">
+    <div class="menu-item"><span class="num">04</span> Terminal</div>
+  </a>
+  <a href="https://exophs.vercel.app/terminal/terminalV2/" aria-label="TerminalV2">
+    <div class="menu-item"><span class="num">05</span> Terminal V2</div>
+  </a>
+</div>
+
+<main>
+  <div class="hero">
+    <p class="eyebrow">Welcome to my website, have a look around</p>
+    <a href="https://exophs.is-a.dev/" style="text-decoration:none;">
+      <h1 class="hero-name" id="main-title">Hey Chat</h1>
+    </a>
+    <p class="hero-sub">// exophs &nbsp;·&nbsp; i make bullshit stuff idk &nbsp;·&nbsp; .exophs on discord</p>
+    <div class="typewriter-wrap">
+      <div class="typewriter-card">
+        <span class="typewriter-prompt">~$</span>
+        <span id="typewriter"></span>
+        <span class="cursor-blink"></span>
       </div>
     </div>
+    <div class="countdown-wrap" id="countdownWrap">
+      <p class="countdown-label">countdown to 19th birthday — oct 16</p>
+      <div class="countdown-grid" id="countdownGrid">
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-days">000</div>
+          <div class="countdown-lbl">days</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-hours">00</div>
+          <div class="countdown-lbl">hours</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-mins">00</div>
+          <div class="countdown-lbl">mins</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-secs">00</div>
+          <div class="countdown-lbl">secs</div>
+        </div>
+      </div>
+    </div>
+    <div id="secret-message" style="display:none; margin-top:32px;">
+      <a href="https://exophs.vercel.app/this/is/not/a/secret/">🔒 click here to reveal the secret page</a>
+    </div>
   </div>
+</main>
+
+<div class="hint" id="hintMessage">
+  <p>find the hidden secret — hint: the title</p>
+</div>
+
+<footer>
+  <p>© 2026 <a href="https://exophs.is-a.dev">exophs</a></p>
+</footer>
+
+<div id="guest-wall">
+  <div id="gw-panel">
+    <div id="gw-header">
+      <span id="gw-header-left"><span>//</span>guest wall</span>
+      <span id="gw-count"></span>
+    </div>
+    <div id="gw-messages">
+      <div id="gw-empty">no messages yet. say something!</div>
+    </div>
+    <div id="gw-footer">
+      <input id="gw-nick-input" type="text" placeholder="nickname (optional)" maxlength="24" autocomplete="off">
+      <div id="gw-input-row">
+        <textarea id="gw-msg-input" placeholder="leave a message..." maxlength="200" rows="2"></textarea>
+        <button id="gw-send">send</button>
+      </div>
+      <div id="gw-status"></div>
+    </div>
+  </div>
+  <button id="gw-toggle">// guest wall</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const _sb = supabase.createClient(
+  'https://vhyboshqppbgzarylmuv.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoeWJvc2hxcHBiZ3phcnlsbXV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxNTUzMzksImV4cCI6MjA5NDczMTMzOX0.ROc6E_HsMZOuRQB1C9Fj37QWA8PddcZwXxcrgv_kP0Q'
+);
+
+const COOLDOWN_MS = 30000;
+
+if (!sessionStorage.getItem('tracked')) {
+  _sb.from('page_views').insert({ path: window.location.pathname }).then(() => {});
+  sessionStorage.setItem('tracked', '1');
+}
+
+(async () => {
+  const { data } = await _sb
+    .from('announcements')
+    .select('message')
+    .eq('active', true)
+    .order('created_at', { ascending: false })
+    .limit(1);
+  if (data && data.length > 0) {
+    const banner = document.getElementById('announcement-banner');
+    document.getElementById('announcement-text').textContent = data[0].message;
+    banner.classList.add('visible');
+    document.getElementById('announcement-close').addEventListener('click', () => {
+      banner.style.transition = 'all 0.3s ease';
+      banner.style.opacity = '0';
+      banner.style.transform = 'translateY(-100%)';
+      setTimeout(() => banner.classList.remove('visible'), 300);
+    });
+  }
+})();
+
+(function() {
+  const panel     = document.getElementById('gw-panel');
+  const toggle    = document.getElementById('gw-toggle');
+  const msgBox    = document.getElementById('gw-messages');
+  const emptyMsg  = document.getElementById('gw-empty');
+  const nickInput = document.getElementById('gw-nick-input');
+  const msgInput  = document.getElementById('gw-msg-input');
+  const sendBtn   = document.getElementById('gw-send');
+  const status    = document.getElementById('gw-status');
+  const countEl   = document.getElementById('gw-count');
+
+  let open = false;
+  let messages = [];
+  let cooldownEnd = parseInt(localStorage.getItem('gw_cooldown') || '0');
+
+  toggle.addEventListener('click', () => {
+    open = !open;
+    panel.classList.toggle('open', open);
+    toggle.textContent = open ? '// close' : '// guest wall';
+    if (open) { loadMessages(); scrollBottom(); }
+  });
+
+  function timeAgo(iso) {
+    const diff = Date.now() - new Date(iso).getTime();
+    const m = Math.floor(diff / 60000);
+    const h = Math.floor(diff / 3600000);
+    const d = Math.floor(diff / 86400000);
+    if (diff < 60000) return 'just now';
+    if (m < 60) return m + 'm ago';
+    if (h < 24) return h + 'h ago';
+    return d + 'd ago';
+  }
+
+  function sanitize(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function renderMessages() {
+    if (messages.length === 0) {
+      emptyMsg.style.display = 'block';
+      countEl.textContent = '';
+      return;
+    }
+    emptyMsg.style.display = 'none';
+    countEl.textContent = messages.length + ' message' + (messages.length !== 1 ? 's' : '');
+    msgBox.innerHTML = '';
+    msgBox.appendChild(emptyMsg);
+    messages.forEach(m => {
+      const wrap = document.createElement('div');
+      const isHost = m.source === 'discord';
+      wrap.className = 'gw-msg' + (isHost ? ' gw-msg-from-discord' : '');
+      const nick = m.nickname || 'anonymous';
+      wrap.innerHTML = `
+        <div class="gw-nick ${isHost ? 'is-host' : ''}">${sanitize(nick)}${isHost ? ' · host' : ''}</div>
+        <div class="gw-bubble">${sanitize(m.message)}</div>
+        <div class="gw-time">${timeAgo(m.created_at)}</div>
+      `;
+      msgBox.appendChild(wrap);
+    });
+    scrollBottom();
+  }
+
+  function scrollBottom() {
+    requestAnimationFrame(() => { msgBox.scrollTop = msgBox.scrollHeight; });
+  }
+
+  async function loadMessages() {
+    const { data } = await _sb
+      .from('guest_wall')
+      .select('*')
+      .order('created_at', { ascending: true })
+      .limit(50);
+    if (data) { messages = data; renderMessages(); }
+  }
+
+  function setCooldown() {
+    cooldownEnd = Date.now() + COOLDOWN_MS;
+    localStorage.setItem('gw_cooldown', cooldownEnd.toString());
+    updateCooldownUI();
+  }
+
+  function updateCooldownUI() {
+    const remaining = cooldownEnd - Date.now();
+    if (remaining > 0) {
+      sendBtn.disabled = true;
+      status.textContent = 'cooldown: ' + Math.ceil(remaining / 1000) + 's';
+      status.className = 'warn';
+      setTimeout(updateCooldownUI, 1000);
+    } else {
+      sendBtn.disabled = false;
+      status.textContent = '';
+      status.className = '';
+    }
+  }
+
+  function isSpam(text) {
+    if (text.length < 2) return true;
+    if (/(.)\1{6,}/.test(text)) return true;
+    if (text.split(' ').length === 1 && text.length > 40) return true;
+    const words = text.toLowerCase().split(/\s+/);
+    const unique = new Set(words);
+    if (words.length > 4 && unique.size / words.length < 0.3) return true;
+    return false;
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  msgInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+
+  async function sendMessage() {
+    const msg = msgInput.value.trim();
+    const nick = nickInput.value.trim().slice(0, 24) || 'anonymous';
+
+    if (!msg) { status.textContent = 'message is empty.'; status.className = 'error'; return; }
+    if (msg.length > 200) { status.textContent = 'too long (max 200 chars).'; status.className = 'error'; return; }
+    if (isSpam(msg)) { status.textContent = 'message looks like spam.'; status.className = 'error'; return; }
+    if (Date.now() < cooldownEnd) { updateCooldownUI(); return; }
+
+    sendBtn.disabled = true;
+    status.textContent = 'sending...';
+    status.className = '';
+
+    const { error } = await _sb.from('guest_wall').insert({
+      nickname: nick === 'anonymous' ? null : nick,
+      message: msg,
+      source: 'web'
+    });
+
+    if (error) {
+      status.textContent = 'failed to save message.';
+      status.className = 'error';
+      sendBtn.disabled = false;
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/send-guestwall', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: 'Guest Wall',
+          embeds: [{
+            description: msg,
+            color: 0xcba6f7,
+            author: { name: nick },
+            footer: { text: 'exophs.vercel.app · guest wall' },
+            timestamp: new Date().toISOString()
+          }]
+        })
+      });
+
+      if (!response.ok) throw new Error('Discord request failed');
+    } catch (err) {
+      console.error('Discord webhook failed:', err);
+    }
+
+    msgInput.value = '';
+    status.textContent = 'message sent!';
+    status.className = 'ok';
+    setCooldown();
+    await loadMessages();
+
+    setTimeout(() => {
+      if (status.className === 'ok') {
+        status.textContent = '';
+        status.className = '';
+      }
+    }, 2000);
+  }
+
+  _sb
+    .channel('guest_wall_realtime')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'guest_wall' }, payload => {
+      messages.push(payload.new);
+      if (open) renderMessages();
+    })
+    .subscribe();
+
+  if (Date.now() < cooldownEnd) updateCooldownUI();
+  loadMessages();
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof particlesJS !== 'undefined') {
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 60 },
+        color: { value: "#cba6f7" },
+        shape: { type: "circle" },
+        opacity: { value: 0.18, random: true },
+        size: { value: 1.5, random: true },
+        line_linked: {
+          enable: true,
+          distance: 160,
+          color: "#cba6f7",
+          opacity: 0.06,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 0.4,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out"
+        }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "grab" },
+          onclick: { enable: true, mode: "push" },
+          resize: true
+        },
+        modes: {
+          grab: { distance: 140, line_linked: { opacity: 0.25 } },
+          push: { particles_nb: 3 }
+        }
+      }
+    });
+  }
+
+  const hamburger = document.getElementById('hamburger');
+  const slideMenu = document.getElementById('slideMenu');
+  const menuOverlay = document.getElementById('menuOverlay');
+  hamburger.addEventListener('click', () => {
+    slideMenu.classList.toggle('open');
+    menuOverlay.classList.toggle('open');
+    hamburger.classList.toggle('open');
+  });
+  menuOverlay.addEventListener('click', () => {
+    slideMenu.classList.remove('open');
+    menuOverlay.classList.remove('open');
+    hamburger.classList.remove('open');
+  });
+
+  document.getElementById('main-title').addEventListener('contextmenu', e => {
+    e.preventDefault();
+    document.getElementById('secret-message').style.display = 'block';
+  });
+
+  let pressTimer;
+  document.getElementById('main-title').addEventListener('touchstart', () => {
+    pressTimer = setTimeout(() => {
+      document.getElementById('secret-message').style.display = 'block';
+    }, 800);
+  });
+  document.getElementById('main-title').addEventListener('touchend', () => clearTimeout(pressTimer));
+
+  const texts = [
+    "add me on discord: .exophs",
+    "visit my github for more projects",
+    "i can see you, yeah you!",
+    "what are you looking at?",
+    ":3",
+    "<3",
+    "meow",
+    "hey fag",
+    "do you like my website?",
+  ];
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+  shuffle(texts);
+
+  let tIdx = 0, cIdx = 0, deleting = false;
+  function type() {
+    const el = document.getElementById('typewriter');
+    const cur = texts[tIdx];
+    const speed = deleting ? 40 : 120;
+    if (!deleting && cIdx < cur.length) {
+      el.textContent = cur.slice(0, cIdx + 1);
+      cIdx++;
+      setTimeout(type, speed);
+    } else if (deleting && cIdx > 0) {
+      el.textContent = cur.slice(0, cIdx - 1);
+      cIdx--;
+      setTimeout(type, speed);
+    } else if (!deleting && cIdx === cur.length) {
+      deleting = true;
+      setTimeout(type, 1800);
+    } else {
+      deleting = false;
+      tIdx = (tIdx + 1) % texts.length;
+      if (tIdx === 0) shuffle(texts);
+      setTimeout(type, 400);
+    }
+  }
+  setTimeout(type, 1200);
+
+  const cdDays = document.getElementById('cd-days');
+  const cdHours = document.getElementById('cd-hours');
+  const cdMins = document.getElementById('cd-mins');
+  const cdSecs = document.getElementById('cd-secs');
+  const countdownWrap = document.getElementById('countdownWrap');
+
+  function pad(n, len = 2) { return String(n).padStart(len, '0'); }
+
+  function flip(el, val) {
+    if (el.textContent !== val) {
+      el.textContent = val;
+      el.classList.remove('flip');
+      void el.offsetWidth;
+      el.classList.add('flip');
+    }
+  }
+
+  function updateCountdown() {
+    const target = new Date(2026, 9, 16, 0, 0, 0);
+    const diff = target - new Date();
+    if (diff <= 0) {
+      countdownWrap.innerHTML = '<p class="birthday-msg">🎉 happy birthday!! you\'re 19!! 🎉</p>';
+      return;
+    }
+    flip(cdDays, pad(Math.floor(diff / 86400000), 3));
+    flip(cdHours, pad(Math.floor((diff % 86400000) / 3600000)));
+    flip(cdMins, pad(Math.floor((diff % 3600000) / 60000)));
+    flip(cdSecs, pad(Math.floor((diff % 60000) / 1000)));
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+});
+</script>
 </body>
 </html>
