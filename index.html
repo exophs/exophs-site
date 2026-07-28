@@ -862,9 +862,9 @@ if (!sessionStorage.getItem('tracked')) {
     const { data } = await _sb
       .from('guest_wall')
       .select('*')
-      .order('created_at', { ascending: true })
+      .order('created_at', { ascending: false })
       .limit(50);
-    if (data) { messages = data; renderMessages(); }
+    if (data) { messages = data.reverse(); renderMessages(); }
   }
 
   function setCooldown() {
