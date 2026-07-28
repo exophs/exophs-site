@@ -569,6 +569,130 @@
       padding: 0 4px;
       letter-spacing: 0.1em;
     }
+    .gw-reply-quote {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 9px;
+      color: var(--overlay0);
+      padding: 0 4px;
+      letter-spacing: 0.05em;
+      border-left: 2px solid rgba(180,190,254,0.15);
+      margin-left: 2px;
+      padding-left: 6px;
+      max-width: 100%;
+    }
+    .gw-reply-quote span { color: var(--overlay1); flex-shrink: 0; }
+    .gw-reply-quote em {
+      font-style: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .gw-reactions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 0 4px;
+    }
+    .gw-pill {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(49,50,68,0.5);
+      border: 1px solid rgba(180,190,254,0.1);
+      border-radius: 99px;
+      padding: 2px 7px;
+      font-size: 10px;
+      color: var(--subtext0);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .gw-pill:hover { border-color: rgba(203,166,247,0.3); }
+    .gw-pill.mine {
+      background: rgba(203,166,247,0.12);
+      border-color: rgba(203,166,247,0.35);
+      color: var(--mauve);
+    }
+    .gw-actions {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      padding: 0 4px;
+      opacity: 0.55;
+      transition: opacity 0.15s;
+    }
+    .gw-msg:hover .gw-actions { opacity: 1; }
+    .gw-action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 12px;
+      color: var(--overlay1);
+      padding: 3px 5px;
+      border-radius: 4px;
+      line-height: 1;
+      transition: all 0.15s;
+    }
+    .gw-action-btn:hover { background: rgba(180,190,254,0.08); color: var(--text); }
+    .gw-action-btn.gw-more-btn { font-size: 13px; font-weight: bold; }
+    .gw-action-btn svg { display: block; width: 13px; height: 13px; }
+    .gw-picker {
+      display: none;
+      flex-wrap: wrap;
+      gap: 3px;
+      background: rgba(24,24,37,0.95);
+      border: 1px solid rgba(180,190,254,0.12);
+      border-radius: 6px;
+      padding: 6px;
+      margin: 2px 4px 0;
+      max-width: 220px;
+    }
+    .gw-picker.open { display: flex; }
+    .gw-picker button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      padding: 3px 4px;
+      border-radius: 4px;
+      line-height: 1;
+      transition: background 0.15s;
+    }
+    .gw-picker button:hover { background: rgba(180,190,254,0.1); }
+    #gw-reply-context {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: rgba(203,166,247,0.08);
+      border: 1px solid rgba(203,166,247,0.2);
+      border-radius: 4px;
+      padding: 5px 8px;
+      font-size: 10px;
+      color: var(--subtext0);
+      letter-spacing: 0.03em;
+    }
+    #gw-reply-context.open { display: flex; }
+    #gw-reply-context span { color: var(--mauve); flex-shrink: 0; }
+    #gw-reply-label {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #gw-reply-cancel {
+      background: none;
+      border: none;
+      color: var(--overlay1);
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1;
+      padding: 0 2px;
+    }
+    #gw-reply-cancel:hover { color: var(--red); }
     #gw-empty {
       font-size: 11px;
       color: var(--overlay0);
@@ -745,6 +869,11 @@
       <div id="gw-empty">no messages yet. say something!</div>
     </div>
     <div id="gw-footer">
+      <div id="gw-reply-context">
+        <span>↪</span>
+        <span id="gw-reply-label"></span>
+        <button id="gw-reply-cancel" aria-label="Cancel reply">×</button>
+      </div>
       <input id="gw-nick-input" type="text" placeholder="nickname (optional)" maxlength="24" autocomplete="off">
       <div id="gw-input-row">
         <textarea id="gw-msg-input" placeholder="leave a message..." maxlength="200" rows="2"></textarea>
@@ -800,9 +929,17 @@ if (!sessionStorage.getItem('tracked')) {
   const sendBtn   = document.getElementById('gw-send');
   const status    = document.getElementById('gw-status');
   const countEl   = document.getElementById('gw-count');
+  const replyBar  = document.getElementById('gw-reply-context');
+  const replyLbl  = document.getElementById('gw-reply-label');
+  const replyCancel = document.getElementById('gw-reply-cancel');
+
+  const QUICK_EMOJIS = ['👍', '🔥', '😂'];
+  const PICKER_EMOJIS = ['👍', '🔥', '😂', '😮', '😢', '🎉', '👀', '🙏', '💯', '🤔', '😎', '🙌', '✨', '😴', '🤝', '👏', '😅', '🫡'];
 
   let open = false;
   let messages = [];
+  let replyingTo = null;
+  let openPickerId = null;
   let cooldownEnd = parseInt(localStorage.getItem('gw_cooldown') || '0');
 
   toggle.addEventListener('click', () => {
@@ -829,6 +966,57 @@ if (!sessionStorage.getItem('tracked')) {
     return d.innerHTML;
   }
 
+  function getUid() {
+    let uid = localStorage.getItem('gw_uid');
+    if (!uid) {
+      uid = 'u_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('gw_uid', uid);
+    }
+    return uid;
+  }
+
+  function findMessage(id) {
+    return messages.find(m => String(m.id) === String(id));
+  }
+
+  function replyQuoteHtml(m) {
+    if (!m.reply_to) return '';
+    const original = findMessage(m.reply_to);
+    const nick = original ? (original.nickname || 'anonymous') : 'a message';
+    const snippet = original ? original.message.slice(0, 40) : 'original message unavailable';
+    return `<div class="gw-reply-quote">↪ <span>${sanitize(nick)}</span><em>${sanitize(snippet)}</em></div>`;
+  }
+
+  function reactionPillsHtml(m) {
+    const reactions = m.reactions || {};
+    const uid = getUid();
+    const entries = Object.entries(reactions).filter(([, list]) => Array.isArray(list) && list.length > 0);
+    if (entries.length === 0) return '';
+    return `<div class="gw-reactions">${entries.map(([emoji, list]) => {
+      const mine = list.includes(uid);
+      return `<button class="gw-pill ${mine ? 'mine' : ''}" data-id="${m.id}" data-emoji="${emoji}">${emoji} ${list.length}</button>`;
+    }).join('')}</div>`;
+  }
+
+  function actionsHtml(m) {
+    const quick = QUICK_EMOJIS.map(e =>
+      `<button class="gw-action-btn" data-action="react" data-id="${m.id}" data-emoji="${e}">${e}</button>`
+    ).join('');
+    const picker = PICKER_EMOJIS.map(e =>
+      `<button data-action="react" data-id="${m.id}" data-emoji="${e}">${e}</button>`
+    ).join('');
+    return `
+      <div class="gw-actions">
+        ${quick}
+        <button class="gw-action-btn gw-more-btn" data-action="toggle-picker" data-id="${m.id}">+</button>
+        <button class="gw-action-btn" data-action="reply" data-id="${m.id}" aria-label="Reply">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"></polyline><path d="M4 12h11a5 5 0 0 1 5 5v1"></path></svg>
+        </button>
+      </div>
+      <div class="gw-picker ${openPickerId === String(m.id) ? 'open' : ''}">${picker}</div>
+    `;
+  }
+
   function renderMessages() {
     if (messages.length === 0) {
       emptyMsg.style.display = 'block';
@@ -843,16 +1031,71 @@ if (!sessionStorage.getItem('tracked')) {
       const wrap = document.createElement('div');
       const isHost = m.source === 'discord';
       wrap.className = 'gw-msg' + (isHost ? ' gw-msg-from-discord' : '');
+      wrap.dataset.id = m.id;
       const nick = m.nickname || 'anonymous';
       wrap.innerHTML = `
+        ${replyQuoteHtml(m)}
         <div class="gw-nick ${isHost ? 'is-host' : ''}">${sanitize(nick)}${isHost ? ' · Owner' : ''}</div>
         <div class="gw-bubble">${sanitize(m.message)}</div>
         <div class="gw-time">${timeAgo(m.created_at)}</div>
+        ${reactionPillsHtml(m)}
+        ${actionsHtml(m)}
       `;
       msgBox.appendChild(wrap);
     });
     scrollBottom();
   }
+
+  async function toggleReaction(msgId, emoji) {
+    const msg = findMessage(msgId);
+    if (!msg) return;
+    const uid = getUid();
+    const reactions = msg.reactions ? { ...msg.reactions } : {};
+    const list = reactions[emoji] ? [...reactions[emoji]] : [];
+    const idx = list.indexOf(uid);
+    if (idx >= 0) list.splice(idx, 1); else list.push(uid);
+    if (list.length === 0) delete reactions[emoji]; else reactions[emoji] = list;
+    msg.reactions = reactions;
+    renderMessages();
+    await _sb.from('guest_wall').update({ reactions }).eq('id', msgId);
+  }
+
+  function startReply(msgId) {
+    const msg = findMessage(msgId);
+    if (!msg) return;
+    replyingTo = { id: msg.id, nick: msg.nickname || 'anonymous' };
+    replyLbl.textContent = 'replying to ' + replyingTo.nick;
+    replyBar.classList.add('open');
+    msgInput.focus();
+  }
+
+  function cancelReply() {
+    replyingTo = null;
+    replyBar.classList.remove('open');
+  }
+
+  replyCancel.addEventListener('click', cancelReply);
+
+  msgBox.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn) {
+      const pill = e.target.closest('.gw-pill');
+      if (pill) toggleReaction(pill.dataset.id, pill.dataset.emoji);
+      return;
+    }
+    const action = btn.dataset.action;
+    const id = btn.dataset.id;
+    if (action === 'react') {
+      toggleReaction(id, btn.dataset.emoji);
+      openPickerId = null;
+      renderMessages();
+    } else if (action === 'toggle-picker') {
+      openPickerId = openPickerId === String(id) ? null : String(id);
+      renderMessages();
+    } else if (action === 'reply') {
+      startReply(id);
+    }
+  });
 
   function scrollBottom() {
     requestAnimationFrame(() => { msgBox.scrollTop = msgBox.scrollHeight; });
@@ -928,7 +1171,8 @@ if (!sessionStorage.getItem('tracked')) {
     const { error } = await _sb.from('guest_wall').insert({
       nickname: nick === 'anonymous' ? null : nick,
       message: msg,
-      source: 'web'
+      source: 'web',
+      reply_to: replyingTo ? String(replyingTo.id) : null
     });
 
     if (error) {
@@ -937,6 +1181,8 @@ if (!sessionStorage.getItem('tracked')) {
       sendBtn.disabled = false;
       return;
     }
+
+    cancelReply();
 
     try {
       const response = await fetch('/api/send-guestwall', {
@@ -977,6 +1223,15 @@ if (!sessionStorage.getItem('tracked')) {
     .channel('guest_wall_realtime')
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'guest_wall' }, payload => {
       messages.push(payload.new);
+      if (open) renderMessages();
+    })
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'guest_wall' }, payload => {
+      const idx = messages.findIndex(m => String(m.id) === String(payload.new.id));
+      if (idx >= 0) messages[idx] = payload.new;
+      if (open) renderMessages();
+    })
+    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'guest_wall' }, payload => {
+      messages = messages.filter(m => String(m.id) !== String(payload.old.id));
       if (open) renderMessages();
     })
     .subscribe();
