@@ -541,12 +541,30 @@
         if (session && session.user.email === ADMIN_EMAIL) showAdmin();
     }
 
+    let realtimeChannel;
+
     function showAdmin() {
         loginSection.style.display = 'none';
         adminSection.style.display = 'block';
         loadAnalytics();
         loadAnnouncements();
         loadGuestWall();
+        subscribeRealtime();
+    }
+
+    function subscribeRealtime() {
+        if (realtimeChannel) return;
+        realtimeChannel = sb.channel('admin-realtime')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'guest_wall' }, loadGuestWall)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, loadAnnouncements)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'page_views' }, loadAnalytics)
+            .subscribe();
+    }
+
+    function unsubscribeRealtime() {
+        if (!realtimeChannel) return;
+        sb.removeChannel(realtimeChannel);
+        realtimeChannel = null;
     }
 
     function showLogin() {
@@ -566,6 +584,7 @@
     });
 
     document.getElementById('logout-button').addEventListener('click', async () => {
+        unsubscribeRealtime();
         await sb.auth.signOut();
         showLogin();
     });
