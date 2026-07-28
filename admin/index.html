@@ -410,6 +410,32 @@
             letter-spacing: 0.08em;
         }
 
+        #gw-list {
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 6px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(203,166,247,0.35) rgba(49,50,68,0.4);
+        }
+
+        #gw-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #gw-list::-webkit-scrollbar-track {
+            background: rgba(49,50,68,0.4);
+            border-radius: 99px;
+        }
+
+        #gw-list::-webkit-scrollbar-thumb {
+            background: rgba(203,166,247,0.35);
+            border-radius: 99px;
+        }
+
+        #gw-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(203,166,247,0.55);
+        }
+
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(12px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -423,6 +449,7 @@
             .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
             .stat-num { font-size: 22px; }
             .announce-input-row { flex-direction: column; }
+            #gw-list { max-height: 340px; }
         }
     </style>
 </head>
@@ -625,19 +652,28 @@
     }
 
     async function loadGuestWall() {
-        const { data } = await sb
-            .from('guest_wall')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(50);
+        let all = [];
+        let from = 0;
+        const pageSize = 1000;
+        while (true) {
+            const { data, error } = await sb
+                .from('guest_wall')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .range(from, from + pageSize - 1);
+            if (error || !data) break;
+            all = all.concat(data);
+            if (data.length < pageSize) break;
+            from += pageSize;
+        }
 
         const container = document.getElementById('gw-list');
-        if (!data || data.length === 0) {
+        if (all.length === 0) {
             container.innerHTML = '<p class="no-announce">no messages yet.</p>';
             return;
         }
 
-        container.innerHTML = data.map(m => {
+        container.innerHTML = all.map(m => {
             const nick = m.nickname || 'anonymous';
             const isHost = m.source === 'discord';
             const time = new Date(m.created_at).toLocaleString();
