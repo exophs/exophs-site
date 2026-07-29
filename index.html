@@ -149,6 +149,37 @@
       text-decoration: none;
     }
     .nav-logo span { color: var(--overlay0); }
+    #presence-badge {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--overlay1);
+      text-transform: uppercase;
+      background: rgba(49,50,68,0.4);
+      border: 1px solid rgba(180,190,254,0.08);
+      padding: 5px 12px;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+    .presence-dot {
+      width: 6px;
+      height: 6px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px rgba(166,227,161,0.6);
+      animation: presencePulse 2s ease-in-out infinite;
+    }
+    @keyframes presencePulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
     .hamburger {
       display: flex;
       flex-direction: column;
@@ -769,6 +800,7 @@
       .countdown-num { min-width: 56px; font-size: 28px; }
       footer { padding: 0 16px 12px; }
       #guest-wall { width: calc(100vw - 24px); right: 12px; }
+      #presence-badge { display: none; }
     }
   </style>
 </head>
@@ -786,6 +818,9 @@
   <a href="https://exophs.is-a.dev/" class="nav-logo">
     <span>.</span>exophs
   </a>
+  <div id="presence-badge">
+    <span class="presence-dot"></span><span id="presence-count">-</span> here now
+  </div>
   <div class="hamburger" id="hamburger">
     <div></div><div></div><div></div>
   </div>
@@ -1050,14 +1085,23 @@ if (!sessionStorage.getItem('tracked')) {
     const msg = findMessage(msgId);
     if (!msg) return;
     const uid = getUid();
-    const reactions = msg.reactions ? { ...msg.reactions } : {};
+    const previous = msg.reactions ? { ...msg.reactions } : {};
+    const reactions = { ...previous };
     const list = reactions[emoji] ? [...reactions[emoji]] : [];
     const idx = list.indexOf(uid);
     if (idx >= 0) list.splice(idx, 1); else list.push(uid);
     if (list.length === 0) delete reactions[emoji]; else reactions[emoji] = list;
     msg.reactions = reactions;
     renderMessages();
-    await _sb.from('guest_wall').update({ reactions }).eq('id', msgId);
+    const { error } = await _sb.from('guest_wall').update({ reactions }).eq('id', msgId);
+    if (error) {
+      console.error('Failed to save reaction:', error);
+      msg.reactions = previous;
+      renderMessages();
+      status.textContent = 'reaction failed to save.';
+      status.className = 'error';
+      setTimeout(() => { if (status.className === 'error') { status.textContent = ''; status.className = ''; } }, 3000);
+    }
   }
 
   function startReply(msgId) {
@@ -1238,6 +1282,35 @@ if (!sessionStorage.getItem('tracked')) {
 
   if (Date.now() < cooldownEnd) updateCooldownUI();
   loadMessages();
+})();
+
+(function() {
+  const countEl = document.getElementById('presence-count');
+  if (!countEl) return;
+
+  function getUid() {
+    let uid = localStorage.getItem('gw_uid');
+    if (!uid) {
+      uid = 'u_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('gw_uid', uid);
+    }
+    return uid;
+  }
+
+  const presenceChannel = _sb.channel('site-presence', {
+    config: { presence: { key: getUid() } }
+  });
+
+  presenceChannel
+    .on('presence', { event: 'sync' }, () => {
+      const state = presenceChannel.presenceState();
+      countEl.textContent = Object.keys(state).length;
+    })
+    .subscribe(async status => {
+      if (status === 'SUBSCRIBED') {
+        await presenceChannel.track({ online_at: new Date().toISOString() });
+      }
+    });
 })();
 </script>
 
