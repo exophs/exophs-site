@@ -1301,14 +1301,21 @@ if (!sessionStorage.getItem('tracked')) {
     config: { presence: { key: getUid() } }
   });
 
+  function updateCount() {
+    const state = presenceChannel.presenceState();
+    countEl.textContent = Object.keys(state).length;
+  }
+
   presenceChannel
-    .on('presence', { event: 'sync' }, () => {
-      const state = presenceChannel.presenceState();
-      countEl.textContent = Object.keys(state).length;
-    })
-    .subscribe(async status => {
+    .on('presence', { event: 'sync' }, updateCount)
+    .on('presence', { event: 'join' }, updateCount)
+    .on('presence', { event: 'leave' }, updateCount)
+    .subscribe(async (status, err) => {
       if (status === 'SUBSCRIBED') {
         await presenceChannel.track({ online_at: new Date().toISOString() });
+        updateCount();
+      } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+        console.error('Presence channel failed:', status, err);
       }
     });
 })();
