@@ -31,7 +31,7 @@ a collection of mini projects
 | `/ExophsBot`        | Commands for my Minecraft bot I made with quicoys|
 | `/cursor`           | Custom cursor effects / trails                   |
 | `/brave-block`      | Brave browser related experiment / blocker demo  |
-| `/admin`            | Temporary admin page (not secure)                |
+| `/admin`            | Admin page                                       |
 | `/scam`             | Joke/scam UI parody of a gif                     |
 | `/vsbm`             | Volumetric raymarching shader playground         |
 | … and more          | tiny one-off demos and unfinished ideas          |
