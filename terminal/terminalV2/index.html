@@ -153,11 +153,13 @@
    ============================================================ */
 
 /*
-    After starting Cloudflare Tunnel, put the URL here.
+    Put your current Cloudflare Tunnel URL here.
 
     Example:
 
     https://something-random.trycloudflare.com
+
+    Do NOT put a trailing slash.
 */
 
 const API_URL =
@@ -190,6 +192,7 @@ function rainbowText(text, hue) {
             result += char;
 
             continue;
+
         }
 
         const charHue =
@@ -197,9 +200,11 @@ function rainbowText(text, hue) {
 
         result +=
             `<span style="color:hsl(${charHue},60%,75%)">${char}</span>`;
+
     }
 
     return result;
+
 }
 
 
@@ -215,11 +220,15 @@ function animateRainbow() {
         (hue + 0.5) % 360;
 
     asciiArt.innerHTML =
-        rainbowText(originalText, hue);
+        rainbowText(
+            originalText,
+            hue
+        );
 
     requestAnimationFrame(
         animateRainbow
     );
+
 }
 
 
@@ -231,18 +240,22 @@ function stopRainbowAnimation() {
         `<span style="color:white">${originalText}</span>`;
 
     const rainbowElements =
-        document.querySelectorAll(".rainbow-border");
-
-    rainbowElements.forEach(element => {
-
-        element.classList.remove(
-            "rainbow-border"
+        document.querySelectorAll(
+            ".rainbow-border"
         );
 
-        element.style.color =
-            "white";
+    rainbowElements.forEach(
+        element => {
 
-    });
+            element.classList.remove(
+                "rainbow-border"
+            );
+
+            element.style.color =
+                "white";
+
+        }
+    );
 
 }
 
@@ -255,23 +268,32 @@ animateRainbow();
    ============================================================ */
 
 const terminal =
-    document.getElementById("terminal");
+    document.getElementById(
+        "terminal"
+    );
 
 const cmdInput =
-    document.getElementById("cmd-input");
+    document.getElementById(
+        "cmd-input"
+    );
 
 const userPrompt =
-    document.getElementById("user-prompt");
+    document.getElementById(
+        "user-prompt"
+    );
 
 
 /* ============================================================
    USERS
    ============================================================ */
 
-const usersKey = "users";
+const usersKey =
+    "users";
 
 let currentUser =
-    localStorage.getItem("currentUser");
+    localStorage.getItem(
+        "currentUser"
+    );
 
 
 function updateUserPrompt() {
@@ -280,14 +302,25 @@ function updateUserPrompt() {
         currentUser
             ? `${currentUser}@web:~$`
             : "user@web:~$";
+
 }
 
 
 function getUsers() {
 
-    return JSON.parse(
-        localStorage.getItem(usersKey)
-    ) || [];
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(
+                usersKey
+            )
+        ) || [];
+
+    } catch {
+
+        return [];
+
+    }
 
 }
 
@@ -328,11 +361,108 @@ const getCommandCompletions =
     partial => {
 
         return Object.keys(commands)
-            .filter(cmd =>
-                cmd.startsWith(partial)
+            .filter(
+                cmd =>
+                    cmd.startsWith(
+                        partial
+                    )
             );
 
     };
+
+
+/* ============================================================
+   FILE SIZE FORMATTER
+   ============================================================ */
+
+function formatFileSize(bytes) {
+
+    if (bytes < 1024) {
+
+        return `${bytes} B`;
+
+    }
+
+    if (bytes < 1024 * 1024) {
+
+        return `${(
+            bytes / 1024
+        ).toFixed(1)} KB`;
+
+    }
+
+    if (bytes < 1024 * 1024 * 1024) {
+
+        return `${(
+            bytes /
+            (1024 * 1024)
+        ).toFixed(2)} MB`;
+
+    }
+
+    return `${(
+        bytes /
+        (1024 * 1024 * 1024)
+    ).toFixed(2)} GB`;
+
+}
+
+
+/* ============================================================
+   FILE DATE FORMATTER
+   ============================================================ */
+
+function formatFileDate(dateString) {
+
+    const date =
+        new Date(
+            dateString
+        );
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return dateString;
+
+    }
+
+    return date.toLocaleString();
+
+}
+
+
+/* ============================================================
+   FETCH FILES
+   ============================================================ */
+
+async function fetchFiles() {
+
+    const response =
+        await fetch(
+            `${API_URL}/api/files`
+        );
+
+    const result =
+        await response.json();
+
+    if (
+        !response.ok ||
+        !result.success
+    ) {
+
+        throw new Error(
+            result.error ||
+            "Failed to get files."
+        );
+
+    }
+
+    return result.files || [];
+
+}
 
 
 /* ============================================================
@@ -373,6 +503,7 @@ Remote file writer:
 - Enabled
 - Allowed files: .txt
 - Shell access: disabled
+- File reading: disabled
         `.trim();
 
     },
@@ -391,7 +522,8 @@ Remote file writer:
        -------------------------------------------------------- */
 
     whoami: () =>
-        currentUser || "No user logged in",
+        currentUser ||
+        "No user logged in",
 
 
     /* --------------------------------------------------------
@@ -419,9 +551,11 @@ Remote file writer:
        WRITE
        -------------------------------------------------------- */
 
-    write: async (args) => {
+    write: async args => {
 
-        if (args.length < 2) {
+        if (
+            args.length < 2
+        ) {
 
             return `
 Usage:
@@ -440,12 +574,20 @@ write hello.txt Hello world!
             args[0];
 
         const content =
-            args.slice(1).join(" ");
+            args
+                .slice(1)
+                .join(" ");
 
 
-        if (!filename.toLowerCase().endsWith(".txt")) {
+        if (
+            !filename
+                .toLowerCase()
+                .endsWith(".txt")
+        ) {
 
-            return "Error: Only .txt files are allowed.";
+            return (
+                "Error: Only .txt files are allowed."
+            );
 
         }
 
@@ -479,7 +621,9 @@ write hello.txt Hello world!
                 await response.json();
 
 
-            if (!response.ok) {
+            if (
+                !response.ok
+            ) {
 
                 return `Error: ${
                     result.error ||
@@ -496,13 +640,255 @@ Path:
 ${result.filename}
             `.trim();
 
-
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
 
             return `
 Could not connect to the file server.
+
+Make sure:
+1. server.py is running
+2. Cloudflare Tunnel is running
+3. API_URL is correct
+            `.trim();
+
+        }
+
+    },
+
+
+    /* --------------------------------------------------------
+       FILES
+       -------------------------------------------------------- */
+
+    files: async () => {
+
+        try {
+
+            const fileList =
+                await fetchFiles();
+
+
+            if (
+                fileList.length === 0
+            ) {
+
+                return `
+Files in C:\\WebTerminalFiles
+
+No .txt files found.
+                `.trim();
+
+            }
+
+
+            let output =
+                "Files in C:\\WebTerminalFiles\n\n";
+
+
+            fileList.forEach(
+                file => {
+
+                    output +=
+                        `${file.filename}\n`;
+
+                }
+            );
+
+
+            output +=
+                `\n${fileList.length} file${
+                    fileList.length === 1
+                        ? ""
+                        : "s"
+                }`;
+
+
+            return output;
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+            return `
+Could not retrieve the file list.
+
+Make sure:
+1. server.py is running
+2. Cloudflare Tunnel is running
+3. API_URL is correct
+            `.trim();
+
+        }
+
+    },
+
+
+    /* --------------------------------------------------------
+       FILES BY CREATION DATE
+       -------------------------------------------------------- */
+
+    "files-date": async () => {
+
+        try {
+
+            const fileList =
+                await fetchFiles();
+
+
+            if (
+                fileList.length === 0
+            ) {
+
+                return `
+Files sorted by creation date
+
+No .txt files found.
+                `.trim();
+
+            }
+
+
+            fileList.sort(
+                (a, b) =>
+                    new Date(
+                        b.created
+                    ) -
+                    new Date(
+                        a.created
+                    )
+            );
+
+
+            let output =
+                "Files sorted by creation date\n\n";
+
+
+            fileList.forEach(
+                file => {
+
+                    output +=
+                        `${file.filename}`;
+
+                    output +=
+                        `    ${formatFileDate(
+                            file.created
+                        )}`;
+
+                    output +=
+                        "\n";
+
+                }
+            );
+
+
+            output +=
+                `\n${fileList.length} file${
+                    fileList.length === 1
+                        ? ""
+                        : "s"
+                }`;
+
+
+            return output;
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+            return `
+Could not retrieve file dates.
+
+Make sure:
+1. server.py is running
+2. Cloudflare Tunnel is running
+3. API_URL is correct
+            `.trim();
+
+        }
+
+    },
+
+
+    /* --------------------------------------------------------
+       FILES BY SIZE
+       -------------------------------------------------------- */
+
+    "files-size": async () => {
+
+        try {
+
+            const fileList =
+                await fetchFiles();
+
+
+            if (
+                fileList.length === 0
+            ) {
+
+                return `
+Files sorted by size
+
+No .txt files found.
+                `.trim();
+
+            }
+
+
+            fileList.sort(
+                (a, b) =>
+                    b.size -
+                    a.size
+            );
+
+
+            let output =
+                "Files sorted by size\n\n";
+
+
+            fileList.forEach(
+                file => {
+
+                    output +=
+                        `${file.filename}`;
+
+                    output +=
+                        `    ${formatFileSize(
+                            file.size
+                        )}`;
+
+                    output +=
+                        "\n";
+
+                }
+            );
+
+
+            output +=
+                `\n${fileList.length} file${
+                    fileList.length === 1
+                        ? ""
+                        : "s"
+                }`;
+
+
+            return output;
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+            return `
+Could not retrieve file sizes.
 
 Make sure:
 1. server.py is running
@@ -524,7 +910,8 @@ Make sure:
         const commandGroups = [
 
             {
-                title: "[User Management Commands]",
+                title:
+                    "[User Management Commands]",
 
                 commands: [
 
@@ -541,11 +928,13 @@ Make sure:
                     "- whoami"
 
                 ]
+
             },
 
 
             {
-                title: "[System Information Commands]",
+                title:
+                    "[System Information Commands]",
 
                 commands: [
 
@@ -554,22 +943,32 @@ Make sure:
                     "- date"
 
                 ]
+
             },
 
 
             {
-                title: "[File Commands]",
+                title:
+                    "[File Commands]",
 
                 commands: [
 
-                    "- write [filename.txt] [text]"
+                    "- write [filename.txt] [text]",
+
+                    "- files",
+
+                    "- files-date",
+
+                    "- files-size"
 
                 ]
+
             },
 
 
             {
-                title: "[Utility Commands]",
+                title:
+                    "[Utility Commands]",
 
                 commands: [
 
@@ -586,6 +985,7 @@ Make sure:
                     "- turnonrainbow"
 
                 ]
+
             }
 
         ];
@@ -646,16 +1046,24 @@ Make sure:
 
 
         const centerText =
-            (text, width) => {
+            (
+                text,
+                width
+            ) => {
 
                 const spaces =
-                    width - text.length - 2;
+                    width -
+                    text.length -
+                    2;
 
                 const leftSpaces =
-                    Math.floor(spaces / 2);
+                    Math.floor(
+                        spaces / 2
+                    );
 
                 const rightSpaces =
-                    spaces - leftSpaces;
+                    spaces -
+                    leftSpaces;
 
 
                 return `<span class="${borderClass}" ${borderColor}>║</span>${" ".repeat(leftSpaces)}<span style="color:#ffffff">${text}</span>${" ".repeat(rightSpaces)}<span class="${borderClass}" ${borderColor}>║</span>`;
@@ -667,9 +1075,17 @@ Make sure:
             text => {
 
                 const padding =
-                    maxWidth - text.length - 3;
+                    maxWidth -
+                    text.length -
+                    3;
 
-                return `<span class="${borderClass}" ${borderColor}>║</span> <span style="color:#ffffff">${text}</span>${" ".repeat(Math.max(0, padding))}<span class="${borderClass}" ${borderColor}>║</span>`;
+
+                return `<span class="${borderClass}" ${borderColor}>║</span> <span style="color:#ffffff">${text}</span>${" ".repeat(
+                    Math.max(
+                        0,
+                        padding
+                    )
+                )}<span class="${borderClass}" ${borderColor}>║</span>`;
 
             };
 
@@ -678,9 +1094,17 @@ Make sure:
             cmd => {
 
                 const padding =
-                    maxWidth - cmd.length - 5;
+                    maxWidth -
+                    cmd.length -
+                    5;
 
-                return `<span class="${borderClass}" ${borderColor}>║</span>   <span style="color:#ffffff">${cmd}</span>${" ".repeat(Math.max(0, padding))}<span class="${borderClass}" ${borderColor}>║</span>`;
+
+                return `<span class="${borderClass}" ${borderColor}>║</span>   <span style="color:#ffffff">${cmd}</span>${" ".repeat(
+                    Math.max(
+                        0,
+                        padding
+                    )
+                )}<span class="${borderClass}" ${borderColor}>║</span>`;
 
             };
 
@@ -701,7 +1125,10 @@ Make sure:
 
 
         commandGroups.forEach(
-            (group, i) => {
+            (
+                group,
+                i
+            ) => {
 
                 output +=
                     `${formatLine(
@@ -727,7 +1154,9 @@ Make sure:
                 ) {
 
                     output +=
-                        `${formatLine(" ")}\n`;
+                        `${formatLine(
+                            " "
+                        )}\n`;
 
                 }
 
@@ -739,7 +1168,14 @@ Make sure:
             `${horizontalBottom}`;
 
 
-        return { html: output };
+        /*
+            Return an object so the terminal knows
+            this is trusted HTML from the help command.
+        */
+
+        return {
+            html: output
+        };
 
     },
 
@@ -756,9 +1192,14 @@ Make sure:
         ] = args;
 
 
-        if (!username || !password) {
+        if (
+            !username ||
+            !password
+        ) {
 
-            return "Usage: makeuser [username] [password]";
+            return (
+                "Usage: makeuser [username] [password]"
+            );
 
         }
 
@@ -770,30 +1211,36 @@ Make sure:
         const userExists =
             users.some(
                 user =>
-                    user.username === username
+                    user.username ===
+                    username
             );
 
 
-        if (userExists) {
+        if (
+            userExists
+        ) {
 
-            return `User ${username} already exists.`;
+            return (
+                `User ${username} already exists.`
+            );
 
         }
 
 
         users.push({
-
             username,
-
             password
-
         });
 
 
-        saveUsers(users);
+        saveUsers(
+            users
+        );
 
 
-        return `User ${username} created successfully.`;
+        return (
+            `User ${username} created successfully.`
+        );
 
     },
 
@@ -810,9 +1257,14 @@ Make sure:
         ] = args;
 
 
-        if (!username || !password) {
+        if (
+            !username ||
+            !password
+        ) {
 
-            return "Usage: login [username] [password]";
+            return (
+                "Usage: login [username] [password]"
+            );
 
         }
 
@@ -824,14 +1276,20 @@ Make sure:
         const user =
             users.find(
                 u =>
-                    u.username === username &&
-                    u.password === password
+                    u.username ===
+                    username &&
+                    u.password ===
+                    password
             );
 
 
-        if (!user) {
+        if (
+            !user
+        ) {
 
-            return "Invalid username or password.";
+            return (
+                "Invalid username or password."
+            );
 
         }
 
@@ -849,7 +1307,9 @@ Make sure:
         updateUserPrompt();
 
 
-        return `Logged in as ${username}.`;
+        return (
+            `Logged in as ${username}.`
+        );
 
     },
 
@@ -860,9 +1320,13 @@ Make sure:
 
     logout: () => {
 
-        if (!currentUser) {
+        if (
+            !currentUser
+        ) {
 
-            return "No user is currently logged in.";
+            return (
+                "No user is currently logged in."
+            );
 
         }
 
@@ -879,7 +1343,9 @@ Make sure:
         updateUserPrompt();
 
 
-        return "Logged out successfully.";
+        return (
+            "Logged out successfully."
+        );
 
     },
 
@@ -895,7 +1361,10 @@ Make sure:
 
 
         return users
-            .map(u => u.username)
+            .map(
+                u =>
+                    u.username
+            )
             .join("\n")
             ||
             "No users found.";
@@ -915,9 +1384,14 @@ Make sure:
         ] = args;
 
 
-        if (!username || !password) {
+        if (
+            !username ||
+            !password
+        ) {
 
-            return "Usage: deleteuser [username] [password]";
+            return (
+                "Usage: deleteuser [username] [password]"
+            );
 
         }
 
@@ -929,20 +1403,27 @@ Make sure:
         const userIndex =
             users.findIndex(
                 u =>
-                    u.username === username &&
-                    u.password === password
+                    u.username ===
+                    username &&
+                    u.password ===
+                    password
             );
 
 
-        if (userIndex === -1) {
+        if (
+            userIndex === -1
+        ) {
 
-            return "Invalid username or password.";
+            return (
+                "Invalid username or password."
+            );
 
         }
 
 
         if (
-            username === currentUser
+            username ===
+            currentUser
         ) {
 
             currentUser =
@@ -963,10 +1444,14 @@ Make sure:
         );
 
 
-        saveUsers(users);
+        saveUsers(
+            users
+        );
 
 
-        return `User ${username} deleted successfully.`;
+        return (
+            `User ${username} deleted successfully.`
+        );
 
     },
 
@@ -983,9 +1468,13 @@ Make sure:
         ] = args;
 
 
-        if (!currentUser) {
+        if (
+            !currentUser
+        ) {
 
-            return "No user is currently logged in.";
+            return (
+                "No user is currently logged in."
+            );
 
         }
 
@@ -995,7 +1484,9 @@ Make sure:
             !newPassword
         ) {
 
-            return "Usage: changepassword [currentPassword] [newPassword]";
+            return (
+                "Usage: changepassword [currentPassword] [newPassword]"
+            );
 
         }
 
@@ -1007,16 +1498,20 @@ Make sure:
         const user =
             users.find(
                 u =>
-                    u.username === currentUser
+                    u.username ===
+                    currentUser
             );
 
 
         if (
             !user ||
-            user.password !== currentPassword
+            user.password !==
+            currentPassword
         ) {
 
-            return "Current password is incorrect.";
+            return (
+                "Current password is incorrect."
+            );
 
         }
 
@@ -1025,10 +1520,14 @@ Make sure:
             newPassword;
 
 
-        saveUsers(users);
+        saveUsers(
+            users
+        );
 
 
-        return "Password changed successfully.";
+        return (
+            "Password changed successfully."
+        );
 
     },
 
@@ -1042,7 +1541,9 @@ Make sure:
         window.location.href =
             "https://exophs.vercel.app";
 
-        return "Redirecting to homepage...";
+        return (
+            "Redirecting to homepage..."
+        );
 
     },
 
@@ -1060,8 +1561,9 @@ Make sure:
        -------------------------------------------------------- */
 
     history: () =>
-        commandHistory.join("\n")
-        ||
+        commandHistory.join(
+            "\n"
+        ) ||
         "No command history",
 
 
@@ -1071,9 +1573,13 @@ Make sure:
 
     turnoffrainbow: () => {
 
-        if (!rainbowMode) {
+        if (
+            !rainbowMode
+        ) {
 
-            return "Rainbow mode is already turned off.";
+            return (
+                "Rainbow mode is already turned off."
+            );
 
         }
 
@@ -1081,7 +1587,9 @@ Make sure:
         stopRainbowAnimation();
 
 
-        return "Rainbow mode turned off successfully.";
+        return (
+            "Rainbow mode turned off successfully."
+        );
 
     },
 
@@ -1092,19 +1600,27 @@ Make sure:
 
     turnonrainbow: () => {
 
-        if (rainbowMode) {
+        if (
+            rainbowMode
+        ) {
 
-            return "Rainbow mode is already turned on.";
+            return (
+                "Rainbow mode is already turned on."
+            );
 
         }
 
 
-        rainbowMode = true;
+        rainbowMode =
+            true;
+
 
         animateRainbow();
 
 
-        return "Rainbow mode turned on successfully.";
+        return (
+            "Rainbow mode turned on successfully."
+        );
 
     }
 
@@ -1119,13 +1635,21 @@ cmdInput.addEventListener(
     "keydown",
     async e => {
 
-        if (e.key === "Enter") {
+        /* ----------------------------------------------------
+           ENTER
+           ---------------------------------------------------- */
+
+        if (
+            e.key === "Enter"
+        ) {
 
             const input =
                 cmdInput.value.trim();
 
 
-            if (!input) {
+            if (
+                !input
+            ) {
 
                 return;
 
@@ -1155,12 +1679,18 @@ cmdInput.addEventListener(
 
                 output =
                     commands[command]
-                        ? await commands[command](args)
+                        ? await commands[
+                            command
+                        ](args)
                         : `Command not found: ${command}`;
 
-            } catch (error) {
+            } catch (
+                error
+            ) {
 
-                console.error(error);
+                console.error(
+                    error
+                );
 
                 output =
                     `Command error: ${error.message}`;
@@ -1183,10 +1713,32 @@ cmdInput.addEventListener(
                     "output";
 
 
-                if (output && typeof output === "object" && output.html) {
-                    outputElement.innerHTML = output.html;
+                /*
+                    HELP returns:
+
+                    {
+                        html: "..."
+                    }
+
+                    Everything else is treated as
+                    plain text.
+                */
+
+                if (
+                    output &&
+                    typeof output ===
+                        "object" &&
+                    output.html
+                ) {
+
+                    outputElement.innerHTML =
+                        output.html;
+
                 } else {
-                    outputElement.textContent = output;
+
+                    outputElement.textContent =
+                        output;
+
                 }
 
 
@@ -1201,7 +1753,8 @@ cmdInput.addEventListener(
             }
 
 
-            cmdInput.value = "";
+            cmdInput.value =
+                "";
 
         }
 
@@ -1210,7 +1763,9 @@ cmdInput.addEventListener(
            HISTORY UP
            ---------------------------------------------------- */
 
-        if (e.key === "ArrowUp") {
+        if (
+            e.key === "ArrowUp"
+        ) {
 
             e.preventDefault();
 
@@ -1240,7 +1795,8 @@ cmdInput.addEventListener(
             ) {
 
                 historyIndex =
-                    commandHistory.length - 1;
+                    commandHistory.length -
+                    1;
 
                 cmdInput.value =
                     commandHistory[
@@ -1256,7 +1812,9 @@ cmdInput.addEventListener(
            HISTORY DOWN
            ---------------------------------------------------- */
 
-        if (e.key === "ArrowDown") {
+        if (
+            e.key === "ArrowDown"
+        ) {
 
             e.preventDefault();
 
@@ -1299,7 +1857,9 @@ cmdInput.addEventListener(
            TAB COMPLETION
            ---------------------------------------------------- */
 
-        if (e.key === "Tab") {
+        if (
+            e.key === "Tab"
+        ) {
 
             e.preventDefault();
 
@@ -1313,7 +1873,9 @@ cmdInput.addEventListener(
 
 
             const currentWord =
-                parts[parts.length - 1];
+                parts[
+                    parts.length - 1
+                ];
 
 
             if (
@@ -1333,6 +1895,7 @@ cmdInput.addEventListener(
                     cmdInput.value =
                         matches[0] + " ";
 
+
                     tabCompletionState.currentMatches =
                         [];
 
@@ -1341,15 +1904,19 @@ cmdInput.addEventListener(
                 ) {
 
                     if (
-                        tabCompletionState.currentMatches.toString()
+                        tabCompletionState
+                            .currentMatches
+                            .toString()
                         !==
                         matches.toString()
                     ) {
 
-                        tabCompletionState.currentMatches =
+                        tabCompletionState
+                            .currentMatches =
                             matches;
 
-                        tabCompletionState.matchIndex =
+                        tabCompletionState
+                            .matchIndex =
                             0;
 
                     }
@@ -1357,19 +1924,23 @@ cmdInput.addEventListener(
 
                     cmdInput.value =
                         matches[
-                            tabCompletionState.matchIndex
+                            tabCompletionState
+                                .matchIndex
                         ] + " ";
 
 
-                    tabCompletionState.matchIndex =
+                    tabCompletionState
+                        .matchIndex =
                         (
-                            tabCompletionState.matchIndex + 1
+                            tabCompletionState
+                                .matchIndex + 1
                         ) %
                         matches.length;
 
 
                     if (
-                        tabCompletionState.matchIndex === 0
+                        tabCompletionState
+                            .matchIndex === 0
                     ) {
 
                         const outputElement =
@@ -1383,7 +1954,9 @@ cmdInput.addEventListener(
 
 
                         outputElement.textContent =
-                            matches.join(" ");
+                            matches.join(
+                                " "
+                            );
 
 
                         terminal.appendChild(
