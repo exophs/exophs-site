@@ -7,18 +7,19 @@
     <style>
       * {
         box-sizing: border-box;
+      }
+
+      html, body {
+        height: 100%;
         margin: 0;
-        padding: 0;
       }
 
       body {
-        background-color: #f8f9fa;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: #ffffff;
+        font-family: 'Segoe UI', Arial, sans-serif;
         overflow: hidden;
-        height: 100vh;
       }
 
-      /* Floating toolbar */
       #toolbar {
         position: fixed;
         left: 16px;
@@ -27,82 +28,80 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 12px;
-        padding: 14px 10px;
-        background: rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(12px);
+        gap: 14px;
+        padding: 16px 12px;
+        background: rgba(30, 30, 46, 0.85);
+        border: 1px solid rgba(205, 214, 244, 0.12);
         border-radius: 20px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
-        z-index: 100;
-        border: 1px solid rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        z-index: 10;
       }
 
-      /* Color picker button */
-      #color-picker-button {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        border: 3px solid #fff;
-        background: conic-gradient(
-          from 0deg,
-          #ff0000,
-          #ffff00,
-          #00ff00,
-          #00ffff,
-          #0000ff,
-          #ff00ff,
-          #ff0000
-        );
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
-      }
-
-      #color-picker-button:hover {
-        transform: scale(1.08);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      }
-
-      /* Color swatches */
       .color-option {
-        width: 28px;
-        height: 28px;
+        width: 26px;
+        height: 26px;
         border-radius: 50%;
         cursor: pointer;
-        border: 2px solid transparent;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-        transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        border: 2px solid rgba(205, 214, 244, 0.25);
+        transition: transform 0.15s ease, border-color 0.15s ease;
       }
 
       .color-option:hover {
-        transform: scale(1.12);
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
+        transform: scale(1.15);
+        border-color: #cdd6f4;
       }
 
-      .color-option.active {
-        border-color: #333;
-        transform: scale(1.1);
+      .color-option.selected {
+        border-color: #89b4fa;
+        box-shadow: 0 0 0 2px rgba(137, 180, 250, 0.4);
       }
 
-      /* Brush size */
+      #color-picker-button {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 2px solid rgba(205, 214, 244, 0.25);
+        background: conic-gradient(
+          #f38ba8,
+          #f9e2af,
+          #a6e3a1,
+          #94e2d5,
+          #89b4fa,
+          #cba6f7,
+          #f38ba8
+        );
+        cursor: pointer;
+        transition: transform 0.15s ease;
+      }
+
+      #color-picker-button:hover {
+        transform: scale(1.15);
+      }
+
+      .divider {
+        width: 24px;
+        height: 1px;
+        background: rgba(205, 214, 244, 0.15);
+      }
+
       #brush-size-container {
         display: flex;
-        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        gap: 4px;
-        margin-top: 4px;
       }
 
       #brush-size-slider {
         writing-mode: vertical-lr;
         direction: rtl;
-        width: 8px;
-        height: 90px;
         appearance: none;
-        background: #e0e0e0;
+        width: 6px;
+        height: 90px;
+        background: rgba(205, 214, 244, 0.15);
         border-radius: 4px;
-        outline: none;
         cursor: pointer;
+        outline: none;
       }
 
       #brush-size-slider::-webkit-slider-thumb {
@@ -110,67 +109,63 @@
         width: 18px;
         height: 18px;
         border-radius: 50%;
-        background: #4a90e2;
+        background: #89b4fa;
         cursor: pointer;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        border: 2px solid white;
+        border: 2px solid #1e1e2e;
       }
 
       #brush-size-slider::-moz-range-thumb {
         width: 18px;
         height: 18px;
         border-radius: 50%;
-        background: #4a90e2;
+        background: #89b4fa;
         cursor: pointer;
-        border: 2px solid white;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        border: 2px solid #1e1e2e;
       }
 
-      #brush-size-value {
-        font-size: 11px;
-        color: #666;
-        font-weight: 500;
-      }
-
-      /* Tool buttons */
-      .tool-btn {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
+      .icon-btn {
+        width: 30px;
+        height: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
+        border-radius: 10px;
         cursor: pointer;
-        background: #f0f0f0;
-        border: none;
-        transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        transition: background 0.15s ease, transform 0.15s ease;
       }
 
-      .tool-btn:hover {
-        background: #e4e4e4;
-        transform: translateY(-1px);
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+      .icon-btn:hover {
+        background: rgba(205, 214, 244, 0.1);
+        transform: scale(1.08);
       }
 
-      .tool-btn.active {
-        background: #ffe082;
-        box-shadow: 0 0 0 2px #ffb300;
+      .icon-btn.active {
+        background: rgba(137, 180, 250, 0.25);
       }
 
-      .tool-btn img,
-      .tool-btn svg {
+      #eraser-btn {
         width: 20px;
         height: 20px;
         object-fit: contain;
+        filter: invert(85%) sepia(8%) saturate(400%) hue-rotate(196deg);
       }
 
-      #eraser-btn img {
-        width: 22px;
-        height: 22px;
+      #save-btn {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: #cdd6f4;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
       }
 
-      /* Canvas */
+      #clear-btn {
+        width: 20px;
+        height: 20px;
+        fill: #f38ba8;
+      }
+
       canvas {
         position: fixed;
         top: 0;
@@ -178,333 +173,288 @@
         width: 100%;
         height: 100%;
         z-index: 0;
-        cursor: crosshair;
-        background: white;
         touch-action: none;
+        background-color: #ffffff;
       }
 
-      /* Warning dialog */
       #warning-dialog {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.45);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        backdrop-filter: blur(4px);
-      }
-
-      #warning-dialog.visible {
-        display: flex;
-      }
-
-      .dialog-content {
-        background: white;
-        padding: 28px 32px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(30, 30, 46, 0.9);
+        color: #cdd6f4;
+        padding: 24px;
+        border: 1px solid rgba(205, 214, 244, 0.12);
         border-radius: 16px;
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+        display: none;
+        z-index: 1000;
         text-align: center;
-        max-width: 320px;
-        width: 90%;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-        animation: dialogIn 0.2s ease;
+        width: 280px;
+        font-size: 15px;
       }
 
-      @keyframes dialogIn {
-        from {
-          opacity: 0;
-          transform: scale(0.92) translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1) translateY(0);
-        }
+      #warning-dialog p {
+        margin: 0 0 16px 0;
       }
 
-      .dialog-content p {
-        font-size: 16px;
-        color: #333;
-        margin-bottom: 24px;
-        line-height: 1.4;
-      }
-
-      .dialog-buttons {
-        display: flex;
-        gap: 12px;
-        justify-content: center;
-      }
-
-      .dialog-buttons button {
-        padding: 10px 22px;
+      #warning-dialog button {
+        margin: 0 6px;
+        padding: 10px 20px;
         font-size: 14px;
-        font-weight: 500;
-        border: none;
-        border-radius: 8px;
         cursor: pointer;
-        transition: background 0.15s ease, transform 0.1s ease;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: opacity 0.15s ease;
       }
 
-      .dialog-buttons button:hover {
-        transform: translateY(-1px);
+      #warning-dialog button:hover {
+        opacity: 0.85;
       }
 
-      .btn-confirm {
-        background: #ef5350;
-        color: white;
+      #warning-dialog button.confirm {
+        background-color: #f38ba8;
+        color: #1e1e2e;
       }
 
-      .btn-confirm:hover {
-        background: #e53935;
-      }
-
-      .btn-cancel {
-        background: #eeeeee;
-        color: #444;
-      }
-
-      .btn-cancel:hover {
-        background: #e0e0e0;
-      }
-
-      /* Subtle divider in toolbar */
-      .toolbar-divider {
-        width: 24px;
-        height: 1px;
-        background: #ddd;
-        margin: 2px 0;
+      #warning-dialog button.cancel {
+        background-color: rgba(205, 214, 244, 0.15);
+        color: #cdd6f4;
       }
     </style>
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
     <div id="toolbar">
-      <!-- Color picker -->
-      <div id="color-picker-button" onclick="openColorPicker()" title="Custom color"></div>
-      <input type="color" id="color-input" style="display: none" onchange="setColor(this.value)" />
+      <div id="color-picker-button" onclick="openColorPicker()"></div>
+      <input
+        type="color"
+        id="color-input"
+        style="display: none"
+        onchange="setColor(this.value)"
+      />
 
-      <div class="toolbar-divider"></div>
+      <div class="divider"></div>
 
-      <!-- Preset colors -->
-      <div class="color-option active" style="background-color: #000000" onclick="setColor('#000000')" data-color="#000000"></div>
-      <div class="color-option" style="background-color: #ffffff; border: 1px solid #ccc" onclick="setColor('#FFFFFF')" data-color="#FFFFFF"></div>
-      <div class="color-option" style="background-color: #ed1c24" onclick="setColor('#ED1C24')" data-color="#ED1C24"></div>
-      <div class="color-option" style="background-color: #ff7f27" onclick="setColor('#FF7F27')" data-color="#FF7F27"></div>
-      <div class="color-option" style="background-color: #fff200" onclick="setColor('#FFF200')" data-color="#FFF200"></div>
-      <div class="color-option" style="background-color: #22b14c" onclick="setColor('#22B14C')" data-color="#22B14C"></div>
-      <div class="color-option" style="background-color: #00a2e8" onclick="setColor('#00A2E8')" data-color="#00A2E8"></div>
-      <div class="color-option" style="background-color: #3f48cc" onclick="setColor('#3F48CC')" data-color="#3F48CC"></div>
-      <div class="color-option" style="background-color: #a349a4" onclick="setColor('#A349A4')" data-color="#A349A4"></div>
+      <div
+        class="color-option selected"
+        data-color="#11111b"
+        style="background-color: #11111b"
+        onclick="setColor('#11111b', this)"
+      ></div>
+      <div
+        class="color-option"
+        data-color="#cdd6f4"
+        style="background-color: #cdd6f4"
+        onclick="setColor('#cdd6f4', this)"
+      ></div>
+      <div
+        class="color-option"
+        data-color="#f38ba8"
+        style="background-color: #f38ba8"
+        onclick="setColor('#f38ba8', this)"
+      ></div>
+      <div
+        class="color-option"
+        data-color="#fab387"
+        style="background-color: #fab387"
+        onclick="setColor('#fab387', this)"
+      ></div>
+      <div
+        class="color-option"
+        data-color="#f9e2af"
+        style="background-color: #f9e2af"
+        onclick="setColor('#f9e2af', this)"
+      ></div>
+      <div
+        class="color-option"
+        data-color="#a6e3a1"
+        style="background-color: #a6e3a1"
+        onclick="setColor('#a6e3a1', this)"
+      ></div>
+      <div
+        class="color-option"
+        data-color="#89b4fa"
+        style="background-color: #89b4fa"
+        onclick="setColor('#89b4fa', this)"
+      ></div>
+      <div
+        class="color-option"
+        data-color="#cba6f7"
+        style="background-color: #cba6f7"
+        onclick="setColor('#cba6f7', this)"
+      ></div>
 
-      <div class="toolbar-divider"></div>
+      <div class="divider"></div>
 
-      <!-- Brush size -->
       <div id="brush-size-container">
         <input
           type="range"
           id="brush-size-slider"
           min="5"
           max="50"
-          value="20"
-          oninput="setBrushSize(this.value)"
+          value="30"
+          onchange="setBrushSize(this.value)"
         />
-        <span id="brush-size-value">20</span>
       </div>
 
-      <div class="toolbar-divider"></div>
+      <div class="divider"></div>
 
-      <!-- Eraser -->
-      <button class="tool-btn" id="eraser-btn" onclick="toggleEraser()" title="Eraser">
+      <div id="eraser-btn-container" class="icon-btn" onclick="toggleEraser()">
         <img
+          id="eraser-btn"
           src="https://static-00.iconduck.com/assets.00/eraser-icon-256x256-e0q4ms0d.png"
           alt="Eraser"
         />
-      </button>
+      </div>
 
-      <!-- Clear -->
-      <button class="tool-btn" onclick="showWarning()" title="Clear canvas">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#555">
-          <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+      <div id="clear-btn-container" class="icon-btn" onclick="showWarning()">
+        <svg
+          id="clear-btn"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M3 6h18v2H3zm3 2h12v14H6zm5 1v9h2v-9h-2zm1 0h-2v9h2zM6 7h12v1H6z"
+          />
         </svg>
-      </button>
+      </div>
 
-      <!-- Save -->
-      <button class="tool-btn" onclick="saveAsImage()" title="Save as PNG">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#555">
-          <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2v9.67z"/>
+      <div id="save-btn-container" class="icon-btn" onclick="saveAsImage()">
+        <svg
+          id="save-btn"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path d="M12 3v12" />
+          <path d="M7 10l5 5 5-5" />
+          <path d="M4 19h16" />
         </svg>
-      </button>
+      </div>
     </div>
 
     <canvas id="background"></canvas>
 
-    <!-- Warning dialog -->
     <div id="warning-dialog">
-      <div class="dialog-content">
-        <p>Are you sure you want to clear the canvas?</p>
-        <div class="dialog-buttons">
-          <button class="btn-confirm" onclick="clearCanvas()">Yes, clear</button>
-          <button class="btn-cancel" onclick="cancelClear()">Cancel</button>
-        </div>
-      </div>
+      <p>Are you sure you want to clear the canvas?</p>
+      <button class="confirm" onclick="clearCanvas()">Yes</button>
+      <button class="cancel" onclick="cancelClear()">Cancel</button>
     </div>
 
     <script>
-      const canvas = document.getElementById("background");
-      const context = canvas.getContext("2d");
-      let isDrawing = false;
-      let isEraser = false;
-      let color = "#000000";
-      let brushSize = 20;
-      let canvasHistory = [];
-      let historyIndex = -1;
+      var canvas = document.getElementById("background");
+      var context = canvas.getContext("2d");
+      var isDrawing = false;
+      var isEraser = false;
+      var color = "#11111b";
+      var brushSize = 30;
+      var canvasHistory = [];
+      var historyIndex = -1;
 
-      // Resize canvas
-      function resizeCanvas() {
-        const tempCanvas = document.createElement("canvas");
-        tempCanvas.width = canvas.width;
-        tempCanvas.height = canvas.height;
-        tempCanvas.getContext("2d").drawImage(canvas, 0, 0);
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        // Fill with white so eraser works correctly
-        context.fillStyle = "#ffffff";
-        context.fillRect(0, 0, canvas.width, canvas.height);
-
-        context.drawImage(tempCanvas, 0, 0);
-      }
-
-      resizeCanvas();
-      window.addEventListener("resize", resizeCanvas);
-
-      // Load saved drawing
       if (localStorage.getItem("drawing")) {
-        const savedImage = new Image();
+        var savedImage = new Image();
         savedImage.src = localStorage.getItem("drawing");
         savedImage.onload = function () {
           context.drawImage(savedImage, 0, 0);
-          saveState(true); // initial state
         };
-      } else {
-        // Start with white background
-        context.fillStyle = "#ffffff";
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        saveState(true);
       }
 
-      function setColor(newColor) {
+      function setColor(newColor, el) {
         color = newColor;
+        document.getElementById("color-picker-button").style.backgroundColor = newColor;
         isEraser = false;
-        document.getElementById("eraser-btn").classList.remove("active");
-
-        // Update active swatch
-        document.querySelectorAll(".color-option").forEach((el) => {
-          el.classList.toggle("active", el.dataset.color.toLowerCase() === newColor.toLowerCase());
+        document.getElementById("eraser-btn-container").classList.remove("active");
+        document.querySelectorAll(".color-option").forEach(function (opt) {
+          opt.classList.remove("selected");
         });
-
-        // Update color picker button to show selected color
-        document.getElementById("color-picker-button").style.background = newColor;
+        if (el) el.classList.add("selected");
       }
 
       function setBrushSize(size) {
-        brushSize = parseInt(size);
-        document.getElementById("brush-size-value").textContent = size;
+        brushSize = size;
       }
 
       function toggleEraser() {
         isEraser = !isEraser;
-        document.getElementById("eraser-btn").classList.toggle("active", isEraser);
-
-        if (isEraser) {
-          // Clear active color swatch visual
-          document.querySelectorAll(".color-option").forEach((el) => el.classList.remove("active"));
-        } else {
-          // Restore last color visual
-          document.querySelectorAll(".color-option").forEach((el) => {
-            el.classList.toggle("active", el.dataset.color.toLowerCase() === color.toLowerCase());
-          });
-        }
+        color = isEraser ? "#ffffff" : color;
+        document.getElementById("eraser-btn-container").classList.toggle("active", isEraser);
       }
 
-      function draw(x, y) {
+      canvas.addEventListener("mousedown", function (event) {
+        if (event.target.classList.contains("color-option")) return;
+        isDrawing = true;
+        saveState();
+      });
+
+      canvas.addEventListener("mouseup", function () {
+        isDrawing = false;
+        context.beginPath();
+        saveState();
+      });
+
+      canvas.addEventListener("mousemove", function (event) {
+        if (!isDrawing || event.target.classList.contains("color-option"))
+          return;
+
+        var clientX = event.clientX;
+        var clientY = event.clientY;
+
+        draw(clientX, clientY);
+      });
+
+      canvas.addEventListener("touchstart", function (event) {
+        event.preventDefault();
+        if (event.target.classList.contains("color-option")) return;
+        isDrawing = true;
+        saveState();
+      });
+
+      canvas.addEventListener("touchend", function () {
+        isDrawing = false;
+        context.beginPath();
+        saveState();
+      });
+
+      canvas.addEventListener("touchmove", function (event) {
+        event.preventDefault();
+
+        if (!isDrawing || event.target.classList.contains("color-option"))
+          return;
+
+        var touch = event.touches[0];
+        var clientX = touch.clientX;
+        var clientY = touch.clientY;
+
+        draw(clientX, clientY);
+      });
+
+      function draw(clientX, clientY) {
         context.lineWidth = brushSize;
         context.lineCap = "round";
-        context.lineJoin = "round";
-        context.strokeStyle = isEraser ? "#ffffff" : color;
+        context.strokeStyle = color;
 
-        context.lineTo(x, y);
+        context.lineTo(clientX, clientY);
         context.stroke();
         context.beginPath();
-        context.moveTo(x, y);
+        context.moveTo(clientX, clientY);
       }
 
-      // Mouse events
-      canvas.addEventListener("mousedown", (e) => {
-        isDrawing = true;
-        context.beginPath();
-        context.moveTo(e.clientX, e.clientY);
-      });
-
-      canvas.addEventListener("mouseup", () => {
-        if (isDrawing) {
-          isDrawing = false;
-          context.beginPath();
-          saveState();
-        }
-      });
-
-      canvas.addEventListener("mouseleave", () => {
-        if (isDrawing) {
-          isDrawing = false;
-          context.beginPath();
-          saveState();
-        }
-      });
-
-      canvas.addEventListener("mousemove", (e) => {
-        if (!isDrawing) return;
-        draw(e.clientX, e.clientY);
-      });
-
-      // Touch events
-      canvas.addEventListener("touchstart", (e) => {
-        e.preventDefault();
-        isDrawing = true;
-        const touch = e.touches[0];
-        context.beginPath();
-        context.moveTo(touch.clientX, touch.clientY);
-      });
-
-      canvas.addEventListener("touchend", () => {
-        if (isDrawing) {
-          isDrawing = false;
-          context.beginPath();
-          saveState();
-        }
-      });
-
-      canvas.addEventListener("touchmove", (e) => {
-        e.preventDefault();
-        if (!isDrawing) return;
-        const touch = e.touches[0];
-        draw(touch.clientX, touch.clientY);
-      });
-
-      function saveState(isInitial = false) {
-        if (!isInitial && historyIndex < canvasHistory.length - 1) {
+      function saveState() {
+        if (historyIndex < canvasHistory.length - 1) {
           canvasHistory = canvasHistory.slice(0, historyIndex + 1);
         }
         canvasHistory.push(canvas.toDataURL());
-        historyIndex = canvasHistory.length - 1;
-
-        // Keep history reasonable
-        if (canvasHistory.length > 30) {
-          canvasHistory.shift();
-          historyIndex--;
-        }
+        historyIndex++;
 
         localStorage.setItem("drawing", canvas.toDataURL());
       }
@@ -512,11 +462,11 @@
       function undo() {
         if (historyIndex > 0) {
           historyIndex--;
-          const img = new Image();
-          img.src = canvasHistory[historyIndex];
-          img.onload = () => {
+          var imgData = new Image();
+          imgData.src = canvasHistory[historyIndex];
+          imgData.onload = function () {
             context.clearRect(0, 0, canvas.width, canvas.height);
-            context.drawImage(img, 0, 0);
+            context.drawImage(imgData, 0, 0);
           };
         }
       }
@@ -524,35 +474,46 @@
       function redo() {
         if (historyIndex < canvasHistory.length - 1) {
           historyIndex++;
-          const img = new Image();
-          img.src = canvasHistory[historyIndex];
-          img.onload = () => {
+          var imgData = new Image();
+          imgData.src = canvasHistory[historyIndex];
+          imgData.onload = function () {
             context.clearRect(0, 0, canvas.width, canvas.height);
-            context.drawImage(img, 0, 0);
+            context.drawImage(imgData, 0, 0);
           };
         }
       }
 
+      window.addEventListener("resize", function () {
+        var tempCanvas = document.createElement("canvas");
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+        tempCanvas.getContext("2d").drawImage(canvas, 0, 0);
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        context.drawImage(tempCanvas, 0, 0);
+      });
+
       function showWarning() {
-        document.getElementById("warning-dialog").classList.add("visible");
+        document.getElementById("warning-dialog").style.display = "block";
       }
 
       function clearCanvas() {
-        context.fillStyle = "#ffffff";
-        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.clearRect(0, 0, canvas.width, canvas.height);
         saveState();
-        document.getElementById("warning-dialog").classList.remove("visible");
+        document.getElementById("warning-dialog").style.display = "none";
         localStorage.removeItem("drawing");
       }
 
       function cancelClear() {
-        document.getElementById("warning-dialog").classList.remove("visible");
+        document.getElementById("warning-dialog").style.display = "none";
       }
 
       function saveAsImage() {
-        const link = document.createElement("a");
+        var imageUrl = canvas.toDataURL("image/png");
+        var link = document.createElement("a");
+        link.href = imageUrl;
         link.download = "drawing.png";
-        link.href = canvas.toDataURL("image/png");
         link.click();
       }
 
@@ -560,20 +521,13 @@
         document.getElementById("color-input").click();
       }
 
-      // Keyboard shortcuts
-      window.addEventListener("keydown", (e) => {
-        if (e.ctrlKey && e.key === "z") {
-          e.preventDefault();
+      window.addEventListener("keydown", function (event) {
+        if (event.ctrlKey && event.key === "z") {
           undo();
-        } else if (e.ctrlKey && e.key === "y") {
-          e.preventDefault();
+        } else if (event.ctrlKey && event.key === "y") {
           redo();
         }
       });
-
-      // Initialize
-      setColor("#000000");
-      setBrushSize(20);
     </script>
   </body>
 </html>
