@@ -152,16 +152,6 @@
    CONFIGURATION
    ============================================================ */
 
-/*
-    Put your current Cloudflare Tunnel URL here.
-
-    Example:
-
-    https://something-random.trycloudflare.com
-
-    Do NOT put a trailing slash.
-*/
-
 const API_URL =
     "https://workers-adaptation-renew-colored.trycloudflare.com";
 
@@ -472,9 +462,9 @@ async function fetchFiles() {
 const commands = {
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        INFO
-       -------------------------------------------------------- */
+       ======================================================== */
 
     info: () => {
 
@@ -502,6 +492,9 @@ Welcome to Web Terminal
 Remote file writer:
 - Enabled
 - Allowed files: .txt
+- File metadata: Enabled
+- Tree view: Enabled
+- Rate limiting: Enabled
 - Shell access: disabled
 - File reading: disabled
         `.trim();
@@ -509,34 +502,34 @@ Remote file writer:
     },
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        ECHO
-       -------------------------------------------------------- */
+       ======================================================== */
 
     echo: args =>
         args.join(" "),
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        WHOAMI
-       -------------------------------------------------------- */
+       ======================================================== */
 
     whoami: () =>
         currentUser ||
         "No user logged in",
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        DATE
-       -------------------------------------------------------- */
+       ======================================================== */
 
     date: () =>
         new Date().toString(),
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        CLEAR
-       -------------------------------------------------------- */
+       ======================================================== */
 
     clear: () => {
 
@@ -547,9 +540,9 @@ Remote file writer:
     },
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        WRITE
-       -------------------------------------------------------- */
+       ======================================================== */
 
     write: async args => {
 
@@ -622,6 +615,22 @@ write hello.txt Hello world!
 
 
             if (
+                response.status === 429
+            ) {
+
+                return `
+Rate limit exceeded.
+
+Please wait ${
+                    result.retry_after ||
+                    60
+                } seconds before writing another file.
+                `.trim();
+
+            }
+
+
+            if (
                 !response.ok
             ) {
 
@@ -638,6 +647,9 @@ File created successfully.
 
 Path:
 ${result.filename}
+
+Size:
+${formatFileSize(result.size)}
             `.trim();
 
         } catch (error) {
@@ -660,9 +672,9 @@ Make sure:
     },
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        FILES
-       -------------------------------------------------------- */
+       ======================================================== */
 
     files: async () => {
 
@@ -685,15 +697,88 @@ No .txt files found.
             }
 
 
+            const nameWidth =
+                Math.max(
+                    4,
+                    ...fileList.map(
+                        file =>
+                            file.filename.length
+                    )
+                );
+
+
+            const sizeWidth =
+                Math.max(
+                    4,
+                    ...fileList.map(
+                        file =>
+                            formatFileSize(
+                                file.size
+                            ).length
+                    )
+                );
+
+
+            const createdWidth =
+                19;
+
+
+            const separator =
+                "-".repeat(
+                    nameWidth +
+                    sizeWidth +
+                    createdWidth +
+                    10
+                );
+
+
             let output =
                 "Files in C:\\WebTerminalFiles\n\n";
+
+
+            output +=
+                "NAME".padEnd(
+                    nameWidth + 2
+                );
+
+
+            output +=
+                "SIZE".padEnd(
+                    sizeWidth + 2
+                );
+
+
+            output +=
+                "CREATED\n";
+
+
+            output +=
+                separator +
+                "\n";
 
 
             fileList.forEach(
                 file => {
 
                     output +=
-                        `${file.filename}\n`;
+                        file.filename.padEnd(
+                            nameWidth + 2
+                        );
+
+                    output +=
+                        formatFileSize(
+                            file.size
+                        ).padEnd(
+                            sizeWidth + 2
+                        );
+
+                    output +=
+                        formatFileDate(
+                            file.created
+                        );
+
+                    output +=
+                        "\n";
 
                 }
             );
@@ -729,9 +814,9 @@ Make sure:
     },
 
 
-    /* --------------------------------------------------------
-       FILES BY CREATION DATE
-       -------------------------------------------------------- */
+    /* ========================================================
+       FILES-DATE
+       ======================================================== */
 
     "files-date": async () => {
 
@@ -817,9 +902,9 @@ Make sure:
     },
 
 
-    /* --------------------------------------------------------
-       FILES BY SIZE
-       -------------------------------------------------------- */
+    /* ========================================================
+       FILES-SIZE
+       ======================================================== */
 
     "files-size": async () => {
 
@@ -901,9 +986,236 @@ Make sure:
     },
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
+       FILEINFO
+       ======================================================== */
+
+    fileinfo: async args => {
+
+        if (
+            args.length < 1
+        ) {
+
+            return `
+Usage:
+
+fileinfo [filename.txt]
+
+Example:
+
+fileinfo hello.txt
+            `.trim();
+
+        }
+
+
+        const filename =
+            args.join(" ");
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_URL}/api/fileinfo?filename=${encodeURIComponent(
+                        filename
+                    )}`
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !result.success
+            ) {
+
+                return `Error: ${
+                    result.error ||
+                    "Could not get file information."
+                }`;
+
+            }
+
+
+            const file =
+                result.file;
+
+
+            return `
+File Information
+
+Name:
+${file.filename}
+
+Size:
+${formatFileSize(file.size)}
+
+Created:
+${formatFileDate(file.created)}
+
+Modified:
+${formatFileDate(file.modified)}
+
+Extension:
+.txt
+            `.trim();
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+            return `
+Could not retrieve file information.
+
+Make sure:
+1. server.py is running
+2. Cloudflare Tunnel is running
+3. API_URL is correct
+            `.trim();
+
+        }
+
+    },
+
+
+    /* ========================================================
+       TREE
+       ======================================================== */
+
+    tree: async () => {
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_URL}/api/tree`
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !result.success
+            ) {
+
+                return `Error: ${
+                    result.error ||
+                    "Could not retrieve tree."
+                }`;
+
+            }
+
+
+            const treeData =
+                result.tree || [];
+
+
+            if (
+                treeData.length === 0
+            ) {
+
+                return `
+C:\\WebTerminalFiles
+
+(empty)
+                `.trim();
+
+            }
+
+
+            let output =
+                "C:\\WebTerminalFiles\n";
+
+
+            function renderTree(
+                nodes,
+                prefix = ""
+            ) {
+
+                nodes.forEach(
+                    (
+                        node,
+                        index
+                    ) => {
+
+                        const isLast =
+                            index ===
+                            nodes.length - 1;
+
+                        const branch =
+                            isLast
+                                ? "└── "
+                                : "├── ";
+
+                        if (
+                            node.type ===
+                            "directory"
+                        ) {
+
+                            output +=
+                                `${prefix}${branch}${node.name}/\n`;
+
+                            renderTree(
+                                node.children || [],
+                                prefix +
+                                    (
+                                        isLast
+                                            ? "    "
+                                            : "│   "
+                                    )
+                            );
+
+                        } else {
+
+                            output +=
+                                `${prefix}${branch}${node.name}\n`;
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+            renderTree(
+                treeData
+            );
+
+
+            return output.trim();
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+            return `
+Could not retrieve the file tree.
+
+Make sure:
+1. server.py is running
+2. Cloudflare Tunnel is running
+3. API_URL is correct
+            `.trim();
+
+        }
+
+    },
+
+
+    /* ========================================================
        HELP
-       -------------------------------------------------------- */
+       ======================================================== */
 
     help: () => {
 
@@ -925,7 +1237,9 @@ Make sure:
 
                     "- users",
 
-                    "- whoami"
+                    "- whoami",
+
+                    "- changepassword [currentPassword] [newPassword]"
 
                 ]
 
@@ -959,7 +1273,11 @@ Make sure:
 
                     "- files-date",
 
-                    "- files-size"
+                    "- files-size",
+
+                    "- fileinfo [filename.txt]",
+
+                    "- tree"
 
                 ]
 
@@ -979,6 +1297,10 @@ Make sure:
                     "- help",
 
                     "- back",
+
+                    "- pwd",
+
+                    "- history",
 
                     "- turnoffrainbow",
 
@@ -1168,11 +1490,6 @@ Make sure:
             `${horizontalBottom}`;
 
 
-        /*
-            Return an object so the terminal knows
-            this is trusted HTML from the help command.
-        */
-
         return {
             html: output
         };
@@ -1180,9 +1497,9 @@ Make sure:
     },
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        MAKE USER
-       -------------------------------------------------------- */
+       ======================================================== */
 
     makeuser: args => {
 
@@ -1245,9 +1562,9 @@ Make sure:
     },
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        LOGIN
-       -------------------------------------------------------- */
+       ======================================================== */
 
     login: args => {
 
@@ -1314,9 +1631,9 @@ Make sure:
     },
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        LOGOUT
-       -------------------------------------------------------- */
+       ======================================================== */
 
     logout: () => {
 
@@ -1350,9 +1667,9 @@ Make sure:
     },
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        USERS
-       -------------------------------------------------------- */
+       ======================================================== */
 
     users: () => {
 
@@ -1372,9 +1689,9 @@ Make sure:
     },
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        DELETE USER
-       -------------------------------------------------------- */
+       ======================================================== */
 
     deleteuser: args => {
 
@@ -1456,9 +1773,9 @@ Make sure:
     },
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        CHANGE PASSWORD
-       -------------------------------------------------------- */
+       ======================================================== */
 
     changepassword: args => {
 
@@ -1532,9 +1849,9 @@ Make sure:
     },
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        BACK
-       -------------------------------------------------------- */
+       ======================================================== */
 
     back: () => {
 
@@ -1548,17 +1865,17 @@ Make sure:
     },
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        PWD
-       -------------------------------------------------------- */
+       ======================================================== */
 
     pwd: () =>
         "~",
 
 
-    /* --------------------------------------------------------
+    /* ========================================================
        HISTORY
-       -------------------------------------------------------- */
+       ======================================================== */
 
     history: () =>
         commandHistory.join(
@@ -1567,9 +1884,9 @@ Make sure:
         "No command history",
 
 
-    /* --------------------------------------------------------
-       TURN OFF RAINBOW
-       -------------------------------------------------------- */
+    /* ========================================================
+       RAINBOW OFF
+       ======================================================== */
 
     turnoffrainbow: () => {
 
@@ -1594,9 +1911,9 @@ Make sure:
     },
 
 
-    /* --------------------------------------------------------
-       TURN ON RAINBOW
-       -------------------------------------------------------- */
+    /* ========================================================
+       RAINBOW ON
+       ======================================================== */
 
     turnonrainbow: () => {
 
@@ -1634,10 +1951,6 @@ Make sure:
 cmdInput.addEventListener(
     "keydown",
     async e => {
-
-        /* ----------------------------------------------------
-           ENTER
-           ---------------------------------------------------- */
 
         if (
             e.key === "Enter"
@@ -1713,17 +2026,6 @@ cmdInput.addEventListener(
                     "output";
 
 
-                /*
-                    HELP returns:
-
-                    {
-                        html: "..."
-                    }
-
-                    Everything else is treated as
-                    plain text.
-                */
-
                 if (
                     output &&
                     typeof output ===
@@ -1759,9 +2061,9 @@ cmdInput.addEventListener(
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            HISTORY UP
-           ---------------------------------------------------- */
+           ==================================================== */
 
         if (
             e.key === "ArrowUp"
@@ -1808,9 +2110,9 @@ cmdInput.addEventListener(
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            HISTORY DOWN
-           ---------------------------------------------------- */
+           ==================================================== */
 
         if (
             e.key === "ArrowDown"
@@ -1853,9 +2155,9 @@ cmdInput.addEventListener(
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            TAB COMPLETION
-           ---------------------------------------------------- */
+           ==================================================== */
 
         if (
             e.key === "Tab"
