@@ -1,76 +1,120 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
     <title>Web Terminal</title>
-    <link rel="icon" href="https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/terminalV2.png?v=1742106355073" type="image/png">
+
+    <link
+        rel="icon"
+        href="https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/terminalV2.png?v=1742106355073"
+        type="image/png"
+    >
+
     <style>
-    body {
-        background-color: black;
-        color: white;
-        font-family: monospace;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        overflow: hidden;
-    }
-    #header {
-        padding: 10px;
-    }
-    #ascii-art {
-        white-space: pre;
-        line-height: 1.2;
-        margin-bottom: 0;
-    }
-    #input-line {
-        display: flex;
-        align-items: center;
-        gap: 1px;
-        padding: 0 10px 10px 10px;
-        background-color: #000;
-        user-select: none;
-    }
-    #input-line span {
-        color: white;
-    }
-    #cmd-input {
-        flex-grow: 1;
-        background: none;
-        border: none;
-        color: white;
-        font-family: inherit;
-        outline: none;
-        height: 1.5em;
-        line-height: 1.5em;
-        caret-color: white;
-    }
-    #terminal {
-        flex-grow: 1;
-        padding: 10px;
-        overflow-y: scroll;
-    }
-    #terminal::-webkit-scrollbar {
-        display: none;
-    }
-    .output {
-        margin-bottom: 10px;
-        white-space: pre-wrap;
-    }
-    @keyframes borderRainbow {
-        0% { color: hsl(0, 60%, 75%); }
-        33% { color: hsl(120, 60%, 75%); }
-        66% { color: hsl(240, 60%, 75%); }
-        100% { color: hsl(360, 60%, 75%); }
-    }
-    .rainbow-border {
-        animation: borderRainbow 6s linear infinite;
-    }
+
+        body {
+            background-color: black;
+            color: white;
+            font-family: monospace;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #header {
+            padding: 10px;
+        }
+
+        #ascii-art {
+            white-space: pre;
+            line-height: 1.2;
+            margin-bottom: 0;
+        }
+
+        #input-line {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            padding: 0 10px 10px 10px;
+            background-color: #000;
+            user-select: none;
+        }
+
+        #input-line span {
+            color: white;
+        }
+
+        #cmd-input {
+            flex-grow: 1;
+            background: none;
+            border: none;
+            color: white;
+            font-family: inherit;
+            outline: none;
+            height: 1.5em;
+            line-height: 1.5em;
+            caret-color: white;
+        }
+
+        #terminal {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: scroll;
+        }
+
+        #terminal::-webkit-scrollbar {
+            display: none;
+        }
+
+        .output {
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+
+        @keyframes borderRainbow {
+
+            0% {
+                color: hsl(0, 60%, 75%);
+            }
+
+            33% {
+                color: hsl(120, 60%, 75%);
+            }
+
+            66% {
+                color: hsl(240, 60%, 75%);
+            }
+
+            100% {
+                color: hsl(360, 60%, 75%);
+            }
+
+        }
+
+        .rainbow-border {
+            animation: borderRainbow 6s linear infinite;
+        }
+
     </style>
+
 </head>
+
+
 <body>
+
     <div id="header">
+
         <div id="ascii-art">
 888       888          888        88888888888                            d8b                   888 
 888   o   888          888            888                                Y8P                   888 
@@ -81,401 +125,1308 @@
 8888P   Y8888 Y8b.     888 d88P       888 Y8b.     888     888  888  888 888 888  888 888  888 888 
 888P     Y888  "Y8888  88888P"        888  "Y8888  888     888  888  888 888 888  888 "Y888888 888 
         </div>
+
         <div id="input-line">
-            <span id="user-prompt">user@web:~$</span>
-            <input id="cmd-input" type="text" autocomplete="off" autofocus>
+
+            <span id="user-prompt">
+                user@web:~$
+            </span>
+
+            <input
+                id="cmd-input"
+                type="text"
+                autocomplete="off"
+                autofocus
+            >
+
         </div>
+
     </div>
+
+
     <div id="terminal"></div>
 
-    <script>
-        // Rainbow color animation for ASCII art
-        const asciiArt = document.getElementById('ascii-art');
-        const originalText = asciiArt.textContent;
-        let rainbowMode = true;
 
-        function rainbowText(text, hue) {
-            let result = '';
-            for (let i = 0; i < text.length; i++) {
-                const char = text[i];
-                if (char.trim() === '') {
-                    result += char;
-                    continue;
-                }
-                const charHue = (hue + i * 3) % 360;
-                // Pastel colors: 60% saturation, 75% lightness
-                result += `<span style="color: hsl(${charHue}, 60%, 75%)">${char}</span>`;
+<script>
+
+/* ============================================================
+   CONFIGURATION
+   ============================================================ */
+
+/*
+    After starting Cloudflare Tunnel, put the URL here.
+
+    Example:
+
+    https://something-random.trycloudflare.com
+*/
+
+const API_URL =
+    "https://YOUR-CLOUDFLARE-URL.trycloudflare.com";
+
+
+/* ============================================================
+   RAINBOW ASCII ART
+   ============================================================ */
+
+const asciiArt =
+    document.getElementById("ascii-art");
+
+const originalText =
+    asciiArt.textContent;
+
+let rainbowMode = true;
+
+
+function rainbowText(text, hue) {
+
+    let result = "";
+
+    for (let i = 0; i < text.length; i++) {
+
+        const char = text[i];
+
+        if (char.trim() === "") {
+
+            result += char;
+
+            continue;
+        }
+
+        const charHue =
+            (hue + i * 3) % 360;
+
+        result +=
+            `<span style="color:hsl(${charHue},60%,75%)">${char}</span>`;
+    }
+
+    return result;
+}
+
+
+let hue = 0;
+
+
+function animateRainbow() {
+
+    if (!rainbowMode)
+        return;
+
+    hue =
+        (hue + 0.5) % 360;
+
+    asciiArt.innerHTML =
+        rainbowText(originalText, hue);
+
+    requestAnimationFrame(
+        animateRainbow
+    );
+}
+
+
+function stopRainbowAnimation() {
+
+    rainbowMode = false;
+
+    asciiArt.innerHTML =
+        `<span style="color:white">${originalText}</span>`;
+
+    const rainbowElements =
+        document.querySelectorAll(".rainbow-border");
+
+    rainbowElements.forEach(element => {
+
+        element.classList.remove(
+            "rainbow-border"
+        );
+
+        element.style.color =
+            "white";
+
+    });
+
+}
+
+
+animateRainbow();
+
+
+/* ============================================================
+   TERMINAL
+   ============================================================ */
+
+const terminal =
+    document.getElementById("terminal");
+
+const cmdInput =
+    document.getElementById("cmd-input");
+
+const userPrompt =
+    document.getElementById("user-prompt");
+
+
+/* ============================================================
+   USERS
+   ============================================================ */
+
+const usersKey = "users";
+
+let currentUser =
+    localStorage.getItem("currentUser");
+
+
+function updateUserPrompt() {
+
+    userPrompt.textContent =
+        currentUser
+            ? `${currentUser}@web:~$`
+            : "user@web:~$";
+}
+
+
+function getUsers() {
+
+    return JSON.parse(
+        localStorage.getItem(usersKey)
+    ) || [];
+
+}
+
+
+function saveUsers(users) {
+
+    localStorage.setItem(
+        usersKey,
+        JSON.stringify(users)
+    );
+
+}
+
+
+/* ============================================================
+   COMMAND HISTORY
+   ============================================================ */
+
+let commandHistory = [];
+
+let historyIndex = -1;
+
+
+let tabCompletionState = {
+
+    currentMatches: [],
+
+    matchIndex: 0
+
+};
+
+
+/* ============================================================
+   COMMAND COMPLETION
+   ============================================================ */
+
+const getCommandCompletions =
+    partial => {
+
+        return Object.keys(commands)
+            .filter(cmd =>
+                cmd.startsWith(partial)
+            );
+
+    };
+
+
+/* ============================================================
+   COMMANDS
+   ============================================================ */
+
+const commands = {
+
+
+    /* --------------------------------------------------------
+       INFO
+       -------------------------------------------------------- */
+
+    info: () => {
+
+        const browserInfo =
+            navigator.userAgent;
+
+        const resolution =
+            `${window.innerWidth}x${window.innerHeight}`;
+
+        const memory =
+            Math.round(
+                window.performance.memory?.usedJSHeapSize
+                / 1024
+                / 1024
+            ) || "N/A";
+
+
+        return `
+Welcome to Web Terminal
+
+- Browser: ${browserInfo}
+- Resolution: ${resolution}
+- Memory: ${memory} MB
+
+Remote file writer:
+- Enabled
+- Allowed files: .txt
+- Shell access: disabled
+        `.trim();
+
+    },
+
+
+    /* --------------------------------------------------------
+       ECHO
+       -------------------------------------------------------- */
+
+    echo: args =>
+        args.join(" "),
+
+
+    /* --------------------------------------------------------
+       WHOAMI
+       -------------------------------------------------------- */
+
+    whoami: () =>
+        currentUser || "No user logged in",
+
+
+    /* --------------------------------------------------------
+       DATE
+       -------------------------------------------------------- */
+
+    date: () =>
+        new Date().toString(),
+
+
+    /* --------------------------------------------------------
+       CLEAR
+       -------------------------------------------------------- */
+
+    clear: () => {
+
+        terminal.innerHTML = "";
+
+        return "";
+
+    },
+
+
+    /* --------------------------------------------------------
+       WRITE
+       -------------------------------------------------------- */
+
+    write: async (args) => {
+
+        if (args.length < 2) {
+
+            return `
+Usage:
+
+write [filename.txt] [text]
+
+Example:
+
+write hello.txt Hello world!
+            `.trim();
+
+        }
+
+
+        const filename =
+            args[0];
+
+        const content =
+            args.slice(1).join(" ");
+
+
+        if (!filename.toLowerCase().endsWith(".txt")) {
+
+            return "Error: Only .txt files are allowed.";
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_URL}/api/write`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                filename:
+                                    filename,
+
+                                content:
+                                    content
+                            })
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                return `Error: ${
+                    result.error ||
+                    "Request failed."
+                }`;
+
             }
-            return result;
+
+
+            return `
+File created successfully.
+
+Path:
+${result.filename}
+            `.trim();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            return `
+Could not connect to the file server.
+
+Make sure:
+1. server.py is running
+2. Cloudflare Tunnel is running
+3. API_URL is correct
+            `.trim();
+
         }
 
-        let hue = 0;
-        function animateRainbow() {
-            if (!rainbowMode) return; // Stop the animation if rainbowMode is false
-            
-            hue = (hue + 0.5) % 360; // Slow animation speed
-            asciiArt.innerHTML = rainbowText(originalText, hue);
-            requestAnimationFrame(animateRainbow);
+    },
+
+
+    /* --------------------------------------------------------
+       HELP
+       -------------------------------------------------------- */
+
+    help: () => {
+
+        const commandGroups = [
+
+            {
+                title: "[User Management Commands]",
+
+                commands: [
+
+                    "- makeuser [username] [password]",
+
+                    "- login [username] [password]",
+
+                    "- logout",
+
+                    "- deleteuser [username] [password]",
+
+                    "- users",
+
+                    "- whoami"
+
+                ]
+            },
+
+
+            {
+                title: "[System Information Commands]",
+
+                commands: [
+
+                    "- info",
+
+                    "- date"
+
+                ]
+            },
+
+
+            {
+                title: "[File Commands]",
+
+                commands: [
+
+                    "- write [filename.txt] [text]"
+
+                ]
+            },
+
+
+            {
+                title: "[Utility Commands]",
+
+                commands: [
+
+                    "- echo [text]",
+
+                    "- clear",
+
+                    "- help",
+
+                    "- back",
+
+                    "- turnoffrainbow",
+
+                    "- turnonrainbow"
+
+                ]
+            }
+
+        ];
+
+
+        let maxWidth =
+            "Available Commands".length + 4;
+
+
+        commandGroups.forEach(
+            group => {
+
+                maxWidth =
+                    Math.max(
+                        maxWidth,
+                        group.title.length + 4
+                    );
+
+
+                group.commands.forEach(
+                    cmd => {
+
+                        maxWidth =
+                            Math.max(
+                                maxWidth,
+                                cmd.length + 6
+                            );
+
+                    }
+                );
+
+            }
+        );
+
+
+        const borderClass =
+            rainbowMode
+                ? "rainbow-border"
+                : "";
+
+
+        const borderColor =
+            rainbowMode
+                ? ""
+                : 'style="color:white"';
+
+
+        const horizontalBorder =
+            `<span class="${borderClass}" ${borderColor}>╔${"═".repeat(maxWidth - 2)}╗</span>`;
+
+
+        const horizontalDivider =
+            `<span class="${borderClass}" ${borderColor}>╠${"═".repeat(maxWidth - 2)}╣</span>`;
+
+
+        const horizontalBottom =
+            `<span class="${borderClass}" ${borderColor}>╚${"═".repeat(maxWidth - 2)}╝</span>`;
+
+
+        const centerText =
+            (text, width) => {
+
+                const spaces =
+                    width - text.length - 2;
+
+                const leftSpaces =
+                    Math.floor(spaces / 2);
+
+                const rightSpaces =
+                    spaces - leftSpaces;
+
+
+                return `<span class="${borderClass}" ${borderColor}>║</span>${" ".repeat(leftSpaces)}<span style="color:#ffffff">${text}</span>${" ".repeat(rightSpaces)}<span class="${borderClass}" ${borderColor}>║</span>`;
+
+            };
+
+
+        const formatLine =
+            text => {
+
+                const padding =
+                    maxWidth - text.length - 3;
+
+                return `<span class="${borderClass}" ${borderColor}>║</span> <span style="color:#ffffff">${text}</span>${" ".repeat(Math.max(0, padding))}<span class="${borderClass}" ${borderColor}>║</span>`;
+
+            };
+
+
+        const formatCommand =
+            cmd => {
+
+                const padding =
+                    maxWidth - cmd.length - 5;
+
+                return `<span class="${borderClass}" ${borderColor}>║</span>   <span style="color:#ffffff">${cmd}</span>${" ".repeat(Math.max(0, padding))}<span class="${borderClass}" ${borderColor}>║</span>`;
+
+            };
+
+
+        let output =
+            `${horizontalBorder}\n`;
+
+
+        output +=
+            `${centerText(
+                "Available Commands",
+                maxWidth
+            )}\n`;
+
+
+        output +=
+            `${horizontalDivider}\n`;
+
+
+        commandGroups.forEach(
+            (group, i) => {
+
+                output +=
+                    `${formatLine(
+                        group.title
+                    )}\n`;
+
+
+                group.commands.forEach(
+                    cmd => {
+
+                        output +=
+                            `${formatCommand(
+                                cmd
+                            )}\n`;
+
+                    }
+                );
+
+
+                if (
+                    i <
+                    commandGroups.length - 1
+                ) {
+
+                    output +=
+                        `${formatLine(" ")}\n`;
+
+                }
+
+            }
+        );
+
+
+        output +=
+            `${horizontalBottom}`;
+
+
+        return output;
+
+    },
+
+
+    /* --------------------------------------------------------
+       MAKE USER
+       -------------------------------------------------------- */
+
+    makeuser: args => {
+
+        const [
+            username,
+            password
+        ] = args;
+
+
+        if (!username || !password) {
+
+            return "Usage: makeuser [username] [password]";
+
         }
 
-        function stopRainbowAnimation() {
-            // Stop the animation by setting rainbowMode to false
-            rainbowMode = false;
-            
-            // Reset the ASCII art to plain white text
-            asciiArt.innerHTML = `<span style="color: white">${originalText}</span>`;
-            
-            // Remove rainbow-border class from all elements that have it
-            const rainbowElements = document.querySelectorAll('.rainbow-border');
-            rainbowElements.forEach(element => {
-                element.classList.remove('rainbow-border');
-                element.style.color = 'white';
-            });
+
+        const users =
+            getUsers();
+
+
+        const userExists =
+            users.some(
+                user =>
+                    user.username === username
+            );
+
+
+        if (userExists) {
+
+            return `User ${username} already exists.`;
+
         }
+
+
+        users.push({
+
+            username,
+
+            password
+
+        });
+
+
+        saveUsers(users);
+
+
+        return `User ${username} created successfully.`;
+
+    },
+
+
+    /* --------------------------------------------------------
+       LOGIN
+       -------------------------------------------------------- */
+
+    login: args => {
+
+        const [
+            username,
+            password
+        ] = args;
+
+
+        if (!username || !password) {
+
+            return "Usage: login [username] [password]";
+
+        }
+
+
+        const users =
+            getUsers();
+
+
+        const user =
+            users.find(
+                u =>
+                    u.username === username &&
+                    u.password === password
+            );
+
+
+        if (!user) {
+
+            return "Invalid username or password.";
+
+        }
+
+
+        currentUser =
+            username;
+
+
+        localStorage.setItem(
+            "currentUser",
+            username
+        );
+
+
+        updateUserPrompt();
+
+
+        return `Logged in as ${username}.`;
+
+    },
+
+
+    /* --------------------------------------------------------
+       LOGOUT
+       -------------------------------------------------------- */
+
+    logout: () => {
+
+        if (!currentUser) {
+
+            return "No user is currently logged in.";
+
+        }
+
+
+        localStorage.removeItem(
+            "currentUser"
+        );
+
+
+        currentUser =
+            null;
+
+
+        updateUserPrompt();
+
+
+        return "Logged out successfully.";
+
+    },
+
+
+    /* --------------------------------------------------------
+       USERS
+       -------------------------------------------------------- */
+
+    users: () => {
+
+        const users =
+            getUsers();
+
+
+        return users
+            .map(u => u.username)
+            .join("\n")
+            ||
+            "No users found.";
+
+    },
+
+
+    /* --------------------------------------------------------
+       DELETE USER
+       -------------------------------------------------------- */
+
+    deleteuser: args => {
+
+        const [
+            username,
+            password
+        ] = args;
+
+
+        if (!username || !password) {
+
+            return "Usage: deleteuser [username] [password]";
+
+        }
+
+
+        const users =
+            getUsers();
+
+
+        const userIndex =
+            users.findIndex(
+                u =>
+                    u.username === username &&
+                    u.password === password
+            );
+
+
+        if (userIndex === -1) {
+
+            return "Invalid username or password.";
+
+        }
+
+
+        if (
+            username === currentUser
+        ) {
+
+            currentUser =
+                null;
+
+            localStorage.removeItem(
+                "currentUser"
+            );
+
+            updateUserPrompt();
+
+        }
+
+
+        users.splice(
+            userIndex,
+            1
+        );
+
+
+        saveUsers(users);
+
+
+        return `User ${username} deleted successfully.`;
+
+    },
+
+
+    /* --------------------------------------------------------
+       CHANGE PASSWORD
+       -------------------------------------------------------- */
+
+    changepassword: args => {
+
+        const [
+            currentPassword,
+            newPassword
+        ] = args;
+
+
+        if (!currentUser) {
+
+            return "No user is currently logged in.";
+
+        }
+
+
+        if (
+            !currentPassword ||
+            !newPassword
+        ) {
+
+            return "Usage: changepassword [currentPassword] [newPassword]";
+
+        }
+
+
+        const users =
+            getUsers();
+
+
+        const user =
+            users.find(
+                u =>
+                    u.username === currentUser
+            );
+
+
+        if (
+            !user ||
+            user.password !== currentPassword
+        ) {
+
+            return "Current password is incorrect.";
+
+        }
+
+
+        user.password =
+            newPassword;
+
+
+        saveUsers(users);
+
+
+        return "Password changed successfully.";
+
+    },
+
+
+    /* --------------------------------------------------------
+       BACK
+       -------------------------------------------------------- */
+
+    back: () => {
+
+        window.location.href =
+            "https://exophs.vercel.app";
+
+        return "Redirecting to homepage...";
+
+    },
+
+
+    /* --------------------------------------------------------
+       PWD
+       -------------------------------------------------------- */
+
+    pwd: () =>
+        "~",
+
+
+    /* --------------------------------------------------------
+       HISTORY
+       -------------------------------------------------------- */
+
+    history: () =>
+        commandHistory.join("\n")
+        ||
+        "No command history",
+
+
+    /* --------------------------------------------------------
+       TURN OFF RAINBOW
+       -------------------------------------------------------- */
+
+    turnoffrainbow: () => {
+
+        if (!rainbowMode) {
+
+            return "Rainbow mode is already turned off.";
+
+        }
+
+
+        stopRainbowAnimation();
+
+
+        return "Rainbow mode turned off successfully.";
+
+    },
+
+
+    /* --------------------------------------------------------
+       TURN ON RAINBOW
+       -------------------------------------------------------- */
+
+    turnonrainbow: () => {
+
+        if (rainbowMode) {
+
+            return "Rainbow mode is already turned on.";
+
+        }
+
+
+        rainbowMode = true;
 
         animateRainbow();
 
-        const terminal = document.getElementById('terminal');
-        const cmdInput = document.getElementById('cmd-input');
-        const userPrompt = document.getElementById('user-prompt');
-        const usersKey = 'users';
-        let currentUser = localStorage.getItem('currentUser');
-        
-        let commandHistory = [];
-        let historyIndex = -1;
-        
-        let tabCompletionState = {
-            currentMatches: [],
-            matchIndex: 0
-        };
 
-        const updateUserPrompt = () => {
-            userPrompt.textContent = currentUser ? `${currentUser}@web:~$` : 'user@web:~$';
-        };
+        return "Rainbow mode turned on successfully.";
 
-        const getUsers = () => JSON.parse(localStorage.getItem(usersKey)) || [];
-        const saveUsers = (users) => {
-            localStorage.setItem(usersKey, JSON.stringify(users));
-        };
-        
-        const getCommandCompletions = (partial) => {
-            return Object.keys(commands).filter(cmd => cmd.startsWith(partial));
-        };
+    }
 
-        const commands = {
-            info: () => {
-                const browserInfo = navigator.userAgent;
-                const resolution = `${window.innerWidth}x${window.innerHeight}`;
-                const memory = Math.round(window.performance.memory?.usedJSHeapSize / 1024 / 1024) || "N/A";
-                
-                const maxWidth = Math.max(
-                    `Welcome to Web Terminal`.length,
-                    `- Browser: ${browserInfo}`.length,
-                    `- Resolution: ${resolution}`.length,
-                    `- Memory: ${memory} MB`.length
-                ) + 4;
-                
-                const horizontalBorder = '╔' + '═'.repeat(maxWidth - 2) + '╗';
-                const horizontalDivider = '╠' + '═'.repeat(maxWidth - 2) + '╣';
-                const horizontalBottom = '╚' + '═'.repeat(maxWidth - 2) + '╝';
-                
-                const centerText = (text, width) => {
-                    const spaces = width - text.length - 2;
-                    const leftSpaces = Math.floor(spaces / 2);
-                    const rightSpaces = spaces - leftSpaces;
-                    return `║${' '.repeat(leftSpaces)}<span style="color:#ffffff">${text}</span>${' '.repeat(rightSpaces)}║`;
-                };
-                
-                const formatLine = (text) => {
-                    const padding = maxWidth - text.length - 3;
-                    return `║ <span style="color:#ffffff">${text}</span>${' '.repeat(padding)}║`;
-                };
-                
-                return `
-<span style="color:white">${horizontalBorder}</span>
-${centerText('Welcome to Web Terminal', maxWidth)}
-<span style="color:white">${horizontalDivider}</span>
-${formatLine(`- Browser: ${browserInfo}`)}
-${formatLine(`- Resolution: ${resolution}`)}
-${formatLine(`- Memory: ${memory} MB`)}
-<span style="color:white">${horizontalBottom}</span>
-                `.trim();
-            },
-            echo: (args) => args.join(' '),
-            whoami: () => currentUser || "No user logged in",
-            date: () => new Date().toString(),
-            clear: () => { terminal.innerHTML = ""; return ""; },
-            help: () => {
-                const commandGroups = [
-                    { title: '[User Management Commands]', commands: [
-                        '- makeuser [username] [password]',
-                        '- login [username] [password]',
-                        '- logout',
-                        '- deleteuser [username] [password]',
-                        '- users',
-                        '- whoami'
-                    ]},
-                    { title: '[System Information Commands]', commands: [
-                        '- info',
-                        '- date'
-                    ]},
-                    { title: '[Utility Commands]', commands: [
-                        '- echo [text]',
-                        '- clear',
-                        '- help',
-                        '- back',
-                        '- turnoffrainbow',
-                        '- turnonrainbow'
-                    ]}
-                ];
+};
 
-                let maxWidth = 'Available Commands'.length + 4;
-                commandGroups.forEach(group => {
-                    maxWidth = Math.max(maxWidth, group.title.length + 4);
-                    group.commands.forEach(cmd => {
-                        maxWidth = Math.max(maxWidth, cmd.length + 6);
-                    });
-                });
 
-                const borderClass = rainbowMode ? 'rainbow-border' : '';
-                const borderColor = rainbowMode ? '' : 'style="color:white"';
+/* ============================================================
+   COMMAND INPUT
+   ============================================================ */
 
-                const horizontalBorder = `<span class="${borderClass}" ${borderColor}>╔${'═'.repeat(maxWidth - 2)}╗</span>`;
-                const horizontalDivider = `<span class="${borderClass}" ${borderColor}>╠${'═'.repeat(maxWidth - 2)}╣</span>`;
-                const horizontalBottom = `<span class="${borderClass}" ${borderColor}>╚${'═'.repeat(maxWidth - 2)}╝</span>`;
+cmdInput.addEventListener(
+    "keydown",
+    async e => {
 
-                const centerText = (text, width) => {
-                    const spaces = width - text.length - 2;
-                    const leftSpaces = Math.floor(spaces / 2);
-                    const rightSpaces = spaces - leftSpaces;
-                    return `<span class="${borderClass}" ${borderColor}>║</span>${' '.repeat(leftSpaces)}<span style="color:#ffffff">${text}</span>${' '.repeat(rightSpaces)}<span class="${borderClass}" ${borderColor}>║</span>`;
-                };
+        if (e.key === "Enter") {
 
-                const formatLine = (text) => {
-                    const padding = maxWidth - text.length - 3;
-                    return `<span class="${borderClass}" ${borderColor}>║</span> <span style="color:#ffffff">${text}</span>${' '.repeat(padding)}<span class="${borderClass}" ${borderColor}>║</span>`;
-                };
+            const input =
+                cmdInput.value.trim();
 
-                const formatCommand = (cmd) => {
-                    const padding = maxWidth - cmd.length - 5;
-                    return `<span class="${borderClass}" ${borderColor}>║</span>   <span style="color:#ffffff">${cmd}</span>${' '.repeat(padding)}<span class="${borderClass}" ${borderColor}>║</span>`;
-                };
 
-                let output = `${horizontalBorder}\n`;
-                output += `${centerText('Available Commands', maxWidth)}\n`;
-                output += `${horizontalDivider}\n`;
+            if (!input) {
 
-                commandGroups.forEach((group, i) => {
-                    output += `${formatLine(group.title)}\n`;
-                    group.commands.forEach(cmd => {
-                        output += `${formatCommand(cmd)}\n`;
-                    });
-                    if (i < commandGroups.length - 1) {
-                        output += `${formatLine(' ')}\n`;
+                return;
+
+            }
+
+
+            commandHistory.push(
+                input
+            );
+
+
+            historyIndex =
+                commandHistory.length;
+
+
+            const [
+                command,
+                ...args
+            ] =
+                input.split(" ");
+
+
+            let output;
+
+
+            try {
+
+                output =
+                    commands[command]
+                        ? await commands[command](args)
+                        : `Command not found: ${command}`;
+
+            } catch (error) {
+
+                console.error(error);
+
+                output =
+                    `Command error: ${error.message}`;
+
+            }
+
+
+            if (
+                output !== undefined &&
+                output !== ""
+            ) {
+
+                const outputElement =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                outputElement.className =
+                    "output";
+
+
+                outputElement.textContent =
+                    output;
+
+
+                terminal.appendChild(
+                    outputElement
+                );
+
+
+                terminal.scrollTop =
+                    terminal.scrollHeight;
+
+            }
+
+
+            cmdInput.value = "";
+
+        }
+
+
+        /* ----------------------------------------------------
+           HISTORY UP
+           ---------------------------------------------------- */
+
+        if (e.key === "ArrowUp") {
+
+            e.preventDefault();
+
+
+            if (
+                commandHistory.length === 0
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                historyIndex > 0
+            ) {
+
+                historyIndex--;
+
+                cmdInput.value =
+                    commandHistory[
+                        historyIndex
+                    ];
+
+            } else if (
+                historyIndex === -1
+            ) {
+
+                historyIndex =
+                    commandHistory.length - 1;
+
+                cmdInput.value =
+                    commandHistory[
+                        historyIndex
+                    ];
+
+            }
+
+        }
+
+
+        /* ----------------------------------------------------
+           HISTORY DOWN
+           ---------------------------------------------------- */
+
+        if (e.key === "ArrowDown") {
+
+            e.preventDefault();
+
+
+            if (
+                commandHistory.length === 0
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                historyIndex <
+                commandHistory.length - 1
+            ) {
+
+                historyIndex++;
+
+                cmdInput.value =
+                    commandHistory[
+                        historyIndex
+                    ];
+
+            } else {
+
+                historyIndex =
+                    commandHistory.length;
+
+                cmdInput.value =
+                    "";
+
+            }
+
+        }
+
+
+        /* ----------------------------------------------------
+           TAB COMPLETION
+           ---------------------------------------------------- */
+
+        if (e.key === "Tab") {
+
+            e.preventDefault();
+
+
+            const input =
+                cmdInput.value.trim();
+
+
+            const parts =
+                input.split(" ");
+
+
+            const currentWord =
+                parts[parts.length - 1];
+
+
+            if (
+                parts.length === 1
+            ) {
+
+                const matches =
+                    getCommandCompletions(
+                        currentWord
+                    );
+
+
+                if (
+                    matches.length === 1
+                ) {
+
+                    cmdInput.value =
+                        matches[0] + " ";
+
+                    tabCompletionState.currentMatches =
+                        [];
+
+                } else if (
+                    matches.length > 1
+                ) {
+
+                    if (
+                        tabCompletionState.currentMatches.toString()
+                        !==
+                        matches.toString()
+                    ) {
+
+                        tabCompletionState.currentMatches =
+                            matches;
+
+                        tabCompletionState.matchIndex =
+                            0;
+
                     }
-                });
 
-                output += `${horizontalBottom}`;
 
-                return output;
-            },
-            makeuser: (args) => {
-                const [username, password] = args;
-                if (!username || !password) {
-                    return 'Usage: makeuser [username] [password]';
-                }
+                    cmdInput.value =
+                        matches[
+                            tabCompletionState.matchIndex
+                        ] + " ";
 
-                const users = getUsers();
-                const userExists = users.some(user => user.username === username);
-                if (userExists) {
-                    return `User ${username} already exists.`;
-                }
 
-                users.push({ username, password });
-                saveUsers(users);
-                return `User ${username} created successfully.`;
-            },
-            login: (args) => {
-                const [username, password] = args;
-                if (!username || !password) {
-                    return 'Usage: login [username] [password]';
-                }
+                    tabCompletionState.matchIndex =
+                        (
+                            tabCompletionState.matchIndex + 1
+                        ) %
+                        matches.length;
 
-                const users = getUsers();
-                const user = users.find(u => u.username === username && u.password === password);
-                if (!user) {
-                    return 'Invalid username or password.';
-                }
 
-                currentUser = username;
-                localStorage.setItem('currentUser', username);
-                updateUserPrompt();
-                return `Logged in as ${username}.`;
-            },
-            logout: () => {
-                if (!currentUser) {
-                    return 'No user is currently logged in.';
-                }
+                    if (
+                        tabCompletionState.matchIndex === 0
+                    ) {
 
-                localStorage.removeItem('currentUser');
-                currentUser = null;
-                updateUserPrompt();
-                return 'Logged out successfully.';
-            },
-            users: () => {
-                const users = getUsers();
-                return users.map(u => u.username).join('\n') || 'No users found.';
-            },
-            deleteuser: (args) => {
-                const [username, password] = args;
-                if (!username || !password) {
-                    return 'Usage: deleteuser [username] [password]';
-                }
+                        const outputElement =
+                            document.createElement(
+                                "div"
+                            );
 
-                const users = getUsers();
-                const userIndex = users.findIndex(u => u.username === username && u.password === password);
 
-                if (userIndex === -1) {
-                    return 'Invalid username or password.';
-                }
+                        outputElement.className =
+                            "output";
 
-                if (username === currentUser) {
-                    currentUser = null;
-                    localStorage.removeItem('currentUser');
-                    updateUserPrompt();
-                }
 
-                users.splice(userIndex, 1);
-                saveUsers(users);
-                return `User ${username} deleted successfully.`;
-            },
-            changepassword: (args) => {
-                const [currentPassword, newPassword] = args;
-                if (!currentUser) {
-                    return 'No user is currently logged in.';
-                }
+                        outputElement.textContent =
+                            matches.join(" ");
 
-                if (!currentPassword || !newPassword) {
-                    return 'Usage: changepassword [currentPassword] [newPassword]';
-                }
 
-                const users = getUsers();
-                const user = users.find(u => u.username === currentUser);
+                        terminal.appendChild(
+                            outputElement
+                        );
 
-                if (!user || user.password !== currentPassword) {
-                    return 'Current password is incorrect.';
-                }
 
-                user.password = newPassword;
-                saveUsers(users);
-                return 'Password changed successfully.';
-            },
-            back: () => {
-                window.location.href = 'https://exophs.vercel.app';
-                return 'Redirecting to homepage...';
-            },
-            pwd: () => '~',
-            history: () => commandHistory.join('\n') || 'No command history',
-            turnoffrainbow: () => {
-                if (!rainbowMode) {
-                    return "Rainbow mode is already turned off.";
-                }
-                
-                stopRainbowAnimation();
-                return "Rainbow mode turned off successfully.";
-            },
-            turnonrainbow: () => {
-                if (rainbowMode) {
-                    return "Rainbow mode is already turned on.";
-                }
-                
-                rainbowMode = true;
-                animateRainbow();
-                return "Rainbow mode turned on successfully.";
-            }
-        };
+                        terminal.scrollTop =
+                            terminal.scrollHeight;
 
-        cmdInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const input = cmdInput.value.trim();
-                if (input) {
-                    commandHistory.push(input);
-                    historyIndex = commandHistory.length;
-                }
-                
-                const [command, ...args] = input.split(' ');
-                const output = commands[command]
-                    ? commands[command](args)
-                    : `Command not found: ${command}`;
-
-                if (output !== undefined) {
-                    terminal.innerHTML += `<div class="output"><br>${output}</div>`;
-                    terminal.scrollTop = terminal.scrollHeight;
-                }
-                cmdInput.value = '';
-            }
-            
-            if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                if (commandHistory.length === 0) return;
-                
-                if (historyIndex > 0) {
-                    historyIndex--;
-                    cmdInput.value = commandHistory[historyIndex];
-                } else if (historyIndex === -1 && commandHistory.length > 0) {
-                    historyIndex = commandHistory.length - 1;
-                    cmdInput.value = commandHistory[historyIndex];
-                }
-            }
-            
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                if (commandHistory.length === 0) return;
-                
-                if (historyIndex < commandHistory.length - 1) {
-                    historyIndex++;
-                    cmdInput.value = commandHistory[historyIndex];
-                } else {
-                    historyIndex = commandHistory.length;
-                    cmdInput.value = '';
-                }
-            }
-            
-            if (e.key === 'Tab') {
-                e.preventDefault();
-                const input = cmdInput.value.trim();
-                const parts = input.split(' ');
-                const currentWord = parts[parts.length - 1];
-                
-                if (parts.length === 1) {
-                    const matches = getCommandCompletions(currentWord);
-                    
-                    if (matches.length === 1) {
-                        cmdInput.value = matches[0] + ' ';
-                        tabCompletionState.currentMatches = [];
-                    } else if (matches.length > 1) {
-                        if (tabCompletionState.currentMatches.toString() !== matches.toString()) {
-                            tabCompletionState.currentMatches = matches;
-                            tabCompletionState.matchIndex = 0;
-                        }
-                        
-                        cmdInput.value = matches[tabCompletionState.matchIndex] + ' ';
-                        tabCompletionState.matchIndex = (tabCompletionState.matchIndex + 1) % matches.length;
-                        
-                        if (tabCompletionState.matchIndex === 0) {
-                            terminal.innerHTML += `<div class="output"><br>${matches.join(' ')}</div>`;
-                            terminal.scrollTop = terminal.scrollHeight;
-                        }
                     }
+
                 }
+
             }
-        });
 
-        document.addEventListener('click', () => {
-            cmdInput.focus();
-        });
+        }
 
-        updateUserPrompt();
-    </script>
+    }
+);
+
+
+/* ============================================================
+   CLICK TERMINAL TO FOCUS
+   ============================================================ */
+
+document.addEventListener(
+    "click",
+    () => {
+
+        cmdInput.focus();
+
+    }
+);
+
+
+/* ============================================================
+   INITIALIZE
+   ============================================================ */
+
+updateUserPrompt();
+
+</script>
+
 </body>
+
 </html>
+```
