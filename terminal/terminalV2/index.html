@@ -496,7 +496,7 @@ Remote file writer:
 - Tree view: Enabled
 - Rate limiting: Enabled
 - Shell access: disabled
-- File reading: disabled
+- File reading: enabled (.txt only)
         `.trim();
 
     },
@@ -660,6 +660,78 @@ ${formatFileSize(result.size)}
 
             return `
 Could not connect to the file server.
+
+Make sure:
+1. server.py is running
+2. Cloudflare Tunnel is running
+3. API_URL is correct
+            `.trim();
+
+        }
+
+    },
+
+
+
+    /* ========================================================
+       CAT
+       ======================================================== */
+
+    cat: async args => {
+
+        if (
+            args.length < 1
+        ) {
+
+            return `
+Usage:
+
+cat [filename.txt]
+
+Example:
+
+cat hello.txt
+            `.trim();
+
+        }
+
+        const filename =
+            args.join(" ");
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_URL}/api/read?filename=${encodeURIComponent(
+                        filename
+                    )}`
+                );
+
+            const result =
+                await response.json();
+
+            if (
+                !response.ok ||
+                !result.success
+            ) {
+
+                return `Error: ${
+                    result.error ||
+                    "Could not read file."
+                }`;
+
+            }
+
+            return result.content;
+
+        } catch (error) {
+
+            console.error(
+                error
+            );
+
+            return `
+Could not retrieve file contents.
 
 Make sure:
 1. server.py is running
@@ -1268,6 +1340,8 @@ Make sure:
                 commands: [
 
                     "- write [filename.txt] [text]",
+
+                    "- cat [filename.txt]",
 
                     "- files",
 
