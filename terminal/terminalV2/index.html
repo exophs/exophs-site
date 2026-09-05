@@ -1,25 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Web Terminal</title>
-
-    <link
-        rel="icon"
-        href="https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/terminalV2.png?v=1742106355073"
-        type="image/png"
-    >
-
+    <link rel="icon" href="https://cdn.glitch.global/58cc88e6-fae4-4d3a-9fee-87a8518eb0a0/terminalV2.png?v=1742106355073" type="image/png">
     <style>
-
         body {
             background-color: black;
             color: white;
@@ -82,407 +68,141 @@
         }
 
         @keyframes borderRainbow {
-
-            0% {
-                color: hsl(0, 60%, 75%);
-            }
-
-            33% {
-                color: hsl(120, 60%, 75%);
-            }
-
-            66% {
-                color: hsl(240, 60%, 75%);
-            }
-
-            100% {
-                color: hsl(360, 60%, 75%);
-            }
-
+            0% { color: hsl(0, 60%, 75%); }
+            33% { color: hsl(120, 60%, 75%); }
+            66% { color: hsl(240, 60%, 75%); }
+            100% { color: hsl(360, 60%, 75%); }
         }
 
         .rainbow-border {
             animation: borderRainbow 6s linear infinite;
         }
-
     </style>
-
 </head>
-
-
 <body>
-
     <div id="header">
-
-        <div id="ascii-art">
-888       888          888        88888888888                            d8b                   888 
+        <div id="ascii-art">888       888          888        88888888888                            d8b                   888 
 888   o   888          888            888                                Y8P                   888 
 888  d8b  888          888            888                                                      888 
 888 d888b 888  .d88b.  88888b.        888  .d88b.  888d888 88888b.d88b.  888 88888b.   8888b.  888 
 888d88888b888 d8P  Y8b 888 "88b       888 d8P  Y8b 888P"   888 "888 "88b 888 888 "88b     "88b 888 
 88888P Y88888 88888888 888  888       888 88888888 888     888  888  888 888 888  888 .d888888 888 
 8888P   Y8888 Y8b.     888 d88P       888 Y8b.     888     888  888  888 888 888  888 888  888 888 
-888P     Y888  "Y8888  88888P"        888  "Y8888  888     888  888  888 888 888  888 "Y888888 888 
-        </div>
-
+888P     Y888  "Y8888  88888P"        888  "Y8888  888     888  888  888 888 888  888 "Y888888 888 </div>
         <div id="input-line">
-
-            <span id="user-prompt">
-                user@web:~$
-            </span>
-
-            <input
-                id="cmd-input"
-                type="text"
-                autocomplete="off"
-                autofocus
-            >
-
+            <span id="user-prompt">user@web:~$</span>
+            <input id="cmd-input" type="text" autocomplete="off" autofocus>
         </div>
-
     </div>
-
 
     <div id="terminal"></div>
 
+    <script>
+        const API_URL = "https://resumes-detail-citizenship-seminar.trycloudflare.com";
 
-<script>
+        const asciiArt = document.getElementById("ascii-art");
+        const originalText = asciiArt.textContent;
+        let rainbowMode = true;
 
-/* ============================================================
-   CONFIGURATION
-   ============================================================ */
-
-const API_URL =
-    "https://resumes-detail-citizenship-seminar.trycloudflare.com";
-
-
-/* ============================================================
-   RAINBOW ASCII ART
-   ============================================================ */
-
-const asciiArt =
-    document.getElementById("ascii-art");
-
-const originalText =
-    asciiArt.textContent;
-
-let rainbowMode = true;
-
-
-function rainbowText(text, hue) {
-
-    let result = "";
-
-    for (let i = 0; i < text.length; i++) {
-
-        const char = text[i];
-
-        if (char.trim() === "") {
-
-            result += char;
-
-            continue;
-
+        function rainbowText(text, hue) {
+            let result = "";
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (char.trim() === "") {
+                    result += char;
+                    continue;
+                }
+                const charHue = (hue + i * 3) % 360;
+                result += `<span style="color:hsl(${charHue},60%,75%)">${char}</span>`;
+            }
+            return result;
         }
 
-        const charHue =
-            (hue + i * 3) % 360;
+        let hue = 0;
 
-        result +=
-            `<span style="color:hsl(${charHue},60%,75%)">${char}</span>`;
-
-    }
-
-    return result;
-
-}
-
-
-let hue = 0;
-
-
-function animateRainbow() {
-
-    if (!rainbowMode)
-        return;
-
-    hue =
-        (hue + 0.5) % 360;
-
-    asciiArt.innerHTML =
-        rainbowText(
-            originalText,
-            hue
-        );
-
-    requestAnimationFrame(
-        animateRainbow
-    );
-
-}
-
-
-function stopRainbowAnimation() {
-
-    rainbowMode = false;
-
-    asciiArt.innerHTML =
-        `<span style="color:white">${originalText}</span>`;
-
-    const rainbowElements =
-        document.querySelectorAll(
-            ".rainbow-border"
-        );
-
-    rainbowElements.forEach(
-        element => {
-
-            element.classList.remove(
-                "rainbow-border"
-            );
-
-            element.style.color =
-                "white";
-
+        function animateRainbow() {
+            if (!rainbowMode) return;
+            hue = (hue + 0.5) % 360;
+            asciiArt.innerHTML = rainbowText(originalText, hue);
+            requestAnimationFrame(animateRainbow);
         }
-    );
 
-}
-
-
-animateRainbow();
-
-
-/* ============================================================
-   TERMINAL
-   ============================================================ */
-
-const terminal =
-    document.getElementById(
-        "terminal"
-    );
-
-const cmdInput =
-    document.getElementById(
-        "cmd-input"
-    );
-
-const userPrompt =
-    document.getElementById(
-        "user-prompt"
-    );
-
-
-/* ============================================================
-   USERS
-   ============================================================ */
-
-const usersKey =
-    "users";
-
-let currentUser =
-    localStorage.getItem(
-        "currentUser"
-    );
-
-
-function updateUserPrompt() {
-
-    userPrompt.textContent =
-        currentUser
-            ? `${currentUser}@web:~$`
-            : "user@web:~$";
-
-}
-
-
-function getUsers() {
-
-    try {
-
-        return JSON.parse(
-            localStorage.getItem(
-                usersKey
-            )
-        ) || [];
-
-    } catch {
-
-        return [];
-
-    }
-
-}
-
-
-function saveUsers(users) {
-
-    localStorage.setItem(
-        usersKey,
-        JSON.stringify(users)
-    );
-
-}
-
-
-/* ============================================================
-   COMMAND HISTORY
-   ============================================================ */
-
-let commandHistory = [];
-
-let historyIndex = -1;
-
-
-let tabCompletionState = {
-
-    currentMatches: [],
-
-    matchIndex: 0
-
-};
-
-
-/* ============================================================
-   COMMAND COMPLETION
-   ============================================================ */
-
-const getCommandCompletions =
-    partial => {
-
-        return Object.keys(commands)
-            .filter(
-                cmd =>
-                    cmd.startsWith(
-                        partial
-                    )
-            );
-
-    };
-
-
-/* ============================================================
-   FILE SIZE FORMATTER
-   ============================================================ */
-
-function formatFileSize(bytes) {
-
-    if (bytes < 1024) {
-
-        return `${bytes} B`;
-
-    }
-
-    if (bytes < 1024 * 1024) {
-
-        return `${(
-            bytes / 1024
-        ).toFixed(1)} KB`;
-
-    }
-
-    if (bytes < 1024 * 1024 * 1024) {
-
-        return `${(
-            bytes /
-            (1024 * 1024)
-        ).toFixed(2)} MB`;
-
-    }
-
-    return `${(
-        bytes /
-        (1024 * 1024 * 1024)
-    ).toFixed(2)} GB`;
-
-}
-
-
-/* ============================================================
-   FILE DATE FORMATTER
-   ============================================================ */
-
-function formatFileDate(dateString) {
-
-    const date =
-        new Date(
-            dateString
-        );
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return dateString;
-
-    }
-
-    return date.toLocaleString();
-
-}
-
-
-/* ============================================================
-   FETCH FILES
-   ============================================================ */
-
-async function fetchFiles() {
-
-    const response =
-        await fetch(
-            `${API_URL}/api/files`
-        );
-
-    const result =
-        await response.json();
-
-    if (
-        !response.ok ||
-        !result.success
-    ) {
-
-        throw new Error(
-            result.error ||
-            "Failed to get files."
-        );
-
-    }
-
-    return result.files || [];
-
-}
-
-
-/* ============================================================
-   COMMANDS
-   ============================================================ */
-
-const commands = {
-
-
-    /* ========================================================
-       INFO
-       ======================================================== */
-
-    info: () => {
-
-        const browserInfo =
-            navigator.userAgent;
-
-        const resolution =
-            `${window.innerWidth}x${window.innerHeight}`;
-
-        const memory =
-            Math.round(
-                window.performance.memory?.usedJSHeapSize
-                / 1024
-                / 1024
-            ) || "N/A";
-
-
-        return `
+        function stopRainbowAnimation() {
+            rainbowMode = false;
+            asciiArt.innerHTML = `<span style="color:white">${originalText}</span>`;
+            const rainbowElements = document.querySelectorAll(".rainbow-border");
+            rainbowElements.forEach(element => {
+                element.classList.remove("rainbow-border");
+                element.style.color = "white";
+            });
+        }
+
+        animateRainbow();
+
+        const terminal = document.getElementById("terminal");
+        const cmdInput = document.getElementById("cmd-input");
+        const userPrompt = document.getElementById("user-prompt");
+
+        const usersKey = "users";
+        let currentUser = localStorage.getItem("currentUser");
+
+        function updateUserPrompt() {
+            userPrompt.textContent = currentUser ? `${currentUser}@web:~$` : "user@web:~$";
+        }
+
+        function getUsers() {
+            try {
+                return JSON.parse(localStorage.getItem(usersKey)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem(usersKey, JSON.stringify(users));
+        }
+
+        let commandHistory = [];
+        let historyIndex = -1;
+
+        let tabCompletionState = {
+            currentMatches: [],
+            matchIndex: 0
+        };
+
+        const getCommandCompletions = partial => {
+            return Object.keys(commands).filter(cmd => cmd.startsWith(partial));
+        };
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return `${bytes} B`;
+            if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+            if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+            return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+        }
+
+        function formatFileDate(dateString) {
+            const date = new Date(dateString);
+            if (Number.isNaN(date.getTime())) return dateString;
+            return date.toLocaleString();
+        }
+
+        async function fetchFiles() {
+            const response = await fetch(`${API_URL}/api/files`);
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error(result.error || "Failed to get files.");
+            }
+            return result.files || [];
+        }
+
+        const commands = {
+            info: () => {
+                const browserInfo = navigator.userAgent;
+                const resolution = `${window.innerWidth}x${window.innerHeight}`;
+                const memory = Math.round(window.performance.memory?.usedJSHeapSize / 1024 / 1024) || "N/A";
+
+                return `
 Welcome to Web Terminal
 
 - Browser: ${browserInfo}
@@ -497,60 +217,23 @@ Remote file writer:
 - Rate limiting: Enabled
 - Shell access: disabled
 - File reading: disabled
-        `.trim();
+                `.trim();
+            },
 
-    },
+            echo: args => args.join(" "),
 
+            whoami: () => currentUser || "No user logged in",
 
-    /* ========================================================
-       ECHO
-       ======================================================== */
+            date: () => new Date().toString(),
 
-    echo: args =>
-        args.join(" "),
+            clear: () => {
+                terminal.innerHTML = "";
+                return "";
+            },
 
-
-    /* ========================================================
-       WHOAMI
-       ======================================================== */
-
-    whoami: () =>
-        currentUser ||
-        "No user logged in",
-
-
-    /* ========================================================
-       DATE
-       ======================================================== */
-
-    date: () =>
-        new Date().toString(),
-
-
-    /* ========================================================
-       CLEAR
-       ======================================================== */
-
-    clear: () => {
-
-        terminal.innerHTML = "";
-
-        return "";
-
-    },
-
-
-    /* ========================================================
-       WRITE
-       ======================================================== */
-
-    write: async args => {
-
-        if (
-            args.length < 2
-        ) {
-
-            return `
+            write: async args => {
+                if (args.length < 2) {
+                    return `
 Usage:
 
 write [filename.txt] [text]
@@ -558,91 +241,38 @@ write [filename.txt] [text]
 Example:
 
 write hello.txt Hello world!
-            `.trim();
+                    `.trim();
+                }
 
-        }
+                const filename = args[0];
+                const content = args.slice(1).join(" ");
 
+                if (!filename.toLowerCase().endsWith(".txt")) {
+                    return "Error: Only .txt files are allowed.";
+                }
 
-        const filename =
-            args[0];
-
-        const content =
-            args
-                .slice(1)
-                .join(" ");
-
-
-        if (
-            !filename
-                .toLowerCase()
-                .endsWith(".txt")
-        ) {
-
-            return (
-                "Error: Only .txt files are allowed."
-            );
-
-        }
-
-
-        try {
-
-            const response =
-                await fetch(
-                    `${API_URL}/api/write`,
-                    {
+                try {
+                    const response = await fetch(`${API_URL}/api/write`, {
                         method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ filename, content })
+                    });
 
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
+                    const result = await response.json();
 
-                        body:
-                            JSON.stringify({
-                                filename:
-                                    filename,
-
-                                content:
-                                    content
-                            })
-                    }
-                );
-
-
-            const result =
-                await response.json();
-
-
-            if (
-                response.status === 429
-            ) {
-
-                return `
+                    if (response.status === 429) {
+                        return `
 Rate limit exceeded.
 
-Please wait ${
-                    result.retry_after ||
-                    60
-                } seconds before writing another file.
-                `.trim();
+Please wait ${result.retry_after || 60} seconds before writing another file.
+                        `.trim();
+                    }
 
-            }
+                    if (!response.ok) {
+                        return `Error: ${result.error || "Request failed."}`;
+                    }
 
-
-            if (
-                !response.ok
-            ) {
-
-                return `Error: ${
-                    result.error ||
-                    "Request failed."
-                }`;
-
-            }
-
-
-            return `
+                    return `
 File created successfully.
 
 Path:
@@ -650,353 +280,138 @@ ${result.filename}
 
 Size:
 ${formatFileSize(result.size)}
-            `.trim();
+                    `.trim();
+                } catch (error) {
+                    console.error(error);
+                    return "Could not connect to the file server.";
+                }
+            },
 
-        } catch (error) {
+            files: async () => {
+                try {
+                    const fileList = await fetchFiles();
 
-            console.error(
-                error
-            );
-
-            return `
-Could not connect to the file server.
-
-Make sure:
-1. server.py is running
-2. Cloudflare Tunnel is running
-3. API_URL is correct
-            `.trim();
-
-        }
-
-    },
-
-
-    /* ========================================================
-       FILES
-       ======================================================== */
-
-    files: async () => {
-
-        try {
-
-            const fileList =
-                await fetchFiles();
-
-
-            if (
-                fileList.length === 0
-            ) {
-
-                return `
+                    if (fileList.length === 0) {
+                        return `
 Files in C:\\WebTerminalFiles
 
 No .txt files found.
-                `.trim();
+                        `.trim();
+                    }
 
-            }
+                    const nameWidth = Math.max(4, ...fileList.map(file => file.filename.length));
+                    const sizeWidth = Math.max(4, ...fileList.map(file => formatFileSize(file.size).length));
+                    const createdWidth = 19;
+                    const separator = "-".repeat(nameWidth + sizeWidth + createdWidth + 10);
 
+                    let output = "Files in C:\\WebTerminalFiles\n\n";
+                    output += "NAME".padEnd(nameWidth + 2);
+                    output += "SIZE".padEnd(sizeWidth + 2);
+                    output += "CREATED\n";
+                    output += separator + "\n";
 
-            const nameWidth =
-                Math.max(
-                    4,
-                    ...fileList.map(
-                        file =>
-                            file.filename.length
-                    )
-                );
+                    fileList.forEach(file => {
+                        output += file.filename.padEnd(nameWidth + 2);
+                        output += formatFileSize(file.size).padEnd(sizeWidth + 2);
+                        output += formatFileDate(file.created);
+                        output += "\n";
+                    });
 
+                    output += `\n${fileList.length} file${fileList.length === 1 ? "" : "s"}`;
 
-            const sizeWidth =
-                Math.max(
-                    4,
-                    ...fileList.map(
-                        file =>
-                            formatFileSize(
-                                file.size
-                            ).length
-                    )
-                );
-
-
-            const createdWidth =
-                19;
-
-
-            const separator =
-                "-".repeat(
-                    nameWidth +
-                    sizeWidth +
-                    createdWidth +
-                    10
-                );
-
-
-            let output =
-                "Files in C:\\WebTerminalFiles\n\n";
-
-
-            output +=
-                "NAME".padEnd(
-                    nameWidth + 2
-                );
-
-
-            output +=
-                "SIZE".padEnd(
-                    sizeWidth + 2
-                );
-
-
-            output +=
-                "CREATED\n";
-
-
-            output +=
-                separator +
-                "\n";
-
-
-            fileList.forEach(
-                file => {
-
-                    output +=
-                        file.filename.padEnd(
-                            nameWidth + 2
-                        );
-
-                    output +=
-                        formatFileSize(
-                            file.size
-                        ).padEnd(
-                            sizeWidth + 2
-                        );
-
-                    output +=
-                        formatFileDate(
-                            file.created
-                        );
-
-                    output +=
-                        "\n";
-
-                }
-            );
-
-
-            output +=
-                `\n${fileList.length} file${
-                    fileList.length === 1
-                        ? ""
-                        : "s"
-                }`;
-
-
-            return output;
-
-        } catch (error) {
-
-            console.error(
-                error
-            );
-
-            return `
+                    return output;
+                } catch (error) {
+                    console.error(error);
+                    return `
 Could not retrieve the file list.
 
 Make sure:
 1. server.py is running
 2. Cloudflare Tunnel is running
 3. API_URL is correct
-            `.trim();
+                    `.trim();
+                }
+            },
 
-        }
+            "files-date": async () => {
+                try {
+                    const fileList = await fetchFiles();
 
-    },
-
-
-    /* ========================================================
-       FILES-DATE
-       ======================================================== */
-
-    "files-date": async () => {
-
-        try {
-
-            const fileList =
-                await fetchFiles();
-
-
-            if (
-                fileList.length === 0
-            ) {
-
-                return `
+                    if (fileList.length === 0) {
+                        return `
 Files sorted by creation date
 
 No .txt files found.
-                `.trim();
+                        `.trim();
+                    }
 
-            }
+                    fileList.sort((a, b) => new Date(b.created) - new Date(a.created));
 
+                    let output = "Files sorted by creation date\n\n";
 
-            fileList.sort(
-                (a, b) =>
-                    new Date(
-                        b.created
-                    ) -
-                    new Date(
-                        a.created
-                    )
-            );
+                    fileList.forEach(file => {
+                        output += `${file.filename}`;
+                        output += `    ${formatFileDate(file.created)}`;
+                        output += "\n";
+                    });
 
+                    output += `\n${fileList.length} file${fileList.length === 1 ? "" : "s"}`;
 
-            let output =
-                "Files sorted by creation date\n\n";
-
-
-            fileList.forEach(
-                file => {
-
-                    output +=
-                        `${file.filename}`;
-
-                    output +=
-                        `    ${formatFileDate(
-                            file.created
-                        )}`;
-
-                    output +=
-                        "\n";
-
-                }
-            );
-
-
-            output +=
-                `\n${fileList.length} file${
-                    fileList.length === 1
-                        ? ""
-                        : "s"
-                }`;
-
-
-            return output;
-
-        } catch (error) {
-
-            console.error(
-                error
-            );
-
-            return `
+                    return output;
+                } catch (error) {
+                    console.error(error);
+                    return `
 Could not retrieve file dates.
 
 Make sure:
 1. server.py is running
 2. Cloudflare Tunnel is running
 3. API_URL is correct
-            `.trim();
+                    `.trim();
+                }
+            },
 
-        }
+            "files-size": async () => {
+                try {
+                    const fileList = await fetchFiles();
 
-    },
-
-
-    /* ========================================================
-       FILES-SIZE
-       ======================================================== */
-
-    "files-size": async () => {
-
-        try {
-
-            const fileList =
-                await fetchFiles();
-
-
-            if (
-                fileList.length === 0
-            ) {
-
-                return `
+                    if (fileList.length === 0) {
+                        return `
 Files sorted by size
 
 No .txt files found.
-                `.trim();
+                        `.trim();
+                    }
 
-            }
+                    fileList.sort((a, b) => b.size - a.size);
 
+                    let output = "Files sorted by size\n\n";
 
-            fileList.sort(
-                (a, b) =>
-                    b.size -
-                    a.size
-            );
+                    fileList.forEach(file => {
+                        output += `${file.filename}`;
+                        output += `    ${formatFileSize(file.size)}`;
+                        output += "\n";
+                    });
 
+                    output += `\n${fileList.length} file${fileList.length === 1 ? "" : "s"}`;
 
-            let output =
-                "Files sorted by size\n\n";
-
-
-            fileList.forEach(
-                file => {
-
-                    output +=
-                        `${file.filename}`;
-
-                    output +=
-                        `    ${formatFileSize(
-                            file.size
-                        )}`;
-
-                    output +=
-                        "\n";
-
-                }
-            );
-
-
-            output +=
-                `\n${fileList.length} file${
-                    fileList.length === 1
-                        ? ""
-                        : "s"
-                }`;
-
-
-            return output;
-
-        } catch (error) {
-
-            console.error(
-                error
-            );
-
-            return `
+                    return output;
+                } catch (error) {
+                    console.error(error);
+                    return `
 Could not retrieve file sizes.
 
 Make sure:
 1. server.py is running
 2. Cloudflare Tunnel is running
 3. API_URL is correct
-            `.trim();
+                    `.trim();
+                }
+            },
 
-        }
-
-    },
-
-
-    /* ========================================================
-       FILEINFO
-       ======================================================== */
-
-    fileinfo: async args => {
-
-        if (
-            args.length < 1
-        ) {
-
-            return `
+            fileinfo: async args => {
+                if (args.length < 1) {
+                    return `
 Usage:
 
 fileinfo [filename.txt]
@@ -1004,47 +419,22 @@ fileinfo [filename.txt]
 Example:
 
 fileinfo hello.txt
-            `.trim();
+                    `.trim();
+                }
 
-        }
+                const filename = args.join(" ");
 
+                try {
+                    const response = await fetch(`${API_URL}/api/fileinfo?filename=${encodeURIComponent(filename)}`);
+                    const result = await response.json();
 
-        const filename =
-            args.join(" ");
+                    if (!response.ok || !result.success) {
+                        return `Error: ${result.error || "Could not get file information."}`;
+                    }
 
+                    const file = result.file;
 
-        try {
-
-            const response =
-                await fetch(
-                    `${API_URL}/api/fileinfo?filename=${encodeURIComponent(
-                        filename
-                    )}`
-                );
-
-
-            const result =
-                await response.json();
-
-
-            if (
-                !response.ok ||
-                !result.success
-            ) {
-
-                return `Error: ${
-                    result.error ||
-                    "Could not get file information."
-                }`;
-
-            }
-
-
-            const file =
-                result.file;
-
-
-            return `
+                    return `
 File Information
 
 Name:
@@ -1061,1248 +451,412 @@ ${formatFileDate(file.modified)}
 
 Extension:
 .txt
-            `.trim();
-
-        } catch (error) {
-
-            console.error(
-                error
-            );
-
-            return `
+                    `.trim();
+                } catch (error) {
+                    console.error(error);
+                    return `
 Could not retrieve file information.
 
 Make sure:
 1. server.py is running
 2. Cloudflare Tunnel is running
 3. API_URL is correct
-            `.trim();
+                    `.trim();
+                }
+            },
 
-        }
+            tree: async () => {
+                try {
+                    const response = await fetch(`${API_URL}/api/tree`);
+                    const result = await response.json();
 
-    },
+                    if (!response.ok || !result.success) {
+                        return `Error: ${result.error || "Could not retrieve tree."}`;
+                    }
 
+                    const treeData = result.tree || [];
 
-    /* ========================================================
-       TREE
-       ======================================================== */
-
-    tree: async () => {
-
-        try {
-
-            const response =
-                await fetch(
-                    `${API_URL}/api/tree`
-                );
-
-
-            const result =
-                await response.json();
-
-
-            if (
-                !response.ok ||
-                !result.success
-            ) {
-
-                return `Error: ${
-                    result.error ||
-                    "Could not retrieve tree."
-                }`;
-
-            }
-
-
-            const treeData =
-                result.tree || [];
-
-
-            if (
-                treeData.length === 0
-            ) {
-
-                return `
+                    if (treeData.length === 0) {
+                        return `
 C:\\WebTerminalFiles
 
 (empty)
-                `.trim();
-
-            }
-
-
-            let output =
-                "C:\\WebTerminalFiles\n";
-
-
-            function renderTree(
-                nodes,
-                prefix = ""
-            ) {
-
-                nodes.forEach(
-                    (
-                        node,
-                        index
-                    ) => {
-
-                        const isLast =
-                            index ===
-                            nodes.length - 1;
-
-                        const branch =
-                            isLast
-                                ? "└── "
-                                : "├── ";
-
-                        if (
-                            node.type ===
-                            "directory"
-                        ) {
-
-                            output +=
-                                `${prefix}${branch}${node.name}/\n`;
-
-                            renderTree(
-                                node.children || [],
-                                prefix +
-                                    (
-                                        isLast
-                                            ? "    "
-                                            : "│   "
-                                    )
-                            );
-
-                        } else {
-
-                            output +=
-                                `${prefix}${branch}${node.name}\n`;
-
-                        }
-
+                        `.trim();
                     }
-                );
 
-            }
+                    let output = "C:\\WebTerminalFiles\n";
 
+                    function renderTree(nodes, prefix = "") {
+                        nodes.forEach((node, index) => {
+                            const isLast = index === nodes.length - 1;
+                            const branch = isLast ? "└── " : "├── ";
 
-            renderTree(
-                treeData
-            );
+                            if (node.type === "directory") {
+                                output += `${prefix}${branch}${node.name}/\n`;
+                                renderTree(node.children || [], prefix + (isLast ? "    " : "│   "));
+                            } else {
+                                output += `${prefix}${branch}${node.name}\n`;
+                            }
+                        });
+                    }
 
+                    renderTree(treeData);
 
-            return output.trim();
-
-        } catch (error) {
-
-            console.error(
-                error
-            );
-
-            return `
+                    return output.trim();
+                } catch (error) {
+                    console.error(error);
+                    return `
 Could not retrieve the file tree.
 
 Make sure:
 1. server.py is running
 2. Cloudflare Tunnel is running
 3. API_URL is correct
-            `.trim();
-
-        }
-
-    },
-
-
-    /* ========================================================
-       HELP
-       ======================================================== */
-
-    help: () => {
-
-        const commandGroups = [
-
-            {
-                title:
-                    "[User Management Commands]",
-
-                commands: [
-
-                    "- makeuser [username] [password]",
-
-                    "- login [username] [password]",
-
-                    "- logout",
-
-                    "- deleteuser [username] [password]",
-
-                    "- users",
-
-                    "- whoami",
-
-                    "- changepassword [currentPassword] [newPassword]"
-
-                ]
-
-            },
-
-
-            {
-                title:
-                    "[System Information Commands]",
-
-                commands: [
-
-                    "- info",
-
-                    "- date"
-
-                ]
-
-            },
-
-
-            {
-                title:
-                    "[File Commands]",
-
-                commands: [
-
-                    "- write [filename.txt] [text]",
-
-                    "- files",
-
-                    "- files-date",
-
-                    "- files-size",
-
-                    "- fileinfo [filename.txt]",
-
-                    "- tree"
-
-                ]
-
-            },
-
-
-            {
-                title:
-                    "[Utility Commands]",
-
-                commands: [
-
-                    "- echo [text]",
-
-                    "- clear",
-
-                    "- help",
-
-                    "- back",
-
-                    "- pwd",
-
-                    "- history",
-
-                    "- turnoffrainbow",
-
-                    "- turnonrainbow"
-
-                ]
-
-            }
-
-        ];
-
-
-        let maxWidth =
-            "Available Commands".length + 4;
-
-
-        commandGroups.forEach(
-            group => {
-
-                maxWidth =
-                    Math.max(
-                        maxWidth,
-                        group.title.length + 4
-                    );
-
-
-                group.commands.forEach(
-                    cmd => {
-
-                        maxWidth =
-                            Math.max(
-                                maxWidth,
-                                cmd.length + 6
-                            );
-
-                    }
-                );
-
-            }
-        );
-
-
-        const borderClass =
-            rainbowMode
-                ? "rainbow-border"
-                : "";
-
-
-        const borderColor =
-            rainbowMode
-                ? ""
-                : 'style="color:white"';
-
-
-        const horizontalBorder =
-            `<span class="${borderClass}" ${borderColor}>╔${"═".repeat(maxWidth - 2)}╗</span>`;
-
-
-        const horizontalDivider =
-            `<span class="${borderClass}" ${borderColor}>╠${"═".repeat(maxWidth - 2)}╣</span>`;
-
-
-        const horizontalBottom =
-            `<span class="${borderClass}" ${borderColor}>╚${"═".repeat(maxWidth - 2)}╝</span>`;
-
-
-        const centerText =
-            (
-                text,
-                width
-            ) => {
-
-                const spaces =
-                    width -
-                    text.length -
-                    2;
-
-                const leftSpaces =
-                    Math.floor(
-                        spaces / 2
-                    );
-
-                const rightSpaces =
-                    spaces -
-                    leftSpaces;
-
-
-                return `<span class="${borderClass}" ${borderColor}>║</span>${" ".repeat(leftSpaces)}<span style="color:#ffffff">${text}</span>${" ".repeat(rightSpaces)}<span class="${borderClass}" ${borderColor}>║</span>`;
-
-            };
-
-
-        const formatLine =
-            text => {
-
-                const padding =
-                    maxWidth -
-                    text.length -
-                    3;
-
-
-                return `<span class="${borderClass}" ${borderColor}>║</span> <span style="color:#ffffff">${text}</span>${" ".repeat(
-                    Math.max(
-                        0,
-                        padding
-                    )
-                )}<span class="${borderClass}" ${borderColor}>║</span>`;
-
-            };
-
-
-        const formatCommand =
-            cmd => {
-
-                const padding =
-                    maxWidth -
-                    cmd.length -
-                    5;
-
-
-                return `<span class="${borderClass}" ${borderColor}>║</span>   <span style="color:#ffffff">${cmd}</span>${" ".repeat(
-                    Math.max(
-                        0,
-                        padding
-                    )
-                )}<span class="${borderClass}" ${borderColor}>║</span>`;
-
-            };
-
-
-        let output =
-            `${horizontalBorder}\n`;
-
-
-        output +=
-            `${centerText(
-                "Available Commands",
-                maxWidth
-            )}\n`;
-
-
-        output +=
-            `${horizontalDivider}\n`;
-
-
-        commandGroups.forEach(
-            (
-                group,
-                i
-            ) => {
-
-                output +=
-                    `${formatLine(
-                        group.title
-                    )}\n`;
-
-
-                group.commands.forEach(
-                    cmd => {
-
-                        output +=
-                            `${formatCommand(
-                                cmd
-                            )}\n`;
-
-                    }
-                );
-
-
-                if (
-                    i <
-                    commandGroups.length - 1
-                ) {
-
-                    output +=
-                        `${formatLine(
-                            " "
-                        )}\n`;
-
+                    `.trim();
                 }
-
-            }
-        );
-
-
-        output +=
-            `${horizontalBottom}`;
-
-
-        return {
-            html: output
-        };
-
-    },
-
-
-    /* ========================================================
-       MAKE USER
-       ======================================================== */
-
-    makeuser: args => {
-
-        const [
-            username,
-            password
-        ] = args;
-
-
-        if (
-            !username ||
-            !password
-        ) {
-
-            return (
-                "Usage: makeuser [username] [password]"
-            );
-
-        }
-
-
-        const users =
-            getUsers();
-
-
-        const userExists =
-            users.some(
-                user =>
-                    user.username ===
-                    username
-            );
-
-
-        if (
-            userExists
-        ) {
-
-            return (
-                `User ${username} already exists.`
-            );
-
-        }
-
-
-        users.push({
-            username,
-            password
-        });
-
-
-        saveUsers(
-            users
-        );
-
-
-        return (
-            `User ${username} created successfully.`
-        );
-
-    },
-
-
-    /* ========================================================
-       LOGIN
-       ======================================================== */
-
-    login: args => {
-
-        const [
-            username,
-            password
-        ] = args;
-
-
-        if (
-            !username ||
-            !password
-        ) {
-
-            return (
-                "Usage: login [username] [password]"
-            );
-
-        }
-
-
-        const users =
-            getUsers();
-
-
-        const user =
-            users.find(
-                u =>
-                    u.username ===
-                    username &&
-                    u.password ===
-                    password
-            );
-
-
-        if (
-            !user
-        ) {
-
-            return (
-                "Invalid username or password."
-            );
-
-        }
-
-
-        currentUser =
-            username;
-
-
-        localStorage.setItem(
-            "currentUser",
-            username
-        );
-
-
-        updateUserPrompt();
-
-
-        return (
-            `Logged in as ${username}.`
-        );
-
-    },
-
-
-    /* ========================================================
-       LOGOUT
-       ======================================================== */
-
-    logout: () => {
-
-        if (
-            !currentUser
-        ) {
-
-            return (
-                "No user is currently logged in."
-            );
-
-        }
-
-
-        localStorage.removeItem(
-            "currentUser"
-        );
-
-
-        currentUser =
-            null;
-
-
-        updateUserPrompt();
-
-
-        return (
-            "Logged out successfully."
-        );
-
-    },
-
-
-    /* ========================================================
-       USERS
-       ======================================================== */
-
-    users: () => {
-
-        const users =
-            getUsers();
-
-
-        return users
-            .map(
-                u =>
-                    u.username
-            )
-            .join("\n")
-            ||
-            "No users found.";
-
-    },
-
-
-    /* ========================================================
-       DELETE USER
-       ======================================================== */
-
-    deleteuser: args => {
-
-        const [
-            username,
-            password
-        ] = args;
-
-
-        if (
-            !username ||
-            !password
-        ) {
-
-            return (
-                "Usage: deleteuser [username] [password]"
-            );
-
-        }
-
-
-        const users =
-            getUsers();
-
-
-        const userIndex =
-            users.findIndex(
-                u =>
-                    u.username ===
-                    username &&
-                    u.password ===
-                    password
-            );
-
-
-        if (
-            userIndex === -1
-        ) {
-
-            return (
-                "Invalid username or password."
-            );
-
-        }
-
-
-        if (
-            username ===
-            currentUser
-        ) {
-
-            currentUser =
-                null;
-
-            localStorage.removeItem(
-                "currentUser"
-            );
-
-            updateUserPrompt();
-
-        }
-
-
-        users.splice(
-            userIndex,
-            1
-        );
-
-
-        saveUsers(
-            users
-        );
-
-
-        return (
-            `User ${username} deleted successfully.`
-        );
-
-    },
-
-
-    /* ========================================================
-       CHANGE PASSWORD
-       ======================================================== */
-
-    changepassword: args => {
-
-        const [
-            currentPassword,
-            newPassword
-        ] = args;
-
-
-        if (
-            !currentUser
-        ) {
-
-            return (
-                "No user is currently logged in."
-            );
-
-        }
-
-
-        if (
-            !currentPassword ||
-            !newPassword
-        ) {
-
-            return (
-                "Usage: changepassword [currentPassword] [newPassword]"
-            );
-
-        }
-
-
-        const users =
-            getUsers();
-
-
-        const user =
-            users.find(
-                u =>
-                    u.username ===
-                    currentUser
-            );
-
-
-        if (
-            !user ||
-            user.password !==
-            currentPassword
-        ) {
-
-            return (
-                "Current password is incorrect."
-            );
-
-        }
-
-
-        user.password =
-            newPassword;
-
-
-        saveUsers(
-            users
-        );
-
-
-        return (
-            "Password changed successfully."
-        );
-
-    },
-
-
-    /* ========================================================
-       BACK
-       ======================================================== */
-
-    back: () => {
-
-        window.location.href =
-            "https://exophs.vercel.app";
-
-        return (
-            "Redirecting to homepage..."
-        );
-
-    },
-
-
-    /* ========================================================
-       PWD
-       ======================================================== */
-
-    pwd: () =>
-        "~",
-
-
-    /* ========================================================
-       HISTORY
-       ======================================================== */
-
-    history: () =>
-        commandHistory.join(
-            "\n"
-        ) ||
-        "No command history",
-
-
-    /* ========================================================
-       RAINBOW OFF
-       ======================================================== */
-
-    turnoffrainbow: () => {
-
-        if (
-            !rainbowMode
-        ) {
-
-            return (
-                "Rainbow mode is already turned off."
-            );
-
-        }
-
-
-        stopRainbowAnimation();
-
-
-        return (
-            "Rainbow mode turned off successfully."
-        );
-
-    },
-
-
-    /* ========================================================
-       RAINBOW ON
-       ======================================================== */
-
-    turnonrainbow: () => {
-
-        if (
-            rainbowMode
-        ) {
-
-            return (
-                "Rainbow mode is already turned on."
-            );
-
-        }
-
-
-        rainbowMode =
-            true;
-
-
-        animateRainbow();
-
-
-        return (
-            "Rainbow mode turned on successfully."
-        );
-
-    }
-
-};
-
-
-/* ============================================================
-   COMMAND INPUT
-   ============================================================ */
-
-cmdInput.addEventListener(
-    "keydown",
-    async e => {
-
-        if (
-            e.key === "Enter"
-        ) {
-
-            const input =
-                cmdInput.value.trim();
-
-
-            if (
-                !input
-            ) {
-
-                return;
-
-            }
-
-
-            commandHistory.push(
-                input
-            );
-
-
-            historyIndex =
-                commandHistory.length;
-
-
-            const [
-                command,
-                ...args
-            ] =
-                input.split(" ");
-
-
-            let output;
-
-
-            try {
-
-                output =
-                    commands[command]
-                        ? await commands[
-                            command
-                        ](args)
-                        : `Command not found: ${command}`;
-
-            } catch (
-                error
-            ) {
-
-                console.error(
-                    error
-                );
-
-                output =
-                    `Command error: ${error.message}`;
-
-            }
-
-
-            if (
-                output !== undefined &&
-                output !== ""
-            ) {
-
-                const outputElement =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                outputElement.className =
-                    "output";
-
-
-                if (
-                    output &&
-                    typeof output ===
-                        "object" &&
-                    output.html
-                ) {
-
-                    outputElement.innerHTML =
-                        output.html;
-
-                } else {
-
-                    outputElement.textContent =
-                        output;
-
-                }
-
-
-                terminal.appendChild(
-                    outputElement
-                );
-
-
-                terminal.scrollTop =
-                    terminal.scrollHeight;
-
-            }
-
-
-            cmdInput.value =
-                "";
-
-        }
-
-
-        /* ====================================================
-           HISTORY UP
-           ==================================================== */
-
-        if (
-            e.key === "ArrowUp"
-        ) {
-
-            e.preventDefault();
-
-
-            if (
-                commandHistory.length === 0
-            ) {
-
-                return;
-
-            }
-
-
-            if (
-                historyIndex > 0
-            ) {
-
-                historyIndex--;
-
-                cmdInput.value =
-                    commandHistory[
-                        historyIndex
-                    ];
-
-            } else if (
-                historyIndex === -1
-            ) {
-
-                historyIndex =
-                    commandHistory.length -
-                    1;
-
-                cmdInput.value =
-                    commandHistory[
-                        historyIndex
-                    ];
-
-            }
-
-        }
-
-
-        /* ====================================================
-           HISTORY DOWN
-           ==================================================== */
-
-        if (
-            e.key === "ArrowDown"
-        ) {
-
-            e.preventDefault();
-
-
-            if (
-                commandHistory.length === 0
-            ) {
-
-                return;
-
-            }
-
-
-            if (
-                historyIndex <
-                commandHistory.length - 1
-            ) {
-
-                historyIndex++;
-
-                cmdInput.value =
-                    commandHistory[
-                        historyIndex
-                    ];
-
-            } else {
-
-                historyIndex =
-                    commandHistory.length;
-
-                cmdInput.value =
-                    "";
-
-            }
-
-        }
-
-
-        /* ====================================================
-           TAB COMPLETION
-           ==================================================== */
-
-        if (
-            e.key === "Tab"
-        ) {
-
-            e.preventDefault();
-
-
-            const input =
-                cmdInput.value.trim();
-
-
-            const parts =
-                input.split(" ");
-
-
-            const currentWord =
-                parts[
-                    parts.length - 1
+            },
+
+            help: () => {
+                const commandGroups = [
+                    {
+                        title: "[User Management Commands]",
+                        commands: [
+                            "- makeuser [username] [password]",
+                            "- login [username] [password]",
+                            "- logout",
+                            "- deleteuser [username] [password]",
+                            "- users",
+                            "- whoami",
+                            "- changepassword [currentPassword] [newPassword]"
+                        ]
+                    },
+                    {
+                        title: "[System Information Commands]",
+                        commands: ["- info", "- date"]
+                    },
+                    {
+                        title: "[File Commands]",
+                        commands: [
+                            "- write [filename.txt] [text]",
+                            "- files",
+                            "- files-date",
+                            "- files-size",
+                            "- fileinfo [filename.txt]",
+                            "- tree"
+                        ]
+                    },
+                    {
+                        title: "[Utility Commands]",
+                        commands: [
+                            "- echo [text]",
+                            "- clear",
+                            "- help",
+                            "- back",
+                            "- pwd",
+                            "- history",
+                            "- turnoffrainbow",
+                            "- turnonrainbow"
+                        ]
+                    }
                 ];
 
+                let maxWidth = "Available Commands".length + 4;
 
-            if (
-                parts.length === 1
-            ) {
+                commandGroups.forEach(group => {
+                    maxWidth = Math.max(maxWidth, group.title.length + 4);
+                    group.commands.forEach(cmd => {
+                        maxWidth = Math.max(maxWidth, cmd.length + 6);
+                    });
+                });
 
-                const matches =
-                    getCommandCompletions(
-                        currentWord
-                    );
+                const borderClass = rainbowMode ? "rainbow-border" : "";
+                const borderColor = rainbowMode ? "" : 'style="color:white"';
 
+                const horizontalBorder = `<span class="${borderClass}" ${borderColor}>╔${"═".repeat(maxWidth - 2)}╗</span>`;
+                const horizontalDivider = `<span class="${borderClass}" ${borderColor}>╠${"═".repeat(maxWidth - 2)}╣</span>`;
+                const horizontalBottom = `<span class="${borderClass}" ${borderColor}>╚${"═".repeat(maxWidth - 2)}╝</span>`;
 
-                if (
-                    matches.length === 1
-                ) {
+                const centerText = (text, width) => {
+                    const spaces = width - text.length - 2;
+                    const leftSpaces = Math.floor(spaces / 2);
+                    const rightSpaces = spaces - leftSpaces;
+                    return `<span class="${borderClass}" ${borderColor}>║</span>${" ".repeat(leftSpaces)}<span style="color:#ffffff">${text}</span>${" ".repeat(rightSpaces)}<span class="${borderClass}" ${borderColor}>║</span>`;
+                };
 
-                    cmdInput.value =
-                        matches[0] + " ";
+                const formatLine = text => {
+                    const padding = maxWidth - text.length - 3;
+                    return `<span class="${borderClass}" ${borderColor}>║</span> <span style="color:#ffffff">${text}</span>${" ".repeat(Math.max(0, padding))}<span class="${borderClass}" ${borderColor}>║</span>`;
+                };
 
+                const formatCommand = cmd => {
+                    const padding = maxWidth - cmd.length - 5;
+                    return `<span class="${borderClass}" ${borderColor}>║</span>   <span style="color:#ffffff">${cmd}</span>${" ".repeat(Math.max(0, padding))}<span class="${borderClass}" ${borderColor}>║</span>`;
+                };
 
-                    tabCompletionState.currentMatches =
-                        [];
+                let output = `${horizontalBorder}\n`;
+                output += `${centerText("Available Commands", maxWidth)}\n`;
+                output += `${horizontalDivider}\n`;
 
-                } else if (
-                    matches.length > 1
-                ) {
+                commandGroups.forEach((group, i) => {
+                    output += `${formatLine(group.title)}\n`;
 
-                    if (
-                        tabCompletionState
-                            .currentMatches
-                            .toString()
-                        !==
-                        matches.toString()
-                    ) {
+                    group.commands.forEach(cmd => {
+                        output += `${formatCommand(cmd)}\n`;
+                    });
 
-                        tabCompletionState
-                            .currentMatches =
-                            matches;
-
-                        tabCompletionState
-                            .matchIndex =
-                            0;
-
+                    if (i < commandGroups.length - 1) {
+                        output += `${formatLine(" ")}\n`;
                     }
+                });
 
+                output += `${horizontalBottom}`;
 
-                    cmdInput.value =
-                        matches[
-                            tabCompletionState
-                                .matchIndex
-                        ] + " ";
+                return { html: output };
+            },
 
+            makeuser: args => {
+                const [username, password] = args;
 
-                    tabCompletionState
-                        .matchIndex =
-                        (
-                            tabCompletionState
-                                .matchIndex + 1
-                        ) %
-                        matches.length;
-
-
-                    if (
-                        tabCompletionState
-                            .matchIndex === 0
-                    ) {
-
-                        const outputElement =
-                            document.createElement(
-                                "div"
-                            );
-
-
-                        outputElement.className =
-                            "output";
-
-
-                        outputElement.textContent =
-                            matches.join(
-                                " "
-                            );
-
-
-                        terminal.appendChild(
-                            outputElement
-                        );
-
-
-                        terminal.scrollTop =
-                            terminal.scrollHeight;
-
-                    }
-
+                if (!username || !password) {
+                    return "Usage: makeuser [username] [password]";
                 }
 
+                const users = getUsers();
+                const userExists = users.some(user => user.username === username);
+
+                if (userExists) {
+                    return `User ${username} already exists.`;
+                }
+
+                users.push({ username, password });
+                saveUsers(users);
+
+                return `User ${username} created successfully.`;
+            },
+
+            login: args => {
+                const [username, password] = args;
+
+                if (!username || !password) {
+                    return "Usage: login [username] [password]";
+                }
+
+                const users = getUsers();
+                const user = users.find(u => u.username === username && u.password === password);
+
+                if (!user) {
+                    return "Invalid username or password.";
+                }
+
+                currentUser = username;
+                localStorage.setItem("currentUser", username);
+                updateUserPrompt();
+
+                return `Logged in as ${username}.`;
+            },
+
+            logout: () => {
+                if (!currentUser) {
+                    return "No user is currently logged in.";
+                }
+
+                localStorage.removeItem("currentUser");
+                currentUser = null;
+                updateUserPrompt();
+
+                return "Logged out successfully.";
+            },
+
+            users: () => {
+                const users = getUsers();
+                return users.map(u => u.username).join("\n") || "No users found.";
+            },
+
+            deleteuser: args => {
+                const [username, password] = args;
+
+                if (!username || !password) {
+                    return "Usage: deleteuser [username] [password]";
+                }
+
+                const users = getUsers();
+                const userIndex = users.findIndex(u => u.username === username && u.password === password);
+
+                if (userIndex === -1) {
+                    return "Invalid username or password.";
+                }
+
+                if (username === currentUser) {
+                    currentUser = null;
+                    localStorage.removeItem("currentUser");
+                    updateUserPrompt();
+                }
+
+                users.splice(userIndex, 1);
+                saveUsers(users);
+
+                return `User ${username} deleted successfully.`;
+            },
+
+            changepassword: args => {
+                const [currentPassword, newPassword] = args;
+
+                if (!currentUser) {
+                    return "No user is currently logged in.";
+                }
+
+                if (!currentPassword || !newPassword) {
+                    return "Usage: changepassword [currentPassword] [newPassword]";
+                }
+
+                const users = getUsers();
+                const user = users.find(u => u.username === currentUser);
+
+                if (!user || user.password !== currentPassword) {
+                    return "Current password is incorrect.";
+                }
+
+                user.password = newPassword;
+                saveUsers(users);
+
+                return "Password changed successfully.";
+            },
+
+            back: () => {
+                window.location.href = "https://exophs.vercel.app";
+                return "Redirecting to homepage...";
+            },
+
+            pwd: () => "~",
+
+            history: () => commandHistory.join("\n") || "No command history",
+
+            turnoffrainbow: () => {
+                if (!rainbowMode) {
+                    return "Rainbow mode is already turned off.";
+                }
+
+                stopRainbowAnimation();
+
+                return "Rainbow mode turned off successfully.";
+            },
+
+            turnonrainbow: () => {
+                if (rainbowMode) {
+                    return "Rainbow mode is already turned on.";
+                }
+
+                rainbowMode = true;
+                animateRainbow();
+
+                return "Rainbow mode turned on successfully.";
+            }
+        };
+
+        cmdInput.addEventListener("keydown", async e => {
+            if (e.key === "Enter") {
+                const input = cmdInput.value.trim();
+
+                if (!input) return;
+
+                commandHistory.push(input);
+                historyIndex = commandHistory.length;
+
+                const [command, ...args] = input.split(" ");
+
+                let output;
+
+                try {
+                    output = commands[command] ? await commands[command](args) : `Command not found: ${command}`;
+                } catch (error) {
+                    console.error(error);
+                    output = `Command error: ${error.message}`;
+                }
+
+                if (output !== undefined && output !== "") {
+                    const outputElement = document.createElement("div");
+                    outputElement.className = "output";
+
+                    if (output && typeof output === "object" && output.html) {
+                        outputElement.innerHTML = output.html;
+                    } else {
+                        outputElement.textContent = output;
+                    }
+
+                    terminal.appendChild(outputElement);
+                    terminal.scrollTop = terminal.scrollHeight;
+                }
+
+                cmdInput.value = "";
             }
 
-        }
+            if (e.key === "ArrowUp") {
+                e.preventDefault();
 
-    }
-);
+                if (commandHistory.length === 0) return;
 
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    cmdInput.value = commandHistory[historyIndex];
+                } else if (historyIndex === -1) {
+                    historyIndex = commandHistory.length - 1;
+                    cmdInput.value = commandHistory[historyIndex];
+                }
+            }
 
-/* ============================================================
-   CLICK TERMINAL TO FOCUS
-   ============================================================ */
+            if (e.key === "ArrowDown") {
+                e.preventDefault();
 
-document.addEventListener(
-    "click",
-    () => {
+                if (commandHistory.length === 0) return;
 
-        cmdInput.focus();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    cmdInput.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = commandHistory.length;
+                    cmdInput.value = "";
+                }
+            }
 
-    }
-);
+            if (e.key === "Tab") {
+                e.preventDefault();
 
+                const input = cmdInput.value.trim();
+                const parts = input.split(" ");
+                const currentWord = parts[parts.length - 1];
 
-/* ============================================================
-   INITIALIZE
-   ============================================================ */
+                if (parts.length === 1) {
+                    const matches = getCommandCompletions(currentWord);
 
-updateUserPrompt();
+                    if (matches.length === 1) {
+                        cmdInput.value = matches[0] + " ";
+                        tabCompletionState.currentMatches = [];
+                    } else if (matches.length > 1) {
+                        if (tabCompletionState.currentMatches.toString() !== matches.toString()) {
+                            tabCompletionState.currentMatches = matches;
+                            tabCompletionState.matchIndex = 0;
+                        }
 
-</script>
+                        cmdInput.value = matches[tabCompletionState.matchIndex] + " ";
+                        tabCompletionState.matchIndex = (tabCompletionState.matchIndex + 1) % matches.length;
 
+                        if (tabCompletionState.matchIndex === 0) {
+                            const outputElement = document.createElement("div");
+                            outputElement.className = "output";
+                            outputElement.textContent = matches.join(" ");
+                            terminal.appendChild(outputElement);
+                            terminal.scrollTop = terminal.scrollHeight;
+                        }
+                    }
+                }
+            }
+        });
+
+        document.addEventListener("click", () => {
+            cmdInput.focus();
+        });
+
+        updateUserPrompt();
+    </script>
 </body>
-
 </html>
