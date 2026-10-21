@@ -496,6 +496,7 @@
       flex-direction: column;
       gap: 0;
     }
+    #guest-wall.disabled { display: none; }
     #gw-toggle {
       align-self: flex-end;
       background: rgba(24,24,37,0.85);
@@ -894,7 +895,7 @@
   <p>© 2026 <a href="https://exophs.is-a.dev">exophs</a></p>
 </footer>
 
-<div id="guest-wall">
+<div id="guest-wall" class="disabled">
   <div id="gw-panel">
     <div id="gw-header">
       <span id="gw-header-left"><span>//</span>guest wall</span>
@@ -976,6 +977,25 @@ if (!sessionStorage.getItem('tracked')) {
   let replyingTo = null;
   let openPickerId = null;
   let cooldownEnd = parseInt(localStorage.getItem('gw_cooldown') || '0');
+  let enabled = false;
+  const wall = document.getElementById('guest-wall');
+
+  function setEnabled(value) {
+    enabled = value;
+    wall.classList.toggle('disabled', !enabled);
+    if (!enabled && open) {
+      open = false;
+      panel.classList.remove('open');
+      toggle.textContent = '// guest wall';
+      cancelReply();
+    }
+  }
+
+  async function loadSettings() {
+    const { data, error } = await _sb.from('site_settings').select('guestwall_enabled').eq('id', 1).maybeSingle();
+    // default to showing the wall if the setting is missing or can't be read
+    setEnabled(error || !data ? true : data.guestwall_enabled !== false);
+  }
 
   toggle.addEventListener('click', () => {
     open = !open;
@@ -1203,6 +1223,7 @@ if (!sessionStorage.getItem('tracked')) {
     const msg = msgInput.value.trim();
     const nick = nickInput.value.trim().slice(0, 24) || 'anonymous';
 
+    if (!enabled) return;
     if (!msg) { status.textContent = 'message is empty.'; status.className = 'error'; return; }
     if (msg.length > 200) { status.textContent = 'too long (max 200 chars).'; status.className = 'error'; return; }
     if (isSpam(msg)) { status.textContent = 'message looks like spam.'; status.className = 'error'; return; }
@@ -1278,9 +1299,13 @@ if (!sessionStorage.getItem('tracked')) {
       messages = messages.filter(m => String(m.id) !== String(payload.old.id));
       if (open) renderMessages();
     })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'site_settings' }, payload => {
+      if (payload.new && payload.new.id === 1) setEnabled(payload.new.guestwall_enabled !== false);
+    })
     .subscribe();
 
   if (Date.now() < cooldownEnd) updateCooldownUI();
+  loadSettings();
   loadMessages();
 })();
 

@@ -512,6 +512,17 @@
     </div>
 
     <div class="card">
+        <p class="card-label">guest wall</p>
+        <div class="announcement-item">
+            <span class="badge badge-off" id="gw-state-badge">...</span>
+            <span class="announce-msg" id="gw-state-text">loading...</span>
+            <div class="announce-actions">
+                <button class="btn-ghost" id="gw-state-toggle" disabled>...</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
         <p class="card-label">guest wall messages</p>
         <div id="gw-list"></div>
     </div>
@@ -532,6 +543,12 @@
 
     init();
 
+    function sanitize(str) {
+        const d = document.createElement('div');
+        d.textContent = str;
+        return d.innerHTML;
+    }
+
     const loginSection = document.getElementById('login-section');
     const adminSection = document.getElementById('admin-section');
     const errorMessage = document.getElementById('error-message');
@@ -549,6 +566,7 @@
         loadAnalytics();
         loadAnnouncements();
         loadGuestWall();
+        loadSettings();
         subscribeRealtime();
     }
 
@@ -558,6 +576,7 @@
             .on('postgres_changes', { event: '*', schema: 'public', table: 'guest_wall' }, loadGuestWall)
             .on('postgres_changes', { event: '*', schema: 'public', table: 'announcements' }, loadAnnouncements)
             .on('postgres_changes', { event: '*', schema: 'public', table: 'page_views' }, loadAnalytics)
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'site_settings' }, loadSettings)
             .subscribe();
     }
 
@@ -623,7 +642,7 @@
         }
         container.innerHTML = sorted.map(([path, count]) =>
             `<div class="views-row">
-                <span class="views-path">${path}</span>
+                <span class="views-path">${sanitize(path)}</span>
                 <span class="views-count">${count} views</span>
             </div>`
         ).join('');
@@ -639,7 +658,7 @@
         container.innerHTML = data.map(a => `
             <div class="announcement-item">
                 <span class="badge ${a.active ? 'badge-live' : 'badge-off'}">${a.active ? 'live' : 'off'}</span>
-                <span class="announce-msg">${a.message}</span>
+                <span class="announce-msg">${sanitize(a.message)}</span>
                 <div class="announce-actions">
                     <button class="btn-ghost" onclick="toggleAnnouncement('${a.id}', ${a.active})">${a.active ? 'deactivate' : 'activate'}</button>
                     <button class="btn-red" onclick="deleteAnnouncement('${a.id}')">delete</button>
@@ -669,6 +688,43 @@
         await sb.from('announcements').delete().eq('id', id);
         loadAnnouncements();
     }
+
+    let guestwallEnabled = true;
+
+    function renderGuestwallState() {
+        document.getElementById('gw-state-badge').className = 'badge ' + (guestwallEnabled ? 'badge-live' : 'badge-off');
+        document.getElementById('gw-state-badge').textContent = guestwallEnabled ? 'live' : 'off';
+        document.getElementById('gw-state-text').textContent = guestwallEnabled ? 'guest wall is visible on the main page' : 'guest wall is hidden on the main page';
+        const btn = document.getElementById('gw-state-toggle');
+        btn.textContent = guestwallEnabled ? 'disable' : 'enable';
+        btn.disabled = false;
+    }
+
+    async function loadSettings() {
+        const { data, error } = await sb.from('site_settings').select('guestwall_enabled').eq('id', 1).maybeSingle();
+        if (error) {
+            document.getElementById('gw-state-text').textContent = 'failed to load setting.';
+            return;
+        }
+        guestwallEnabled = data ? data.guestwall_enabled : true;
+        renderGuestwallState();
+    }
+
+    document.getElementById('gw-state-toggle').addEventListener('click', async () => {
+        const btn = document.getElementById('gw-state-toggle');
+        btn.disabled = true;
+        btn.textContent = '...';
+        const { error } = await sb.from('site_settings').upsert({ id: 1, guestwall_enabled: !guestwallEnabled });
+        if (error) {
+            console.error('Failed to update guest wall setting:', error);
+            document.getElementById('gw-state-text').textContent = 'failed to save setting.';
+            btn.disabled = false;
+            btn.textContent = guestwallEnabled ? 'disable' : 'enable';
+            return;
+        }
+        guestwallEnabled = !guestwallEnabled;
+        renderGuestwallState();
+    });
 
     async function loadGuestWall() {
         let all = [];
@@ -700,7 +756,7 @@
                 <div class="announcement-item">
                     <span class="badge ${isHost ? 'badge-host' : 'badge-guest'}">${isHost ? 'Owner' : 'guest'}</span>
                     <span class="announce-msg">
-                        <span class="gw-nick">${nick}</span>${m.message}<span class="gw-time">${time}</span>
+                        <span class="gw-nick">${sanitize(nick)}</span>${sanitize(m.message)}<span class="gw-time">${time}</span>
                     </span>
                     <div class="announce-actions">
                         <button class="btn-red" onclick="deleteGuestMsg('${m.id}', this)">delete</button>
