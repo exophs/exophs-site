@@ -861,7 +861,7 @@
       </div>
     </div>
     <div class="countdown-wrap" id="countdownWrap">
-      <p class="countdown-label">countdown to 19th birthday — oct 16</p>
+      <p class="countdown-label">countdown to 20th birthday — oct 16</p>
       <div class="countdown-grid" id="countdownGrid">
         <div class="countdown-unit">
           <div class="countdown-num" id="cd-days">000</div>
@@ -1477,10 +1477,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateCountdown() {
-    const target = new Date(2026, 9, 16, 0, 0, 0);
+    const target = new Date(2027, 9, 16, 0, 0, 0);
     const diff = target - new Date();
     if (diff <= 0) {
-      countdownWrap.innerHTML = '<p class="birthday-msg">🎉 happy birthday!! you\'re 19!! 🎉</p>';
+      countdownWrap.innerHTML = '<p class="birthday-msg">🎉 happy birthday!! you\'re 20!! 🎉</p>';
       return;
     }
     flip(cdDays, pad(Math.floor(diff / 86400000), 3));
