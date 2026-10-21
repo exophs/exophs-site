@@ -1,12 +1,9 @@
-# !! WEBSITE DOWN BECAUSE I CAN'T PAY FOR A DOMAIN LOL !!
-use https://exophs.vercel.app/ for now
-
 # My website
 
 ![Preview](https://i.imgur.com/fpTphty.png)
 
 my personal website i make little projects on to mess around with code i guess 
-https://exophs.space
+https://exophs.dev
 
 a collection of mini projects
 
