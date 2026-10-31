@@ -14,6 +14,15 @@
   <meta property="og:url" content="https://exophs.dev">
   <meta property="og:type" content="website">
   <link rel="canonical" href="https://exophs.dev">
+  <script>
+    // halloween theme runs oct 20 - nov 1 every year; ?theme=halloween or ?theme=normal forces one
+    (() => {
+      const force = new URLSearchParams(location.search).get('theme');
+      const now = new Date(), m = now.getMonth(), d = now.getDate();
+      const season = (m === 9 && d >= 20) || (m === 10 && d <= 1);
+      if (force === 'halloween' || (force !== 'normal' && season)) document.documentElement.classList.add('halloween');
+    })();
+  </script>
   <style>
     :root {
       --crust:      #11111b;
@@ -42,6 +51,13 @@
       --pink:       #f5c2e7;
       --flamingo:   #f2cdcd;
       --rosewater:  #f5e0dc;
+      --mauve-rgb:    203,166,247;
+      --lavender-rgb: 180,190,254;
+      --surface0-rgb: 49,50,68;
+      --surface2-rgb: 88,91,112;
+      --base-rgb:     30,30,46;
+      --mantle-rgb:   24,24,37;
+      --crust-rgb:    17,17,27;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -51,26 +67,6 @@
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
-    }
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,0.03) 2px,
-        rgba(0,0,0,0.03) 4px
-      );
-      background-size: 100% 4px;
-      pointer-events: none;
-      z-index: 999;
-      animation: scanlines 8s linear infinite;
-    }
-    @keyframes scanlines {
-      from { background-position: 0 0; }
-      to { background-position: 0 100px; }
     }
     #particles-js {
       position: fixed;
@@ -89,8 +85,8 @@
       justify-content: center;
       gap: 12px;
       padding: 10px 48px 10px 20px;
-      background: rgba(203,166,247,0.08);
-      border-bottom: 1px solid rgba(203,166,247,0.2);
+      background: rgba(var(--mauve-rgb),0.08);
+      border-bottom: 1px solid rgba(var(--mauve-rgb),0.2);
       backdrop-filter: blur(12px);
       font-size: 12px;
       letter-spacing: 0.1em;
@@ -135,9 +131,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(30,30,46,0.7);
+      background: rgba(var(--base-rgb),0.7);
       backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(180,190,254,0.1);
+      border-bottom: 1px solid rgba(var(--lavender-rgb),0.1);
       transition: transform 0.4s ease;
     }
     nav.hide { transform: translateY(-100%); }
@@ -161,8 +157,8 @@
       letter-spacing: 0.15em;
       color: var(--overlay1);
       text-transform: uppercase;
-      background: rgba(49,50,68,0.4);
-      border: 1px solid rgba(180,190,254,0.08);
+      background: rgba(var(--surface0-rgb),0.4);
+      border: 1px solid rgba(var(--lavender-rgb),0.08);
       padding: 5px 12px;
       border-radius: 99px;
       white-space: nowrap;
@@ -203,9 +199,9 @@
       top: 0; left: 0; right: 0;
       width: 100%;
       height: auto;
-      background: rgba(24,24,37,0.97);
+      background: rgba(var(--mantle-rgb),0.97);
       backdrop-filter: blur(24px);
-      border-bottom: 1px solid rgba(180,190,254,0.1);
+      border-bottom: 1px solid rgba(var(--lavender-rgb),0.1);
       z-index: 150;
       display: flex;
       flex-direction: row;
@@ -230,7 +226,7 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       padding: 12px 0;
-      border-bottom: 1px solid rgba(180,190,254,0.08);
+      border-bottom: 1px solid rgba(var(--lavender-rgb),0.08);
       transition: all 0.25s ease;
       display: flex;
       align-items: center;
@@ -296,13 +292,13 @@
       margin-bottom: 8px;
       opacity: 0;
       animation: fadeUp 0.8s 0.4s forwards;
-      text-shadow: 0 0 80px rgba(203,166,247,0.12);
+      text-shadow: 0 0 80px rgba(var(--mauve-rgb),0.12);
       cursor: pointer;
       display: inline-block;
       transition: text-shadow 0.3s ease;
     }
     .hero-name:hover {
-      text-shadow: 0 0 40px rgba(203,166,247,0.35), 0 0 80px rgba(203,166,247,0.15);
+      text-shadow: 0 0 40px rgba(var(--mauve-rgb),0.35), 0 0 80px rgba(var(--mauve-rgb),0.15);
     }
     .hero-sub {
       font-size: 13px;
@@ -323,8 +319,8 @@
       align-items: center;
       gap: 10px;
       padding: 12px 20px;
-      background: rgba(49,50,68,0.6);
-      border: 1px solid rgba(180,190,254,0.1);
+      background: rgba(var(--surface0-rgb),0.6);
+      border: 1px solid rgba(var(--lavender-rgb),0.1);
       border-radius: 4px;
       font-size: 13px;
       letter-spacing: 0.05em;
@@ -379,8 +375,8 @@
       min-width: 70px;
       text-align: center;
       padding: 14px 10px 10px;
-      background: rgba(49,50,68,0.6);
-      border: 1px solid rgba(180,190,254,0.1);
+      background: rgba(var(--surface0-rgb),0.6);
+      border: 1px solid rgba(var(--lavender-rgb),0.1);
       border-radius: 4px;
       position: relative;
       overflow: hidden;
@@ -392,7 +388,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(203,166,247,0.04) 0%, transparent 100%);
+      background: linear-gradient(180deg, rgba(var(--mauve-rgb),0.04) 0%, transparent 100%);
     }
     .countdown-lbl {
       font-size: 9px;
@@ -427,8 +423,8 @@
       pointer-events: none;
       z-index: 2;
     }
-    .corner-tl { top: 70px; left: 20px; border-top: 1px solid rgba(203,166,247,0.2); border-left: 1px solid rgba(203,166,247,0.2); }
-    .corner-br { bottom: 40px; right: 20px; border-bottom: 1px solid rgba(203,166,247,0.2); border-right: 1px solid rgba(203,166,247,0.2); }
+    .corner-tl { top: 70px; left: 20px; border-top: 1px solid rgba(var(--mauve-rgb),0.2); border-left: 1px solid rgba(var(--mauve-rgb),0.2); }
+    .corner-br { bottom: 40px; right: 20px; border-bottom: 1px solid rgba(var(--mauve-rgb),0.2); border-right: 1px solid rgba(var(--mauve-rgb),0.2); }
     .hint {
       position: fixed;
       bottom: 24px;
@@ -444,9 +440,9 @@
       color: var(--overlay0);
       text-transform: uppercase;
       padding: 8px 16px;
-      border: 1px solid rgba(180,190,254,0.1);
+      border: 1px solid rgba(var(--lavender-rgb),0.1);
       border-radius: 99px;
-      background: rgba(24,24,37,0.8);
+      background: rgba(var(--mantle-rgb),0.8);
       backdrop-filter: blur(8px);
       white-space: nowrap;
     }
@@ -499,8 +495,8 @@
     #guest-wall.disabled { display: none; }
     #gw-toggle {
       align-self: flex-end;
-      background: rgba(24,24,37,0.85);
-      border: 1px solid rgba(203,166,247,0.2);
+      background: rgba(var(--mantle-rgb),0.85);
+      border: 1px solid rgba(var(--mauve-rgb),0.2);
       border-radius: 4px;
       padding: 8px 14px;
       font-family: inherit;
@@ -513,12 +509,12 @@
       text-transform: uppercase;
     }
     #gw-toggle:hover {
-      background: rgba(203,166,247,0.1);
-      border-color: rgba(203,166,247,0.4);
+      background: rgba(var(--mauve-rgb),0.1);
+      border-color: rgba(var(--mauve-rgb),0.4);
     }
     #gw-panel {
-      background: rgba(17,17,27,0.92);
-      border: 1px solid rgba(180,190,254,0.1);
+      background: rgba(var(--crust-rgb),0.92);
+      border: 1px solid rgba(var(--lavender-rgb),0.1);
       border-radius: 6px;
       backdrop-filter: blur(20px);
       overflow: hidden;
@@ -535,7 +531,7 @@
     #gw-panel.open { display: flex; }
     #gw-header {
       padding: 10px 14px;
-      border-bottom: 1px solid rgba(180,190,254,0.08);
+      border-bottom: 1px solid rgba(var(--lavender-rgb),0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -573,8 +569,8 @@
       animation: fadeUp 0.3s ease forwards;
     }
     .gw-msg-from-discord .gw-bubble {
-      background: rgba(88,91,112,0.25);
-      border-color: rgba(88,91,112,0.3);
+      background: rgba(var(--surface2-rgb),0.25);
+      border-color: rgba(var(--surface2-rgb),0.3);
       border-radius: 4px 12px 12px 4px;
     }
     .gw-nick {
@@ -585,8 +581,8 @@
     }
     .gw-nick.is-host { color: var(--mauve); }
     .gw-bubble {
-      background: rgba(49,50,68,0.5);
-      border: 1px solid rgba(180,190,254,0.08);
+      background: rgba(var(--surface0-rgb),0.5);
+      border: 1px solid rgba(var(--lavender-rgb),0.08);
       border-radius: 4px 12px 12px 12px;
       padding: 7px 10px;
       font-size: 12px;
@@ -609,7 +605,7 @@
       color: var(--overlay0);
       padding: 0 4px;
       letter-spacing: 0.05em;
-      border-left: 2px solid rgba(180,190,254,0.15);
+      border-left: 2px solid rgba(var(--lavender-rgb),0.15);
       margin-left: 2px;
       padding-left: 6px;
       max-width: 100%;
@@ -631,8 +627,8 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      background: rgba(49,50,68,0.5);
-      border: 1px solid rgba(180,190,254,0.1);
+      background: rgba(var(--surface0-rgb),0.5);
+      border: 1px solid rgba(var(--lavender-rgb),0.1);
       border-radius: 99px;
       padding: 2px 7px;
       font-size: 10px;
@@ -641,10 +637,10 @@
       font-family: inherit;
       transition: all 0.15s;
     }
-    .gw-pill:hover { border-color: rgba(203,166,247,0.3); }
+    .gw-pill:hover { border-color: rgba(var(--mauve-rgb),0.3); }
     .gw-pill.mine {
-      background: rgba(203,166,247,0.12);
-      border-color: rgba(203,166,247,0.35);
+      background: rgba(var(--mauve-rgb),0.12);
+      border-color: rgba(var(--mauve-rgb),0.35);
       color: var(--mauve);
     }
     .gw-actions {
@@ -668,15 +664,15 @@
       line-height: 1;
       transition: all 0.15s;
     }
-    .gw-action-btn:hover { background: rgba(180,190,254,0.08); color: var(--text); }
+    .gw-action-btn:hover { background: rgba(var(--lavender-rgb),0.08); color: var(--text); }
     .gw-action-btn.gw-more-btn { font-size: 13px; font-weight: bold; }
     .gw-action-btn svg { display: block; width: 13px; height: 13px; }
     .gw-picker {
       display: none;
       flex-wrap: wrap;
       gap: 3px;
-      background: rgba(24,24,37,0.95);
-      border: 1px solid rgba(180,190,254,0.12);
+      background: rgba(var(--mantle-rgb),0.95);
+      border: 1px solid rgba(var(--lavender-rgb),0.12);
       border-radius: 6px;
       padding: 6px;
       margin: 2px 4px 0;
@@ -693,14 +689,14 @@
       line-height: 1;
       transition: background 0.15s;
     }
-    .gw-picker button:hover { background: rgba(180,190,254,0.1); }
+    .gw-picker button:hover { background: rgba(var(--lavender-rgb),0.1); }
     #gw-reply-context {
       display: none;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      background: rgba(203,166,247,0.08);
-      border: 1px solid rgba(203,166,247,0.2);
+      background: rgba(var(--mauve-rgb),0.08);
+      border: 1px solid rgba(var(--mauve-rgb),0.2);
       border-radius: 4px;
       padding: 5px 8px;
       font-size: 10px;
@@ -733,7 +729,7 @@
       padding: 20px 0;
     }
     #gw-footer {
-      border-top: 1px solid rgba(180,190,254,0.08);
+      border-top: 1px solid rgba(var(--lavender-rgb),0.08);
       padding: 10px 12px;
       display: flex;
       flex-direction: column;
@@ -742,8 +738,8 @@
     }
     #gw-nick-input {
       width: 100%;
-      background: rgba(49,50,68,0.4);
-      border: 1px solid rgba(180,190,254,0.08);
+      background: rgba(var(--surface0-rgb),0.4);
+      border: 1px solid rgba(var(--lavender-rgb),0.08);
       border-radius: 4px;
       padding: 6px 10px;
       font-family: inherit;
@@ -753,13 +749,13 @@
       letter-spacing: 0.05em;
       transition: border-color 0.2s;
     }
-    #gw-nick-input:focus { border-color: rgba(203,166,247,0.3); }
+    #gw-nick-input:focus { border-color: rgba(var(--mauve-rgb),0.3); }
     #gw-nick-input::placeholder { color: var(--overlay0); }
     #gw-input-row { display: flex; gap: 6px; }
     #gw-msg-input {
       flex: 1;
-      background: rgba(49,50,68,0.4);
-      border: 1px solid rgba(180,190,254,0.08);
+      background: rgba(var(--surface0-rgb),0.4);
+      border: 1px solid rgba(var(--lavender-rgb),0.08);
       border-radius: 4px;
       padding: 8px 10px;
       font-family: inherit;
@@ -770,11 +766,11 @@
       transition: border-color 0.2s;
       resize: none;
     }
-    #gw-msg-input:focus { border-color: rgba(203,166,247,0.3); }
+    #gw-msg-input:focus { border-color: rgba(var(--mauve-rgb),0.3); }
     #gw-msg-input::placeholder { color: var(--overlay0); }
     #gw-send {
-      background: rgba(203,166,247,0.12);
-      border: 1px solid rgba(203,166,247,0.25);
+      background: rgba(var(--mauve-rgb),0.12);
+      border: 1px solid rgba(var(--mauve-rgb),0.25);
       border-radius: 4px;
       color: var(--mauve);
       font-family: inherit;
@@ -787,8 +783,8 @@
       align-self: flex-end;
     }
     #gw-send:hover:not(:disabled) {
-      background: rgba(203,166,247,0.22);
-      border-color: rgba(203,166,247,0.45);
+      background: rgba(var(--mauve-rgb),0.22);
+      border-color: rgba(var(--mauve-rgb),0.45);
     }
     #gw-send:disabled { opacity: 0.4; cursor: not-allowed; }
     #gw-status { font-size: 10px; letter-spacing: 0.08em; min-height: 14px; padding: 0 2px; }
@@ -803,10 +799,272 @@
       #guest-wall { width: calc(100vw - 24px); right: 12px; }
       #presence-badge { display: none; }
     }
+
+    /* discord presence + recent projects */
+    main { padding-bottom: 120px; }
+    .extras {
+      margin: 48px auto 0;
+      width: 100%;
+      max-width: 620px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      opacity: 0;
+      animation: fadeUp 0.8s 1.2s forwards;
+    }
+    .extras-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      color: var(--overlay0);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .card {
+      background: rgba(var(--surface0-rgb),0.6);
+      border: 1px solid rgba(var(--lavender-rgb),0.1);
+      border-radius: 4px;
+    }
+
+    #presence { padding: 16px; }
+    #presence-wrap { display: none; }
+    #presence-wrap.ready { display: block; }
+    .pr-top { display: flex; align-items: center; gap: 14px; }
+    .pr-avatar { position: relative; flex-shrink: 0; width: 48px; height: 48px; }
+    .pr-avatar img { width: 100%; height: 100%; border-radius: 50%; display: block; }
+    .pr-dot {
+      position: absolute; right: -2px; bottom: -2px;
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 3px solid var(--mantle);
+      background: var(--overlay0);
+    }
+    .pr-dot.online { background: var(--green); }
+    .pr-dot.idle { background: #f9c74f; }
+    .pr-dot.dnd { background: #f05a5a; }
+    .pr-name { font-size: 15px; font-weight: bold; color: var(--text); }
+    .pr-name span { font-weight: normal; font-size: 12px; color: var(--overlay1); margin-left: 6px; }
+    .pr-custom { font-size: 13px; color: var(--subtext0); margin-top: 3px; word-break: break-word; }
+    .pr-activity {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(var(--lavender-rgb),0.1);
+      text-decoration: none;
+      color: inherit;
+    }
+    .pr-activity.show { display: flex; }
+    .pr-art { width: 52px; height: 52px; border-radius: 3px; flex-shrink: 0; object-fit: cover; background: var(--surface0); }
+    .pr-art:not([src]) { display: none; }
+    .pr-info { min-width: 0; flex: 1; font-size: 13px; line-height: 1.5; }
+    .pr-kind { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mauve); }
+    .pr-title { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pr-sub { color: var(--overlay1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pr-bar { height: 3px; margin-top: 6px; background: var(--surface1); border-radius: 2px; overflow: hidden; display: none; }
+    .pr-bar.show { display: block; }
+    .pr-bar div { height: 100%; width: 0; background: var(--mauve); }
+    a.pr-activity:hover .pr-title { color: var(--mauve); }
+
+    #projects { display: none; }
+    #projects.ready { display: block; }
+    .proj-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .proj {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .proj:hover { border-color: rgba(var(--mauve-rgb),0.35); transform: translateY(-2px); }
+    .proj-name { font-size: 14px; color: var(--text); font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .proj:hover .proj-name { color: var(--mauve); }
+    .proj-desc {
+      font-size: 12px; color: var(--overlay1); line-height: 1.5; flex: 1;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .proj-meta { display: flex; gap: 12px; font-size: 11px; color: var(--overlay0); align-items: center; }
+    .proj-lang { display: flex; align-items: center; gap: 5px; }
+    .proj-lang i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    @media (max-width: 520px) {
+      .proj-grid { grid-template-columns: 1fr; }
+    }
+    .extras-label a { color: var(--overlay1); text-decoration: none; }
+    .extras-label a:hover { color: var(--mauve); }
+
+    /* wide screens: presence and projects side by side so everything fits without scrolling */
+    @media (min-width: 1000px) {
+      main { padding-bottom: 70px; }
+      .extras {
+        --w: min(1060px, calc(100vw - 80px));
+        width: var(--w);
+        max-width: none;
+        margin: 30px 0 0 calc(50% - var(--w) / 2);
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 24px;
+        align-items: start;
+      }
+      .extras-label { text-align: left; margin-bottom: 10px; }
+      .proj-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .proj { padding: 11px 12px; gap: 4px; }
+      .proj-desc { -webkit-line-clamp: 1; }
+    }
+
+    html { scrollbar-color: rgba(var(--mauve-rgb),0.45) var(--crust); scrollbar-width: thin; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: var(--crust); }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(rgba(var(--mauve-rgb),0.55), rgba(var(--lavender-rgb),0.55));
+      border-radius: 10px;
+      border: 2px solid var(--crust);
+    }
+    ::-webkit-scrollbar-thumb:hover { background: linear-gradient(var(--mauve), var(--lavender)); }
+    ::-webkit-scrollbar-corner { background: var(--crust); }
+
+    /* halloween theme: switched on by the script in <head> */
+    html.halloween {
+      --crust:      #080408;
+      --mantle:     #0e080e;
+      --base:       #120a12;
+      --surface0:   #2a1628;
+      --surface1:   #3c2238;
+      --surface2:   #523448;
+      --overlay0:   #7a6670;
+      --overlay1:   #8e7a80;
+      --overlay2:   #a49094;
+      --subtext0:   #bfaea8;
+      --subtext1:   #d4c4ba;
+      --text:       #f2e6d8;
+      --lavender:   #b07ce8;
+      --green:      #9be36b;
+      --mauve:      #ff8c1a;
+      --mauve-rgb:    255,140,26;
+      --lavender-rgb: 157,78,221;
+      --surface0-rgb: 42,22,40;
+      --surface2-rgb: 82,52,72;
+      --base-rgb:     18,10,18;
+      --mantle-rgb:   14,8,14;
+      --crust-rgb:    8,4,8;
+    }
+    .halloween body {
+      background:
+        radial-gradient(ellipse at 50% 130%, rgba(255,110,10,0.10), transparent 60%),
+        var(--base);
+      background-attachment: fixed;
+    }
+    .only-halloween { display: none; }
+    .halloween .only-halloween { display: inline; }
+    .halloween .only-normal { display: none; }
+    .halloween .hero-name {
+      color: #ff8c1a;
+      text-shadow: 0 0 40px rgba(255,140,26,0.25);
+      animation: fadeUp 0.8s 0.4s forwards, flicker 7s 3s infinite;
+    }
+    .halloween .hero-name:hover { text-shadow: 0 0 40px rgba(255,140,26,0.5), 0 0 80px rgba(157,78,221,0.2); }
+    @keyframes flicker {
+      0%, 94%, 100% { opacity: 1; }
+      95% { opacity: 0.6; }
+      96% { opacity: 1; }
+      97.5% { opacity: 0.75; }
+    }
+    .sky, .web { display: none; }
+    .halloween .sky { display: block; position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .moon {
+      position: absolute;
+      top: 100px; right: 12vw;
+      width: clamp(64px, 9vw, 110px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 62% 38%, rgba(160,130,80,0.18) 0 12%, transparent 13%),
+        radial-gradient(circle at 34% 64%, rgba(160,130,80,0.14) 0 9%, transparent 10%),
+        radial-gradient(circle at 40% 35%, #f6ecd0, #e3cf98 70%, #cdb57a);
+      box-shadow: 0 0 50px 6px rgba(240,220,160,0.18);
+      opacity: 0.85;
+    }
+    .bat {
+      position: absolute;
+      top: var(--y);
+      left: -80px;
+      opacity: var(--o, 1);
+      animation: batFly var(--dur) var(--delay) ease-in-out infinite;
+    }
+    .bat-bob { animation: batBob 1.4s ease-in-out infinite alternate; }
+    .bat svg { display: block; width: calc(46px * var(--s, 1)); height: auto; color: #050205; filter: drop-shadow(0 0 2px rgba(255,140,26,0.45)) drop-shadow(0 0 8px rgba(255,140,26,0.15)); }
+    .bat .wing {
+      transform-box: fill-box;
+      transform-origin: 100% 55%;
+      animation: wingBeat var(--flap, 2.6s) linear infinite;
+    }
+    @keyframes batFly {
+      0%   { transform: translate(0, 0); }
+      22%  { transform: translate(25vw, -50px); }
+      45%  { transform: translate(52vw, 10px); }
+      70%  { transform: translate(80vw, -35px); }
+      100% { transform: translate(calc(100vw + 160px), 5px); }
+    }
+    @keyframes batBob {
+      from { transform: translateY(-8px) rotate(-7deg); }
+      to   { transform: translateY(8px) rotate(5deg); }
+    }
+    /* a burst of flaps, then a glide with the wings held out */
+    @keyframes wingBeat {
+      0%   { transform: rotate(-35deg) scaleY(0.85); }
+      5%   { transform: rotate(40deg) scaleY(1); }
+      10%  { transform: rotate(-35deg) scaleY(0.85); }
+      15%  { transform: rotate(40deg) scaleY(1); }
+      20%  { transform: rotate(-35deg) scaleY(0.85); }
+      25%  { transform: rotate(40deg) scaleY(1); }
+      30%  { transform: rotate(-35deg) scaleY(0.85); }
+      35%  { transform: rotate(40deg) scaleY(1); }
+      42%  { transform: rotate(-8deg) scaleY(1); }
+      70%  { transform: rotate(-12deg) scaleY(1); }
+      100% { transform: rotate(-35deg) scaleY(0.85); }
+    }
+    .halloween .web {
+      display: block;
+      position: fixed;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.18;
+    }
+    .web-tr { top: 60px; right: 0; width: 150px; }
+    .web-bl { bottom: 0; left: 0; width: 120px; transform: rotate(180deg); }
+    @media (max-width: 600px) {
+      .web-tr { width: 100px; }
+      .web-bl { width: 80px; }
+      .moon { top: 84px; right: 20px; width: 52px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .halloween .hero-name { animation: fadeUp 0.8s 0.4s forwards; }
+      .bat { display: none; }
+    }
   </style>
 </head>
 <body>
 <div id="particles-js"></div>
+<div class="sky" aria-hidden="true">
+  <div class="moon"></div>
+  <div class="bat" style="--y:23vh;--dur:17s;--delay:1s;--s:1;--o:1;--flap:2.6s"><div class="bat-bob"><svg viewBox="0 0 64 26" overflow="visible" fill="currentColor"><path class="wing" d="M30 13 C25 6 15 3 3 7 C7 9 8 12 7 16 C10 14 13 14.5 15 18 C17 15 20.5 15 22.5 18.5 C24 16 27 15.5 30 17.5 Z"/><g transform="translate(64 0) scale(-1 1)"><path class="wing" d="M30 13 C25 6 15 3 3 7 C7 9 8 12 7 16 C10 14 13 14.5 15 18 C17 15 20.5 15 22.5 18.5 C24 16 27 15.5 30 17.5 Z"/></g><path d="M29.6 9 L29.8 4.5 L31.4 7.6 Z M34.4 9 L34.2 4.5 L32.6 7.6 Z"/><circle cx="32" cy="10" r="3"/><ellipse cx="32" cy="16" rx="3.4" ry="6"/><circle cx="30.9" cy="9.7" r="0.55" fill="#ff8c1a" opacity="0.7"/><circle cx="33.1" cy="9.7" r="0.55" fill="#ff8c1a" opacity="0.7"/></svg></div></div>
+  <div class="bat" style="--y:31vh;--dur:26s;--delay:7s;--s:0.6;--o:0.55;--flap:3.1s"><div class="bat-bob"><svg viewBox="0 0 64 26" overflow="visible" fill="currentColor"><path class="wing" d="M30 13 C25 6 15 3 3 7 C7 9 8 12 7 16 C10 14 13 14.5 15 18 C17 15 20.5 15 22.5 18.5 C24 16 27 15.5 30 17.5 Z"/><g transform="translate(64 0) scale(-1 1)"><path class="wing" d="M30 13 C25 6 15 3 3 7 C7 9 8 12 7 16 C10 14 13 14.5 15 18 C17 15 20.5 15 22.5 18.5 C24 16 27 15.5 30 17.5 Z"/></g><path d="M29.6 9 L29.8 4.5 L31.4 7.6 Z M34.4 9 L34.2 4.5 L32.6 7.6 Z"/><circle cx="32" cy="10" r="3"/><ellipse cx="32" cy="16" rx="3.4" ry="6"/><circle cx="30.9" cy="9.7" r="0.55" fill="#ff8c1a" opacity="0.7"/><circle cx="33.1" cy="9.7" r="0.55" fill="#ff8c1a" opacity="0.7"/></svg></div></div>
+  <div class="bat" style="--y:17vh;--dur:21s;--delay:13s;--s:0.8;--o:0.8;--flap:2.2s"><div class="bat-bob"><svg viewBox="0 0 64 26" overflow="visible" fill="currentColor"><path class="wing" d="M30 13 C25 6 15 3 3 7 C7 9 8 12 7 16 C10 14 13 14.5 15 18 C17 15 20.5 15 22.5 18.5 C24 16 27 15.5 30 17.5 Z"/><g transform="translate(64 0) scale(-1 1)"><path class="wing" d="M30 13 C25 6 15 3 3 7 C7 9 8 12 7 16 C10 14 13 14.5 15 18 C17 15 20.5 15 22.5 18.5 C24 16 27 15.5 30 17.5 Z"/></g><path d="M29.6 9 L29.8 4.5 L31.4 7.6 Z M34.4 9 L34.2 4.5 L32.6 7.6 Z"/><circle cx="32" cy="10" r="3"/><ellipse cx="32" cy="16" rx="3.4" ry="6"/><circle cx="30.9" cy="9.7" r="0.55" fill="#ff8c1a" opacity="0.7"/><circle cx="33.1" cy="9.7" r="0.55" fill="#ff8c1a" opacity="0.7"/></svg></div></div>
+</div>
+<svg class="web web-tr" aria-hidden="true" viewBox="0 0 200 200" fill="none" stroke="#f2e6d8" stroke-width="1.2">
+  <path d="M200 0 L5 52 M200 0 L40 140 M200 0 L118 190 M200 0 L178 200"/>
+  <path d="M150 13 Q158 30 162 36 Q170 40 173 50 Q180 52 189 51"/>
+  <path d="M98 26 Q118 56 121 72 Q140 82 147 100 Q162 104 184 104"/>
+  <path d="M52 40 Q82 82 84 104 Q108 118 113 143 Q140 150 181 156"/>
+</svg>
+<svg class="web web-bl" aria-hidden="true" viewBox="0 0 200 200" fill="none" stroke="#f2e6d8" stroke-width="1.2">
+  <path d="M200 0 L18 30 M200 0 L60 120 M200 0 L150 170"/>
+  <path d="M146 9 Q160 32 164 40 Q176 48 182 60"/>
+  <path d="M92 18 Q120 60 124 80 Q150 100 160 125"/>
+  <path d="M40 26 Q78 74 82 100 Q112 124 118 150 L126 176"/>
+</svg>
 <div class="corner corner-tl"></div>
 <div class="corner corner-br"></div>
 
@@ -848,7 +1106,7 @@
 
 <main>
   <div class="hero">
-    <p class="eyebrow">Welcome to my website, have a look around</p>
+    <p class="eyebrow"><span class="only-normal">Welcome to my website, have a look around</span><span class="only-halloween">happy halloween, have a look around</span></p>
     <a href="https://exophs.is-a.dev/" style="text-decoration:none;">
       <h1 class="hero-name" id="main-title">Hey Chat</h1>
     </a>
@@ -880,6 +1138,36 @@
           <div class="countdown-lbl">secs</div>
         </div>
       </div>
+    </div>
+    <div class="extras">
+      <section id="presence-wrap">
+        <p class="extras-label">right now</p>
+        <div id="presence" class="card">
+          <div class="pr-top">
+            <div class="pr-avatar">
+              <img id="pr-avatar" alt="">
+              <span class="pr-dot" id="pr-dot"></span>
+            </div>
+            <div style="min-width:0">
+              <div class="pr-name" id="pr-name">ray<span id="pr-status">offline</span></div>
+              <div class="pr-custom" id="pr-custom"></div>
+            </div>
+          </div>
+          <a class="pr-activity" id="pr-activity" target="_blank" rel="noreferrer">
+            <img class="pr-art" id="pr-art" alt="">
+            <div class="pr-info">
+              <div class="pr-kind" id="pr-kind"></div>
+              <div class="pr-title" id="pr-title"></div>
+              <div class="pr-sub" id="pr-sub"></div>
+              <div class="pr-bar" id="pr-bar"><div></div></div>
+            </div>
+          </a>
+        </div>
+      </section>
+      <section id="projects">
+        <p class="extras-label">recent projects · <a href="https://github.com/exophs?tab=repositories" target="_blank" rel="noreferrer">see all →</a></p>
+        <div class="proj-grid" id="proj-grid"></div>
+      </section>
     </div>
     <div id="secret-message" style="display:none; margin-top:32px;">
       <a href="https://exophs.dev/this/is/not/a/secret/">🔒 click here to reveal the secret page</a>
@@ -1348,25 +1636,26 @@ if (!sessionStorage.getItem('tracked')) {
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  const spooky = document.documentElement.classList.contains('halloween');
   if (typeof particlesJS !== 'undefined') {
     particlesJS('particles-js', {
       particles: {
-        number: { value: 60 },
-        color: { value: "#cba6f7" },
+        number: { value: spooky ? 50 : 60 },
+        color: { value: spooky ? ["#ff8c1a", "#ff8c1a", "#9d4edd"] : "#cba6f7" },
         shape: { type: "circle" },
-        opacity: { value: 0.18, random: true },
-        size: { value: 1.5, random: true },
+        opacity: { value: spooky ? 0.3 : 0.18, random: true },
+        size: { value: spooky ? 1.8 : 1.5, random: true },
         line_linked: {
           enable: true,
           distance: 160,
-          color: "#cba6f7",
+          color: spooky ? "#ff8c1a" : "#cba6f7",
           opacity: 0.06,
           width: 1
         },
         move: {
           enable: true,
-          speed: 0.4,
-          direction: "none",
+          speed: spooky ? 0.5 : 0.4,
+          direction: spooky ? "top" : "none",
           random: true,
           straight: false,
           out_mode: "out"
@@ -1432,6 +1721,7 @@ document.addEventListener('DOMContentLoaded', () => {
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
   }
+  if (spooky) texts.push("trick or treat", "boo", "give me your candy");
   shuffle(texts);
 
   let tIdx = 0, cIdx = 0, deleting = false;
@@ -1491,6 +1781,178 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCountdown();
   setInterval(updateCountdown, 1000);
 });
+</script>
+
+<script>
+// discord presence via lanyard (live over websocket)
+(() => {
+  const DISCORD_ID = '494913490419449857';
+  const $ = id => document.getElementById(id);
+  const wrap = $('presence-wrap');
+  const STATUS_TEXT = { online: 'online', idle: 'idle', dnd: 'do not disturb', offline: 'offline' };
+  let tick = null;
+
+  function fmtTime(ms) {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+    return h ? `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}` : `${m}:${String(sec).padStart(2, '0')}`;
+  }
+
+  function render(d) {
+    const u = d.discord_user;
+    const ext = u.avatar && u.avatar.startsWith('a_') ? 'gif' : 'png';
+    $('pr-avatar').src = u.avatar
+      ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.${ext}?size=128`
+      : 'https://cdn.discordapp.com/embed/avatars/0.png';
+    $('pr-name').firstChild.textContent = u.global_name || u.username;
+    $('pr-dot').className = 'pr-dot ' + d.discord_status;
+    $('pr-status').textContent = STATUS_TEXT[d.discord_status] || d.discord_status;
+
+    const custom = d.activities.find(a => a.type === 4);
+    $('pr-custom').textContent = custom
+      ? [custom.emoji && !custom.emoji.id ? custom.emoji.name : '', custom.state || ''].join(' ').trim()
+      : '';
+
+    clearInterval(tick);
+    const act = $('pr-activity'), art = $('pr-art'), bar = $('pr-bar');
+    act.classList.remove('show');
+    bar.classList.remove('show');
+    act.removeAttribute('href');
+    art.removeAttribute('src');
+
+    if (d.listening_to_spotify && d.spotify) {
+      const sp = d.spotify;
+      $('pr-kind').textContent = 'listening to spotify';
+      $('pr-title').textContent = sp.song;
+      $('pr-sub').textContent = 'by ' + sp.artist.replace(/;/g, ',');
+      if (sp.album_art_url) art.src = sp.album_art_url;
+      if (sp.track_id) act.href = `https://open.spotify.com/track/${sp.track_id}`;
+      const { start, end } = sp.timestamps || {};
+      if (start && end) {
+        bar.classList.add('show');
+        const fill = () => {
+          bar.firstElementChild.style.width = Math.min(100, (Date.now() - start) / (end - start) * 100) + '%';
+        };
+        fill();
+        tick = setInterval(fill, 1000);
+      }
+      act.classList.add('show');
+      return;
+    }
+
+    const game = d.activities.find(a => a.type !== 4 && a.type !== 2);
+    if (game) {
+      const verbs = { 0: 'playing', 1: 'streaming', 3: 'watching', 5: 'competing in' };
+      $('pr-kind').textContent = verbs[game.type] || 'doing';
+      $('pr-title').textContent = game.name;
+      const sub = [game.details, game.state].filter(Boolean).join(' · ');
+      const started = game.timestamps && game.timestamps.start;
+      const setSub = () => {
+        $('pr-sub').textContent = [sub, started ? fmtTime(Date.now() - started) + ' elapsed' : ''].filter(Boolean).join(' · ');
+      };
+      setSub();
+      if (started) tick = setInterval(setSub, 1000);
+      const img = game.assets && game.assets.large_image;
+      if (img) {
+        art.src = img.startsWith('mp:external/')
+          ? `https://media.discordapp.net/external/${img.slice(12)}`
+          : `https://cdn.discordapp.com/app-assets/${game.application_id}/${img}.png`;
+      } else if (game.application_id) {
+        art.src = `https://dcdn.dstn.to/app-icons/${game.application_id}`;
+      }
+      art.onerror = () => art.removeAttribute('src');
+      act.classList.add('show');
+    }
+  }
+
+  function connect() {
+    let beat = null;
+    const ws = new WebSocket('wss://api.lanyard.rest/socket');
+    ws.addEventListener('message', e => {
+      const msg = JSON.parse(e.data);
+      if (msg.op === 1) {
+        ws.send(JSON.stringify({ op: 2, d: { subscribe_to_id: DISCORD_ID } }));
+        beat = setInterval(() => ws.send(JSON.stringify({ op: 3 })), msg.d.heartbeat_interval);
+      } else if (msg.op === 0 && (msg.t === 'INIT_STATE' || msg.t === 'PRESENCE_UPDATE')) {
+        render(msg.d);
+        wrap.classList.add('ready');
+      }
+    });
+    ws.addEventListener('close', () => {
+      clearInterval(beat);
+      setTimeout(connect, 5000);
+    });
+  }
+  connect();
+})();
+
+// recent github projects (cached for 30 min so we don't hit the rate limit)
+(() => {
+  const USER = 'exophs';
+  const SKIP = ['exophs', 'exophs-site', 'test2'];
+  const CACHE_KEY = 'gh-repos';
+  const LANG_COLORS = {
+    JavaScript: '#f1e05a', TypeScript: '#3178c6', HTML: '#e34c26', CSS: '#663399',
+    'C++': '#f34b7d', C: '#555555', 'C#': '#178600', Shell: '#89e051', Python: '#3572a5',
+    Lua: '#000080', Luau: '#00a2ff', Rust: '#dea584', Java: '#b07219', Go: '#00add8'
+  };
+
+  function timeAgo(date) {
+    const days = Math.floor((Date.now() - new Date(date)) / 86400000);
+    if (days < 1) return 'today';
+    if (days < 30) return `${days}d ago`;
+    if (days < 365) return `${Math.floor(days / 30)}mo ago`;
+    return `${Math.floor(days / 365)}y ago`;
+  }
+
+  function show(repos) {
+    const grid = document.getElementById('proj-grid');
+    const list = repos.filter(r => !r.fork && !SKIP.includes(r.name)).slice(0, 6);
+    if (!list.length) return;
+    grid.replaceChildren(...list.map(r => {
+      const a = document.createElement('a');
+      a.className = 'proj card';
+      a.href = r.homepage || r.html_url;
+      a.target = '_blank';
+      a.rel = 'noreferrer';
+      const name = document.createElement('div');
+      name.className = 'proj-name';
+      name.textContent = r.name;
+      const desc = document.createElement('div');
+      desc.className = 'proj-desc';
+      desc.textContent = r.description || 'no description';
+      const meta = document.createElement('div');
+      meta.className = 'proj-meta';
+      if (r.language) {
+        const lang = document.createElement('span');
+        lang.className = 'proj-lang';
+        const dot = document.createElement('i');
+        dot.style.background = LANG_COLORS[r.language] || 'var(--overlay1)';
+        lang.append(dot, r.language);
+        meta.append(lang);
+      }
+      if (r.stargazers_count) meta.append(`★ ${r.stargazers_count}`);
+      meta.append(timeAgo(r.pushed_at));
+      a.append(name, desc, meta);
+      return a;
+    }));
+    document.getElementById('projects').classList.add('ready');
+  }
+
+  let cached = null;
+  try { cached = JSON.parse(sessionStorage.getItem(CACHE_KEY)); } catch {}
+  if (cached && Date.now() - cached.at < 30 * 60 * 1000) return show(cached.repos);
+
+  fetch(`https://api.github.com/users/${USER}/repos?sort=pushed&per_page=20`)
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(repos => {
+      const slim = repos.map(({ name, description, html_url, homepage, language, stargazers_count, pushed_at, fork }) =>
+        ({ name, description, html_url, homepage, language, stargazers_count, pushed_at, fork }));
+      try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), repos: slim })); } catch {}
+      show(slim);
+    })
+    .catch(() => {});
+})();
 </script>
 </body>
 </html>
