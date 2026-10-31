@@ -891,9 +891,52 @@
       padding: 14px;
       text-decoration: none;
       color: inherit;
-      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      transform-style: preserve-3d;
+      transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
+      transition: border-color 0.2s, box-shadow 0.3s, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
-    .proj:hover { border-color: rgba(var(--mauve-rgb),0.35); transform: translateY(-2px); }
+    .proj:hover {
+      --lift: -3px;
+      border-color: rgba(var(--mauve-rgb),0.25);
+      box-shadow: 0 14px 30px -10px rgba(0,0,0,0.6), 0 0 22px -6px rgba(var(--mauve-rgb),0.35);
+    }
+    /* while the cursor is on a card, follow it closely instead of easing slowly */
+    .proj.tilting { transition: border-color 0.2s, box-shadow 0.3s, transform 0.08s linear; }
+    .proj > * { transform: translateZ(18px); }
+    /* glare that follows the cursor, plus a faint diagonal sheen */
+    .proj::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.13), transparent 50%),
+        linear-gradient(115deg, transparent 35%, rgba(255,255,255,0.07) 48%, transparent 60%) calc(var(--mx, 50%) * -1 + 50%) 0 / 250% 100% no-repeat;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    /* shiny edge: a 1px ring lit brightest near the cursor */
+    .proj::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      pointer-events: none;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(var(--mauve-rgb),1), rgba(var(--lavender-rgb),0.45) 35%, rgba(var(--lavender-rgb),0.08) 70%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .proj:hover::before, .proj:hover::after { opacity: 1; }
+    @media (prefers-reduced-motion: reduce) {
+      .proj, .proj.tilting { transform: none; }
+    }
     .proj-name { font-size: 14px; color: var(--text); font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .proj:hover .proj-name { color: var(--mauve); }
     .proj-desc {
@@ -1956,9 +1999,31 @@ document.addEventListener('DOMContentLoaded', () => {
       if (r.stargazers_count) meta.append(`★ ${r.stargazers_count}`);
       meta.append(timeAgo(r.pushed_at));
       a.append(name, desc, meta);
+      if (canTilt) addTilt(a);
       return a;
     }));
     document.getElementById('projects').classList.add('ready');
+  }
+
+  // cards lean toward the cursor; the glare and edge light follow it
+  const canTilt = matchMedia('(hover: hover) and (pointer: fine)').matches
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const MAX_TILT = 16;
+  function addTilt(card) {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      card.classList.add('tilting');
+      card.style.setProperty('--mx', (x * 100).toFixed(1) + '%');
+      card.style.setProperty('--my', (y * 100).toFixed(1) + '%');
+      card.style.setProperty('--rx', ((0.5 - y) * MAX_TILT).toFixed(2) + 'deg');
+      card.style.setProperty('--ry', ((x - 0.5) * MAX_TILT).toFixed(2) + 'deg');
+    });
+    card.addEventListener('pointerleave', () => {
+      card.classList.remove('tilting');
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
+    });
   }
 
   let cached = null;
