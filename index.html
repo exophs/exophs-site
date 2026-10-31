@@ -830,7 +830,7 @@
     #presence { padding: 16px; }
     #presence-wrap { display: none; }
     #presence-wrap.ready { display: block; }
-    .pr-top { display: flex; align-items: center; gap: 14px; }
+    .pr-top { display: flex; align-items: center; gap: 14px; min-height: 60px; }
     .pr-avatar { position: relative; flex-shrink: 0; width: 48px; height: 48px; }
     .pr-avatar img { width: 100%; height: 100%; border-radius: 50%; display: block; }
     .pr-dot {
@@ -844,9 +844,13 @@
     .pr-dot.dnd { background: #f05a5a; }
     .pr-name { font-size: 15px; font-weight: bold; color: var(--text); }
     .pr-name span { font-weight: normal; font-size: 12px; color: var(--overlay1); margin-left: 6px; }
-    .pr-custom { font-size: 13px; color: var(--subtext0); margin-top: 3px; word-break: break-word; }
+    .pr-custom {
+      font-size: 13px; line-height: 1.3; color: var(--subtext0); margin-top: 3px; word-break: break-word;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    /* the activity row is always laid out (placeholder when idle) so the card never changes height */
     .pr-activity {
-      display: none;
+      display: flex;
       align-items: center;
       gap: 12px;
       margin-top: 14px;
@@ -855,15 +859,25 @@
       text-decoration: none;
       color: inherit;
     }
-    .pr-activity.show { display: flex; }
     .pr-art { width: 52px; height: 52px; border-radius: 3px; flex-shrink: 0; object-fit: cover; background: var(--surface0); }
     .pr-art:not([src]) { display: none; }
+    .pr-art-empty {
+      display: none;
+      width: 52px; height: 52px; border-radius: 3px; flex-shrink: 0;
+      align-items: center; justify-content: center;
+      background: rgba(var(--surface0-rgb),0.6);
+      color: var(--overlay0);
+      font-size: 20px;
+    }
+    .pr-activity.idle .pr-art-empty { display: flex; }
+    .pr-activity.idle .pr-kind { color: var(--overlay0); }
+    .pr-activity.idle .pr-title { color: var(--overlay1); }
     .pr-info { min-width: 0; flex: 1; font-size: 13px; line-height: 1.5; }
-    .pr-kind { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mauve); }
-    .pr-title { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .pr-sub { color: var(--overlay1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .pr-bar { height: 3px; margin-top: 6px; background: var(--surface1); border-radius: 2px; overflow: hidden; display: none; }
-    .pr-bar.show { display: block; }
+    .pr-kind { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--mauve); min-height: 1.5em; }
+    .pr-title { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 1.5em; }
+    .pr-sub { color: var(--overlay1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 1.5em; }
+    .pr-bar { height: 3px; margin-top: 6px; background: var(--surface1); border-radius: 2px; overflow: hidden; visibility: hidden; }
+    .pr-bar.show { visibility: visible; }
     .pr-bar div { height: 100%; width: 0; background: var(--mauve); }
     a.pr-activity:hover .pr-title { color: var(--mauve); }
 
@@ -1153,8 +1167,9 @@
               <div class="pr-custom" id="pr-custom"></div>
             </div>
           </div>
-          <a class="pr-activity" id="pr-activity" target="_blank" rel="noreferrer">
+          <a class="pr-activity idle" id="pr-activity" target="_blank" rel="noreferrer">
             <img class="pr-art" id="pr-art" alt="">
+            <span class="pr-art-empty" aria-hidden="true">♪</span>
             <div class="pr-info">
               <div class="pr-kind" id="pr-kind"></div>
               <div class="pr-title" id="pr-title"></div>
@@ -1815,10 +1830,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     clearInterval(tick);
     const act = $('pr-activity'), art = $('pr-art'), bar = $('pr-bar');
-    act.classList.remove('show');
+    act.classList.add('idle');
     bar.classList.remove('show');
     act.removeAttribute('href');
     art.removeAttribute('src');
+    $('pr-kind').textContent = 'nothing right now';
+    $('pr-title').textContent = 'not listening to anything';
+    $('pr-sub').textContent = 'check back later';
 
     if (d.listening_to_spotify && d.spotify) {
       const sp = d.spotify;
@@ -1836,7 +1854,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fill();
         tick = setInterval(fill, 1000);
       }
-      act.classList.add('show');
+      act.classList.remove('idle');
       return;
     }
 
@@ -1861,7 +1879,7 @@ document.addEventListener('DOMContentLoaded', () => {
         art.src = `https://dcdn.dstn.to/app-icons/${game.application_id}`;
       }
       art.onerror = () => art.removeAttribute('src');
-      act.classList.add('show');
+      act.classList.remove('idle');
     }
   }
 
